@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
-import KakaoRedirect from "@/views/LoginView.vue";
+import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 
 Vue.use(VueRouter);
 
@@ -27,7 +27,7 @@ const routes = [
     component: LoginView,
   },
   {
-    path: "oauth2/redirect",
+    path: "/oauth2/redirect",
     name: "kakaoredirect",
     component: KakaoRedirect,
   },
