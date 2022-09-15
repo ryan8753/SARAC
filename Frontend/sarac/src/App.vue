@@ -40,6 +40,9 @@
     <v-main>
       <router-view/>
     </v-main>
+    <button
+    
+    >로그인페이지</button>
   </v-app>
 </template>
 
