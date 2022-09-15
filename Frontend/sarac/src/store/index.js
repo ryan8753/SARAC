@@ -4,10 +4,13 @@ import Vuex from 'vuex'
 import axios from 'axios'
 // import drf from '@/api/drf'
 
+axios.defaults.baseURL = 'http://localhost:8080'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+
+
   state: {
   },
   getters: {
@@ -19,6 +22,7 @@ export default new Vuex.Store({
 
   actions: {
     async login({accessToken, refreshToken}) {
+
       try {
         const response = await axios({
           method: 'get',
@@ -31,6 +35,7 @@ export default new Vuex.Store({
         return response.data
       } catch (err) {
         console.log("에러에러")
+        console.log(accessToken)
         console.log(refreshToken)
       }}
     },
