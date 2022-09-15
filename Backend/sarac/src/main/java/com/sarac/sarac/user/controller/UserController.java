@@ -45,6 +45,7 @@ public class UserController {
         resultMap.put("id", claims.get("id"));
         resultMap.put("authority", claims.get("authority"));
         resultMap.put("nickname", claims.get("nickname"));
+        resultMap.put("image_path", claims.get("image_path"));
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
