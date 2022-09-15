@@ -28,7 +28,7 @@ const routes = [
   },
   {
     path: "/oauth2/redirect",
-    name: "kakaoredirect",
+it     name: "kakaoredirect",
     component: KakaoRedirect,
   },
 ];
