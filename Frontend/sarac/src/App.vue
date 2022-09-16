@@ -1,5 +1,6 @@
 <template>
-  <v-app>
+  <div>
+    <!-- <v-app>
     <v-app-bar
       app
       color="primary"
@@ -37,19 +38,26 @@
       </v-btn>
     </v-app-bar>
 
+  </v-app> -->
     <v-main>
-      <router-view/>
+      <router-view />
     </v-main>
-  </v-app>
+  </div>
 </template>
 
 <script>
+// vuex 라이브러리에서 mapActions, mapGetters 함수를 가져옵니다.
+import { mapGetters } from "vuex";
+
+const accountStore = "accountStore";
 
 export default {
-  name: 'App',
-
-  data: () => ({
-    //
-  }),
+  name: "App",
+  data: () => {
+    return {};
+  },
+  computed: {
+    ...mapGetters(accountStore, []),
+  },
 };
 </script>
