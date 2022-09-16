@@ -1,4 +1,4 @@
-// import router from "@/router";
+import router from "@/router";
 import axios from "axios";
 
 const accountStore = {
@@ -9,26 +9,20 @@ const accountStore = {
   },
   getters: {},
   mutations: {
+    SET_USER_INFO(state, userInfo){
+      state.user = userInfo
+      console.log(userInfo)
+    },
     USER_LOGOUT(state) {
       // 추후 수정
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       state.user = {};
     },
   },
   actions: {
-    async login(context, { accessToken, refreshToken }) {
-      console.log(accessToken);
-      console.log(refreshToken);
-      axios.defaults.baseURL = "http://localhost:8080";
-
-      // const href = window.location.href;
-      // const params = new URL(href).searchParams;
-      // const accessToken = params.get("accessToken");
-      // const refreshToken = params.get("refreshToken");
-
-      sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
-
+    async getUserInfo({commit}, { accessToken, refreshToken }) {
+      axios.defaults.baseURL = "http://localhost:8080";     
       try {
         const response = await axios({
           method: "get",
@@ -37,10 +31,8 @@ const accountStore = {
             // Authorization: `Bearer ${getState().auth.token}`
             Authorization: `Bearer ${accessToken}`,
           },
-        });
-
-        axios.defaults.baseURL = "http://localhost:8080";
-        console.log(response.data);
+          });
+          commit('SET_USER_INFO', response.data)
         return response.data;
       } catch (err) {
         console.log("에러에러");
@@ -60,9 +52,27 @@ const accountStore = {
       }).then((res) => {
         if (res.data.message == "success") {
           commit("USER_LOGOUT");
+          router.go();
         }
       });
     },
+
+    signout({commit}) {
+      const accessToken = localStorage.getItem("accessToken");
+      axios({
+        url: "api/v1/user",
+        method: "delete",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }).then((res) => {
+        if (res.data.message == "success") {
+          commit("USER_LOGOUT");
+          router.go();
+          alert('회원탈퇴성공')
+        }
+      });
+    }
   },
 };
 

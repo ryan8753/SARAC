@@ -8,7 +8,6 @@
         src="icons/kakaoLogo.png"
       />
     </a>
-    <button @click="redirectClick">클릭클릭</button>
   </div>
 </template>
 
@@ -27,7 +26,7 @@ export default {
     // };
   },
   methods: {
-    ...mapActions(accountStore, ["login"]),
+    ...mapActions(accountStore, ["getUserInfo"]),
   },
 
   created() {
@@ -35,13 +34,17 @@ export default {
     const params = new URL(href).searchParams;
     const accessToken = params.get("accessToken");
     const refreshToken = params.get("refreshToken");
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
 
     const payload = {
       accessToken: accessToken,
       refreshToken: refreshToken,
     };
 
-    this.login(payload);
+    this.getUserInfo(payload);
+    this.$router.push('/mypage')
+    
   },
 };
 </script>

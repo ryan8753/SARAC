@@ -47,7 +47,7 @@
 
 <script>
 // vuex 라이브러리에서 mapActions, mapGetters 함수를 가져옵니다.
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 const accountStore = "accountStore";
 
@@ -59,5 +59,19 @@ export default {
   computed: {
     ...mapGetters(accountStore, []),
   },
+  methods: {
+    ...mapActions(accountStore, ["getUserInfo"]),
+  },
+  created() {
+    const accessToken = localStorage.getItem("accessToken")
+    const refreshToken = localStorage.getItem("refreshToken")
+    const payload = {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
+    if (accessToken) {
+      this.getUserInfo(payload);
+    }
+  }
 };
 </script>
