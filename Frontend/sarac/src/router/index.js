@@ -3,12 +3,13 @@ import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
+import MypageView from "@/views/MypageView.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "home",
     component: HomeView,
   },
@@ -30,6 +31,11 @@ const routes = [
     path: "/oauth2/redirect",
     name: "kakaoredirect",
     component: KakaoRedirect,
+  },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: MypageView,
   },
 ];
 
