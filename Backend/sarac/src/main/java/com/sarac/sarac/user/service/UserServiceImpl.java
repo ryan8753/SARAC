@@ -1,5 +1,6 @@
 package com.sarac.sarac.user.service;
 
+import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Map;
 
@@ -60,5 +62,37 @@ public class UserServiceImpl implements  UserService {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("USER")), attributes, "id");
+    }
+
+    @Transactional
+    @Override
+    public void updateUser(User user, String token) {
+        User originUser = userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id"));
+
+        if (user.getNickname() != null) {
+            originUser.setNickname(user.getNickname());
+        }
+        if (user.getIsLibraryOpen() != null) {
+            originUser.setIsLibraryOpen(user.getIsLibraryOpen());
+        }
+        if (user.getIsReviewOpen() != null) {
+            originUser.setIsReviewOpen(user.getIsReviewOpen());
+        }
+        userRepository.save(originUser);
+
+    }
+
+    @Override
+    public UserDto viewUserInfo(String token) {
+        User originUser = userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id"));
+
+        UserDto userDto = new UserDto();
+        userDto.setKakaoId(originUser.getKakaoId());
+        userDto.setNickname(originUser.getNickname());
+        userDto.setImagePath(originUser.getImagePath());
+        userDto.setReviewOpen(originUser.getIsReviewOpen());
+        userDto.setLabraryOpen(originUser.getIsLibraryOpen());
+
+        return userDto;
     }
 }
