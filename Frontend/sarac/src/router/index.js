@@ -7,6 +7,8 @@ import MypageView from "@/views/MypageView.vue";
 
 Vue.use(VueRouter);
 
+
+
 const routes = [
   {
     path: "/home",
@@ -39,10 +41,23 @@ const routes = [
   },
 ];
 
+
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
 });
+
+router.beforeEach(function(to,from,next) {
+  const accessToken = localStorage.getItem("accessToken") 
+  
+  if (to.path === "/oauth2/redirect" || to.path === "/login") {
+    next()
+  } else if (accessToken) {
+    next()
+  } else {
+    next('/login')
+  }
+})
 
 export default router;
