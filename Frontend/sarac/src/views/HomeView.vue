@@ -1,15 +1,13 @@
 <template>
-  <hello-world />
+  <div>
+    <p>개인리뷰모아보기 home이요~</p>
+  </div>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
+export default {
+  name: "Home",
 
-  export default {
-    name: 'Home',
-
-    components: {
-      HelloWorld,
-    },
-  }
+  components: {},
+};
 </script>
