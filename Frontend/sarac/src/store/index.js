@@ -1,47 +1,16 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-// import router from '@/router'
-import axios from 'axios'
-// import drf from '@/api/drf'
+import Vue from "vue";
+import Vuex from "vuex";
+// import axios from "axios";
 
-axios.defaults.baseURL = 'http://localhost:8080'
+// module 별 Store 불러오기
+import accountStore from "@/store/modules/accountStore";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-export default new Vuex.Store({
-
-
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-
-
-
-  actions: {
-    async login({accessToken, refreshToken}) {
-
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'api/v1/user/me',
-          headers: {
-            // Authorization: `Bearer ${getState().auth.token}`
-            Authorization: `Bearer ${accessToken}`
-          },
-        })
-        return response.data
-      } catch (err) {
-        console.log("에러에러")
-        console.log(accessToken)
-        console.log(refreshToken)
-      }}
-    },
-
-
-
+const store = new Vuex.Store({
   modules: {
-  }
-})
+    accountStore: accountStore,
+  },
+});
+
+export default store;
