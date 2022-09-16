@@ -17,7 +17,7 @@ import java.util.Set;
 @Builder
 @Entity
 @AllArgsConstructor
-public class User extends BaseEntity implements UserDetails {
+public class User implements UserDetails {
 
     @Transient
     private final Set<GrantedAuthority> authorities = new HashSet<>();
@@ -45,8 +45,6 @@ public class User extends BaseEntity implements UserDetails {
     Boolean isLibraryOpen;
 
     Boolean isReviewOpen;
-
-
 
     @Override
     public String getPassword() {

@@ -1,9 +1,9 @@
 package com.sarac.sarac.user.controller;
 
+import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.service.UserService;
 import com.sarac.sarac.user.util.JwtUtil;
-import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,29 +32,17 @@ public class UserController {
             resultMap.put("message", "success");
         }catch(Exception e) {
             e.printStackTrace();
-            resultMap.put("message", "fail");
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Map<String, Object>> myProfile(@RequestHeader Map<String, Object> header) {
-        log.info("**********************"+(String) header.get("authorization"));
-        Map<String, Object> resultMap = new HashMap<>();
-        Claims claims = jwtUtil.parseJwtToken((String)header.get("authorization"));
-        resultMap.put("id", claims.get("id"));
-        resultMap.put("authority", claims.get("authority"));
-        resultMap.put("nickname", claims.get("nickname"));
-        resultMap.put("image_path", claims.get("image_path"));
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-    }
+    public ResponseEntity<UserDto> myProfile(@RequestHeader Map<String, Object> token) {
 
-//    @GetMapping("/auth/verify")
-//    public ResponseEntity<Void> verifyToken(@RequestHeader Map<String, Object> header) {
-//        String token = (String) header.get("authorization");
-////        log.info("토큰 : {}", token);
-//        return new ResponseEntity<Void>(jwtUtil.validateJwtToken(token));
-//    }
+        Map<String, Object> resultMap = new HashMap<>();
+        UserDto user =  userService.viewUserInfo((String) token.get("authorization"));
+        return new ResponseEntity<UserDto>(user, HttpStatus.OK);
+    }
 
     @DeleteMapping
     public ResponseEntity<?> deleteUser(@RequestHeader Map<String,Object> token) {
@@ -64,21 +52,20 @@ public class UserController {
             resultMap.put("message", "success");
         }catch(Exception e) {
             e.printStackTrace();
-            resultMap.put("message", "fail");
         }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/ImagePath")
-    public ResponseEntity<Map<String, String>> fileView(@RequestHeader Map<String,Object> token) {
-        Map<String, String> resultMap = new HashMap<>();
-        User image = userService.findByKakaoId((Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
-        if (image.getImagePath() ==null) {
-            resultMap.put("message", "등록된 사진이 없습니다.");
-        } else {
-            resultMap.put("image_path",image.getImagePath());
+    @PatchMapping
+    public ResponseEntity updateUser(@RequestBody User user, @RequestHeader Map<String,Object> token) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            userService.updateUser(user, (String) token.get("authorization"));
+            resultMap.put("message", "success");
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        return new ResponseEntity(resultMap, HttpStatus.OK);
     }
 
 }

@@ -39,6 +39,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .kakaoId(id)
                     .nickname((String)properties.get("nickname"))
                     .imagePath((String)properties.get("profile_image"))
+                    .isLibraryOpen(true)
+                    .isReviewOpen(true)
                     .build();
         }
         String accessToken = jwtUtil.generateJwtToken(user);
