@@ -1,11 +1,15 @@
 package com.sarac.sarac.user.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
 import com.sarac.sarac.user.util.KakaoUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,13 +18,23 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements  UserService {
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    private final AmazonS3 amazonS3;
 
     @Autowired
     UserRepository userRepository;
@@ -53,6 +67,33 @@ public class UserServiceImpl implements  UserService {
         userRepository.deleteUserByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id"));
 
     }
+
+    @Override
+    public String uploadFile(MultipartFile file, String token) throws IOException {
+        Long kakaoId = ((Long) jwtUtil.parseJwtToken(token).get("id"));
+
+        String s3FileName = String.valueOf(kakaoId)+"."+extractExt(file.getOriginalFilename());
+
+        ObjectMetadata objMeta = new ObjectMetadata();
+        objMeta.setContentLength(file.getInputStream().available());
+
+        amazonS3.putObject(bucket+"/profile", s3FileName, file.getInputStream(), objMeta);
+
+        String newImagePath = amazonS3.getUrl(bucket, s3FileName).toString();
+
+        User user = userRepository.findOneByKakaoId(kakaoId);
+        user.setImagePath(newImagePath);
+        userRepository.save(user);
+
+        return newImagePath;
+
+    }
+    private String extractExt(String originalFilename) {
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(pos + 1);
+    }
+
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

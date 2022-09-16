@@ -43,6 +43,12 @@ spring:
             token_uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user_name_attribute: id
+
+#이미지
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 #카카오 어드민키
 kakao:
   admin : 4834af6c4c44729312c5b43d38dd3516
@@ -51,3 +57,22 @@ kakao:
 jwt:
   secret: zoqxlsthwjdWkdWkdaos
 
+#s3
+cloud:
+  aws:
+    credentials:
+      access-key: AKIA4GUKC3ODS4UKFMWD
+      secret-key: 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
+    s3:
+      bucket: sarac-a505
+    region:
+      static: ap-northeast-2 # 리전 정보
+    stack:
+      auto: false
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
