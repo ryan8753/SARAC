@@ -4,6 +4,8 @@ import com.sarac.sarac.cafe.entity.CafeLike;
 import com.sarac.sarac.cafe.entity.CafeNoise;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.entity.ReviewComment;
+import com.sarac.sarac.review.entity.ReviewLike;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -62,6 +64,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserHashtag> userHashtags = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<ReviewLike> reviewLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<ReviewComment> reviewComments = new HashSet<>();
 
     @Override
     public String getPassword() {
