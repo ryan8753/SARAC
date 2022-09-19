@@ -1,5 +1,6 @@
 package com.sarac.sarac.book.entity;
 
+import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.review.entity.Review;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,5 +39,8 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Review> reviews = new HashSet<>();
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Library> libraries = new HashSet<>();
 
 }
