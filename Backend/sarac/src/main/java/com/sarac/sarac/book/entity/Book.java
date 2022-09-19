@@ -24,6 +24,9 @@ public class Book {
     @Column(length = 50)
     private String bookTitle;
 
+    @Column(length = 100)
+    private String publisher;
+
     @Column(length = 2000)
     private String description;
 
@@ -33,9 +36,6 @@ public class Book {
 
     @Column(length = 20)
     private String genre;
-
-    @Column(length = 3)
-    private String kdc;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Review> reviews = new HashSet<>();
