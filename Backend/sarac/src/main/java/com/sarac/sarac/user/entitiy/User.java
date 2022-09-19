@@ -1,5 +1,7 @@
 package com.sarac.sarac.user.entitiy;
 
+import com.sarac.sarac.cafe.entity.CafeLike;
+import com.sarac.sarac.cafe.entity.CafeNoise;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.review.entity.Review;
 import lombok.*;
@@ -51,6 +53,15 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Library> libraries = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<CafeLike> cafeLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<CafeNoise> cafeNoises = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserHashtag> userHashtags = new HashSet<>();
 
     @Override
     public String getPassword() {
