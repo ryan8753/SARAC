@@ -1,5 +1,6 @@
 package com.sarac.sarac.user.entitiy;
 
+import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.review.entity.Review;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -47,6 +48,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Review> reviews = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Library> libraries = new HashSet<>();
 
     @Override
     public String getPassword() {
