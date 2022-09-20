@@ -20,7 +20,7 @@ public class ReviewHashtag {
     @Column(length = 50)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", referencedColumnName = "id")
     private Review review;
 }
