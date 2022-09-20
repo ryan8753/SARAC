@@ -85,7 +85,39 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void updateReview(ReviewRequest review, Long id) {
+    public void updateReview(ReviewRequest review,Long id,List<MultipartFile> files) throws IOException {
+
+        Review originReview = reviewRepository.findOneById(id);
+        originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+        originReview.setContent(review.getContent());
+        originReview.setTitle(review.getTitle());
+        originReview.setBookScore(review.getBookScore());
+        originReview.setIsSecret(review.getIsSceret());
+
+        Review saveReview=reviewRepository.save(originReview);
+
+        //왜 삭제 안됨?
+//        reviewHashtagRepository.delete((ReviewHashtag) originReview.getReviewHashtags());
+        List<ReviewHashtag> reviewHashtags = reviewHashtagRepository.findAllByReviewId(id);
+        for (ReviewHashtag reviewHashtag : reviewHashtags) {
+            reviewHashtagRepository.delete(reviewHashtag);
+        }
+
+
+        Set<String> hashtag = new HashSet<>();
+        hashtag = review.getHashtag();
+        for (String s : hashtag) {
+            ReviewHashtag reviewHashtag = new ReviewHashtag();
+            reviewHashtag.setReview(saveReview);
+            reviewHashtag.setContent(s);
+            reviewHashtagRepository.save(reviewHashtag);
+        }
+
+        if(files!=null){
+            uploadFile(files, id);
+        }
+
+
 
     }
 
