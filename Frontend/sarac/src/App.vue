@@ -91,13 +91,13 @@ export default {
     .container {
       width: 600px;
       padding: 0px;
-      position: static;
+      /* position: static; */
     
     }
   }
   .container {
     background-color: white;
-    height: calc(var(--vh, 1vh)*99.9);
+    height: calc(var(--vh, 1vh)*100);
   }
   /* :root {
     height: calc(var(--vh, 1vh)*100);
