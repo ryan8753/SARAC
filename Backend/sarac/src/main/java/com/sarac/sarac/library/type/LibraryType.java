@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public enum LibraryType{
 
-    WISH, READING, READED;
+    WISH, READING, READ;
 
 }
