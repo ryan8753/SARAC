@@ -3,6 +3,7 @@ package com.sarac.sarac.global.util;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class FileUpload {
@@ -26,32 +28,25 @@ public class FileUpload {
 
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(file.getInputStream().available());
-        String path=null;
+
 
         if("profile".equals(type.toLowerCase(Locale.ROOT))){
-            s3FileName = String.valueOf(id)+"."+extractExt(file.getOriginalFilename());
-            path="/profile";
+            s3FileName = "profile/"+String.valueOf(id)+"."+extractExt(file.getOriginalFilename());
+
         }else if("review".equals(type)){
-            s3FileName = UUID.randomUUID() +"-"+String.valueOf(id)+"."+extractExt(file.getOriginalFilename());
-            path="/review";
+            s3FileName = "review/"+UUID.randomUUID() +"-"+String.valueOf(id)+"."+extractExt(file.getOriginalFilename());
+
         }
 
-        amazonS3.putObject(bucket+path, s3FileName, file.getInputStream(), objMeta);
-
+        amazonS3.putObject(bucket, s3FileName, file.getInputStream(), objMeta);
         return amazonS3.getUrl(bucket, s3FileName).toString();
     }
 
+
     public void fileDelete(String type,String fileName){
 
-        String s3FileName = fileName;
-        String path=null;
-
-        if("profile".equals(type.toLowerCase(Locale.ROOT))){
-            path="/profile";
-        }else if("review".equals(type)){
-            path="/review";
-        }
-        amazonS3.deleteObject(bucket+path, s3FileName);
+        String key = fileName.substring(fileName.lastIndexOf("/"));
+        amazonS3.deleteObject(bucket+"/"+type,key.substring(1));
 
     }
 

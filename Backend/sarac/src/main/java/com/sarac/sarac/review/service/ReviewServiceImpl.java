@@ -60,8 +60,6 @@ public class ReviewServiceImpl implements ReviewService{
 
         Long id = reviewRepository.save(saveReview).getId();
 
-
-
         Set<String> hashtag = new HashSet<>();
         hashtag = review.getHashtag();
         for (String s : hashtag) {
@@ -77,8 +75,12 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     @Transactional
     public void deleteReview(Long id) {
-
+        List<ReviewPhoto> reviewPhotos = reviewPhotoRepository.findAllByReviewId(id);
+        for (ReviewPhoto reviewPhoto : reviewPhotos) {
+            fileUpload.fileDelete("review",reviewPhoto.getPhotoUrl());
+        }
         reviewRepository.deleteReviewById(id);
+
     }
 
     @Override
