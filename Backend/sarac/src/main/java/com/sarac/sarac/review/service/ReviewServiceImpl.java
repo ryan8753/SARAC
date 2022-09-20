@@ -1,9 +1,12 @@
 package com.sarac.sarac.review.service;
 
 import com.sarac.sarac.global.util.FileUpload;
-import com.sarac.sarac.review.dto.ReviewListDTO;
 import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.payload.dto.ReviewListDTO;
+
+import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.ReviewRepository;
+import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,14 +29,18 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
 
+    private final UserRepository userRepository;
+
     private final JwtUtil jwtUtil;
 
 
     @Override
-    public Long registerReview(Review review, String authorization) {
+    public Long registerReview(ReviewRequest review, String authorization) {
 
-        Long id = reviewRepository.save(review).getId();
-        return id;
+
+//        Long id = reviewRepository.save(saveReview).getId();
+//        return id;
+        return null;
 
     }
 
@@ -46,13 +53,13 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void updateReview(Review review, Long id) {
+    public void updateReview(ReviewRequest review, Long id) {
 
     }
 
     @Override
     public List<ReviewListDTO> showUserReviewList(String token) {
-        List<Review> ReviewList = reviewRepository.findAllByUserId((Long)jwtUtil.parseJwtToken(token).get("id"));
+        List<Review> ReviewList = reviewRepository.findAllByUserId(userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId());
         List<ReviewListDTO> reviewListDTO = new ArrayList<>();
         for (Review review : ReviewList) {
             ReviewListDTO reviewListDTO1 = new ReviewListDTO();
@@ -66,7 +73,17 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<ReviewListDTO> showBookReviewList(String isbn) {
-        return null;
+
+        List<Review> ReviewList = reviewRepository.findAllByBookIsbn(isbn);
+        List<ReviewListDTO> reviewListDTO = new ArrayList<>();
+        for (Review review : ReviewList) {
+            ReviewListDTO reviewListDTO1 = new ReviewListDTO();
+            reviewListDTO1.setBookTitle(review.getBook().getBookTitle());
+            reviewListDTO1.setTitle(review.getTitle());
+
+            reviewListDTO.add(reviewListDTO1);
+        }
+        return reviewListDTO;
     }
 
     @Override
