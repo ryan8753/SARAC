@@ -44,7 +44,7 @@ public class ReviewController {
 
         }catch (Exception e){
             e.printStackTrace();
-            resultMap.put("message", "파일 이미지 용량 초과");
+            resultMap.put("message", "업로드실패");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
         }
 
@@ -59,6 +59,7 @@ public class ReviewController {
         List<ReviewListDTO> reviewListDTOS = null;
         try {
             reviewListDTOS = reviewService.showUserReviewList((String) token.get("authorization"));
+            resultMap.put("message", "success");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,6 +73,7 @@ public class ReviewController {
         List<ReviewListDTO> reviewListDTOS = null;
         try {
             reviewListDTOS = reviewService.showBookReviewList(isbn);
+            resultMap.put("message", "success");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,14 +84,39 @@ public class ReviewController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deleteReview(@PathVariable Long id){
         Map<String, Object> resultMap = new HashMap<>();
-        reviewService.deleteReview(id);
+        try{
+            reviewService.deleteReview(id);
+            resultMap.put("message", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{reviewId}")
-    public ResponseEntity<Map<String, Object>> updateReview(@RequestBody ReviewRequest review, @PathVariable Long id){
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateReview(@RequestPart ReviewRequest review, @RequestPart(value = "files", required = false) List<MultipartFile> files, @PathVariable Long id){
         Map<String, Object> resultMap = new HashMap<>();
-        reviewService.updateReview(review,id);
+        //         이미지 파일만 업로드 가능
+        try {
+            if(files!=null) {
+                for (MultipartFile file : files) {
+                    if (!file.getContentType().startsWith("image")) {
+                        resultMap.put("message", "이미지 파일만 업로드 가능합니다.");
+                        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+                    }
+                }
+                reviewService.updateReview(review,id,files);
+
+            }else {
+                reviewService.updateReview(review,id,null);
+            }
+            resultMap.put("message", review);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap.put("message", "업데이트실패");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }

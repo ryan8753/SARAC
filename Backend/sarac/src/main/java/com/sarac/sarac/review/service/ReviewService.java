@@ -12,7 +12,7 @@ public interface ReviewService {
 
     void deleteReview(Long id);
 
-    void updateReview(ReviewRequest review, Long id);
+    void updateReview(ReviewRequest review, Long id,List<MultipartFile> files) throws IOException;
 
     List<ReviewListDTO> showUserReviewList(String token);
 
