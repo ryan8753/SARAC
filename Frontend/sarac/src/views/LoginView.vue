@@ -24,3 +24,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+
+img {
+  width: 80%;
+}
+
+</style>
