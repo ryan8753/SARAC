@@ -5,12 +5,14 @@ import com.sarac.sarac.user.entitiy.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class Review {
 
     @Id
@@ -35,5 +37,6 @@ public class Review {
     private Integer bookScore;
 
     private Boolean isSecret;
+
 
 }
