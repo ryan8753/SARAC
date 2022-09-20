@@ -12,4 +12,6 @@ public interface ReviewPhotoRepository extends JpaRepository<ReviewPhoto, Long> 
 
     ReviewPhoto save(ReviewPhoto reviewPhoto);
     List<ReviewPhoto> findAllByReviewId(Long id);
+
+    void deleteAllByReviewId(Long reviewId);
 }

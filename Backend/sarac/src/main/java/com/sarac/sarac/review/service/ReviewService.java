@@ -18,6 +18,6 @@ public interface ReviewService {
 
     List<ReviewListDTO> showBookReviewList(String isbn);
 
-    void uploadFile(List<MultipartFile> files, Long id) throws IOException;
+    void uploadReviewFile(List<MultipartFile> files, Long id) throws IOException;
 
 }

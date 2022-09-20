@@ -36,7 +36,7 @@ public class ReviewController {
                     }
                 }
                 Long id = reviewService.registerReview(review,(String) token.get("authorization"));
-                reviewService.uploadFile(files,id);
+                reviewService.uploadReviewFile(files,id);
             }else {
                 Long id = reviewService.registerReview(review, (String) token.get("authorization"));
             }
