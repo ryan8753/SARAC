@@ -15,5 +15,7 @@ public interface ReviewHashtagRepository extends JpaRepository<ReviewHashtag, Lo
 
     List<ReviewHashtag> findAllByReviewId(Long id);
 
+    void deleteAllByReviewId(Long reviewId);
+
 
 }

@@ -85,9 +85,10 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     @Transactional
-    public void updateReview(ReviewRequest review,Long id,List<MultipartFile> files) throws IOException {
+    public void updateReview(ReviewRequest review,Long reviewId,List<MultipartFile> files) throws IOException {
 
-        Review originReview = reviewRepository.findOneById(id);
+
+        Review originReview = reviewRepository.findOneById(reviewId);
         originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
         originReview.setContent(review.getContent());
         originReview.setTitle(review.getTitle());
@@ -96,13 +97,7 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review saveReview=reviewRepository.save(originReview);
 
-        //왜 삭제 안됨?
-//        reviewHashtagRepository.delete((ReviewHashtag) originReview.getReviewHashtags());
-        List<ReviewHashtag> reviewHashtags = reviewHashtagRepository.findAllByReviewId(id);
-        for (ReviewHashtag reviewHashtag : reviewHashtags) {
-            reviewHashtagRepository.delete(reviewHashtag);
-        }
-
+        reviewHashtagRepository.deleteAllByReviewId(reviewId);
 
         Set<String> hashtag = new HashSet<>();
         hashtag = review.getHashtag();
@@ -114,10 +109,14 @@ public class ReviewServiceImpl implements ReviewService{
         }
 
         if(files!=null){
-            uploadFile(files, id);
+
+            List<ReviewPhoto> reviewPhotos = reviewPhotoRepository.findAllByReviewId(reviewId);
+            for (ReviewPhoto reviewPhoto : reviewPhotos) {
+                fileUpload.fileDelete("review",reviewPhoto.getPhotoUrl());
+            }
+            reviewPhotoRepository.deleteAllByReviewId(reviewId);
+            uploadReviewFile(files, reviewId);
         }
-
-
 
     }
 
@@ -151,7 +150,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void uploadFile(List<MultipartFile> files, Long id) throws IOException {
+    public void uploadReviewFile(List<MultipartFile> files, Long id) throws IOException {
 
         for (MultipartFile file : files) {
             String imagePath = fileUpload.fileUpload(file,id,"review");
