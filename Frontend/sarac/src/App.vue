@@ -50,19 +50,21 @@
 import { mapActions, mapGetters } from "vuex";
 
 const accountStore = "accountStore";
-function setScreenSize(newVal) {
-    newVal = newVal * 0.01;
-    document.documentElement.style.setProperty("--vh", `${newVal}px`);
-  }
+function setScreenSize() {
+	let vh = window.innerHeight * 0.01;
+	document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setScreenSize();
+window.addEventListener('resize', setScreenSize);
 
 export default {
   name: "App",
   data: () => {
     return {vh: window.innerHeight};
   },
-  watch: {
-    vh(newVal){ setScreenSize(newVal); }
-  },
+  // watch: {
+  //   vh(newVal){ setScreenSize(newVal); }
+  // },
   computed: {
     ...mapGetters(accountStore, []),
   },
@@ -79,7 +81,7 @@ export default {
     if (accessToken) {
       this.getUserInfo(payload);
     }
-    setScreenSize(this.vh);
+    // setScreenSize();
   }
 };
 </script>
@@ -95,10 +97,10 @@ export default {
   }
   .container {
     background-color: white;
-    height: calc(var(--vh, 1vh)*100);
+    height: calc(var(--vh, 1vh)*99.9);
   }
-  :root {
+  /* :root {
     height: calc(var(--vh, 1vh)*100);
     
-  }
+  } */
 </style>>
