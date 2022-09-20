@@ -1,7 +1,8 @@
 package com.sarac.sarac.review.controller;
 
-import com.sarac.sarac.review.dto.ReviewListDTO;
+import com.sarac.sarac.review.payload.dto.ReviewListDTO;
 import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,11 @@ public class ReviewController {
     ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> registerReview(@RequestBody Review review, @RequestHeader Map<String,Object> token, @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException{
+    public ResponseEntity<Map<String, Object>> registerReview(@RequestBody ReviewRequest review, @RequestHeader Map<String,Object> token, @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException{
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
-        // 이미지 파일만 업로드 가능
+//         이미지 파일만 업로드 가능
         try {
             if(!files.isEmpty()) {
                 for (MultipartFile file : files) {
@@ -38,7 +39,7 @@ public class ReviewController {
                 }
 
                 Long id = reviewService.registerReview(review,(String) token.get("authorization"));
-                reviewService.uploadFile(files, id);
+                reviewService.uploadFile(files,id);
                 resultMap.put("message", "success");
 
             }
@@ -50,7 +51,8 @@ public class ReviewController {
             resultMap.put("message", "파일 이미지 용량 초과");
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 
     }
 
@@ -68,12 +70,12 @@ public class ReviewController {
     }
 
     //책에대한 리뷰 목록 표시
-    @GetMapping("/book")
-    public ResponseEntity<List<ReviewListDTO>> showBookReviewList( @RequestHeader Map<String,Object> token) {
+    @GetMapping("/book/{isbn}")
+    public ResponseEntity<List<ReviewListDTO>> showBookReviewList( @PathVariable String isbn) {
         Map<String, Object> resultMap = new HashMap<>();
         List<ReviewListDTO> reviewListDTOS = null;
         try {
-            reviewListDTOS = reviewService.showUserReviewList((String) token.get("authorization"));
+            reviewListDTOS = reviewService.showBookReviewList(isbn);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,7 +91,7 @@ public class ReviewController {
     }
 
     @PutMapping("/update/{reviewId}")
-    public ResponseEntity<Map<String, Object>> updateReview(@RequestBody Review review, @PathVariable Long id){
+    public ResponseEntity<Map<String, Object>> updateReview(@RequestBody ReviewRequest review, @PathVariable Long id){
         Map<String, Object> resultMap = new HashMap<>();
         reviewService.updateReview(review,id);
 
