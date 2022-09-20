@@ -19,12 +19,16 @@ public class Book {
     @Column(unique = true)
     private String isbn;
 
+    @Column(length=1000)
     private String bookImgUrl;
 
-    @Column(length = 50)
+    @Column(length = 1200)
     private String bookTitle;
 
-    @Column(length = 100)
+    @Column(length = 1000)
+    private String author;
+
+    @Column(length = 1000)
     private String publisher;
 
     @Column(length = 2000)
@@ -36,6 +40,9 @@ public class Book {
 
     @Column(length = 20)
     private String genre;
+
+    @Column(length = 20)
+    private String vol;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
