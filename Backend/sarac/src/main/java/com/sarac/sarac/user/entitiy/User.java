@@ -1,7 +1,11 @@
 package com.sarac.sarac.user.entitiy;
 
-import com.sarac.sarac.baseEntitiy.BaseEntity;
-
+import com.sarac.sarac.cafe.entity.CafeLike;
+import com.sarac.sarac.cafe.entity.CafeNoise;
+import com.sarac.sarac.library.entity.Library;
+import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.entity.ReviewComment;
+import com.sarac.sarac.review.entity.ReviewLike;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,6 +49,27 @@ public class User implements UserDetails {
     Boolean isLibraryOpen;
 
     Boolean isReviewOpen;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Review> reviews = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Library> libraries = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<CafeLike> cafeLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<CafeNoise> cafeNoises = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<UserHashtag> userHashtags = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<ReviewLike> reviewLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<ReviewComment> reviewComments = new HashSet<>();
 
     @Override
     public String getPassword() {
