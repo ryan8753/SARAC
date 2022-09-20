@@ -1,7 +1,6 @@
 package com.sarac.sarac.review.service;
 
-import com.sarac.sarac.review.payload.dto.ReviewListDTO;
-import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.payload.response.ReviewListDTO;
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import org.springframework.web.multipart.MultipartFile;
 

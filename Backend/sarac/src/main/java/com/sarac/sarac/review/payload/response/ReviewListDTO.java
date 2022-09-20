@@ -1,4 +1,4 @@
-package com.sarac.sarac.review.payload.dto;
+package com.sarac.sarac.review.payload.response;
 
 import lombok.Getter;
 import lombok.Setter;

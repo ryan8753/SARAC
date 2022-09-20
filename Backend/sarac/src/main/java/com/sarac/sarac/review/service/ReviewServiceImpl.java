@@ -1,10 +1,15 @@
 package com.sarac.sarac.review.service;
 
+import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.global.util.FileUpload;
 import com.sarac.sarac.review.entity.Review;
-import com.sarac.sarac.review.payload.dto.ReviewListDTO;
+import com.sarac.sarac.review.entity.ReviewHashtag;
+import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.payload.response.ReviewListDTO;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
+import com.sarac.sarac.review.repository.ReviewHashtagRepository;
+import com.sarac.sarac.review.repository.ReviewPhotoRepository;
 import com.sarac.sarac.review.repository.ReviewRepository;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
@@ -16,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -31,17 +38,40 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final UserRepository userRepository;
 
+    private final BookRepository bookRepository;
+
+    private final ReviewHashtagRepository reviewHashtagRepository;
+
+    private final ReviewPhotoRepository reviewPhotoRepository;
+
     private final JwtUtil jwtUtil;
 
 
     @Override
     public Long registerReview(ReviewRequest review, String authorization) {
 
+        Review saveReview = new Review();
+        saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+        saveReview.setContent(review.getContent());
+        saveReview.setTitle(review.getTitle());
+        saveReview.setUser(userRepository.findOneById(review.getWriter()));
+        saveReview.setBookScore(review.getBookScore());
+        saveReview.setIsSecret(review.getIsSceret());
 
-//        Long id = reviewRepository.save(saveReview).getId();
-//        return id;
-        return null;
+        Long id = reviewRepository.save(saveReview).getId();
 
+
+
+        Set<String> hashtag = new HashSet<>();
+        hashtag = review.getHashtag();
+        for (String s : hashtag) {
+            ReviewHashtag reviewHashtag = new ReviewHashtag();
+            reviewHashtag.setReview(reviewRepository.findOneById(id));
+            reviewHashtag.setContent(s);
+            reviewHashtagRepository.save(reviewHashtag);
+        }
+
+        return id;
     }
 
     @Override
@@ -91,16 +121,11 @@ public class ReviewServiceImpl implements ReviewService{
 
         for (MultipartFile file : files) {
             String imagePath = fileUpload.fileUpload(file,id,"review");
-
-
+            ReviewPhoto reviewPhoto = new ReviewPhoto();
+            reviewPhoto.setPhotoUrl(imagePath);
+            reviewPhoto.setReview(reviewRepository.findOneById(id));
+            reviewPhotoRepository.save(reviewPhoto);
         }
-
-
-
-
-//        User user = userRepository.findOneByKakaoId(kakaoId);
-//        user.setImagePath(newImagePath);
-//        userRepository.save(user);
 
     }
     private String extractExt(String originalFilename) {
