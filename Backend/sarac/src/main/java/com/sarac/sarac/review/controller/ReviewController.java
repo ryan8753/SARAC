@@ -1,7 +1,6 @@
 package com.sarac.sarac.review.controller;
 
-import com.sarac.sarac.review.payload.dto.ReviewListDTO;
-import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.payload.response.ReviewListDTO;
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,28 +22,26 @@ public class ReviewController {
     ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> registerReview(@RequestBody ReviewRequest review, @RequestHeader Map<String,Object> token, @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException{
+    public ResponseEntity<Map<String, Object>> registerReview(@RequestPart ReviewRequest review, @RequestHeader Map<String,Object> token, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException{
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 //         이미지 파일만 업로드 가능
         try {
-            if(!files.isEmpty()) {
+            if(files!=null) {
                 for (MultipartFile file : files) {
                     if (!file.getContentType().startsWith("image")) {
                         resultMap.put("message", "이미지 파일만 업로드 가능합니다.");
                         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-
                     }
                 }
-
                 Long id = reviewService.registerReview(review,(String) token.get("authorization"));
                 reviewService.uploadFile(files,id);
-                resultMap.put("message", "success");
+
 
             }
             Long id = reviewService.registerReview(review,(String) token.get("authorization"));
-            resultMap.put("message", "success");
+            resultMap.put("message", review);
 
         }catch (Exception e){
             e.printStackTrace();

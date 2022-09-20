@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@NoArgsConstructor(access = AccessLevel.PROTECTED) 이거 왜?
 @Getter
 @Setter
 public class Review {
@@ -53,5 +52,6 @@ public class Review {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<ReviewPhoto> reviewPhotos = new HashSet<>();
+
 
 }

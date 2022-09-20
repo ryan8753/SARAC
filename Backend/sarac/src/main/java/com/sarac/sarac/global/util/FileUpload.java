@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -19,25 +20,39 @@ public class FileUpload {
     private final AmazonS3 amazonS3;
 
 
-
-
     public String fileUpload(MultipartFile file, Long id, String type) throws IOException {
 
-        String s3FileName = String.valueOf(id)+"."+extractExt(file.getOriginalFilename());
+        String s3FileName = null;
 
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(file.getInputStream().available());
-
         String path=null;
+
         if("profile".equals(type.toLowerCase(Locale.ROOT))){
+            s3FileName = String.valueOf(id)+"."+extractExt(file.getOriginalFilename());
             path="/profile";
         }else if("review".equals(type)){
+            s3FileName = UUID.randomUUID() +"-"+String.valueOf(id)+"."+extractExt(file.getOriginalFilename());
             path="/review";
         }
 
         amazonS3.putObject(bucket+path, s3FileName, file.getInputStream(), objMeta);
 
         return amazonS3.getUrl(bucket, s3FileName).toString();
+    }
+
+    public void fileDelete(String type,String fileName){
+
+        String s3FileName = fileName;
+        String path=null;
+
+        if("profile".equals(type.toLowerCase(Locale.ROOT))){
+            path="/profile";
+        }else if("review".equals(type)){
+            path="/review";
+        }
+        amazonS3.deleteObject(bucket+path, s3FileName);
+
     }
 
 

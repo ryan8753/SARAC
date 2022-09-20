@@ -11,7 +11,7 @@ public class ReviewRequest {
 
     private  Long id;
 
-    private Long isbn;
+    private String isbn;
 
     private Long writer;
 
