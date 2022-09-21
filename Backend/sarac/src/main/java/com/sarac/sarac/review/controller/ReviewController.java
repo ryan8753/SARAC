@@ -2,6 +2,7 @@ package com.sarac.sarac.review.controller;
 
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.payload.response.ReviewDTO;
+import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.service.ReviewService;
@@ -134,6 +135,18 @@ public class ReviewController {
         }
 
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<ReviewDetailDTO> showDetailReview(@PathVariable Long id) {
+        ReviewDetailDTO reviewDetailDTO = null;
+        try {
+            reviewDetailDTO = reviewService.showDetailReview(id);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<ReviewDetailDTO>(reviewDetailDTO, HttpStatus.OK);
     }
 
 
