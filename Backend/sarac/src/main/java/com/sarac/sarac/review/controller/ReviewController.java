@@ -1,5 +1,7 @@
 package com.sarac.sarac.review.controller;
 
+import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.payload.response.ReviewDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.service.ReviewService;
@@ -22,7 +24,7 @@ public class ReviewController {
     ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> registerReview(@RequestPart ReviewRequest review, @RequestHeader Map<String,Object> token, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException{
+    public ResponseEntity<Map<String, Object>> registerReview(@RequestPart ReviewRequest review, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException{
 
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -35,12 +37,12 @@ public class ReviewController {
                         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
                     }
                 }
-                Long id = reviewService.registerReview(review,(String) token.get("authorization"));
+                Long id = reviewService.registerReview(review);
                 reviewService.uploadReviewFile(files,id);
             }else {
-                Long id = reviewService.registerReview(review, (String) token.get("authorization"));
+                Long id = reviewService.registerReview(review);
             }
-            resultMap.put("message", review);
+            resultMap.put("message", "success");
 
         }catch (Exception e){
             e.printStackTrace();
@@ -52,8 +54,8 @@ public class ReviewController {
 
     }
 
-    //개인의 리뷰
-    @GetMapping
+    //개인의 리뷰 목록
+    @GetMapping("/user")
     public ResponseEntity<List<ReviewListDTO>> showUserReviewList( @RequestHeader Map<String,Object> token) {
         Map<String, Object> resultMap = new HashMap<>();
         List<ReviewListDTO> reviewListDTOS = null;
@@ -66,14 +68,27 @@ public class ReviewController {
         return new ResponseEntity<List<ReviewListDTO>>(reviewListDTOS, HttpStatus.OK);
     }
 
-    //책에대한 리뷰 목록 표시
+    @GetMapping("{id}")
+    public ResponseEntity<ReviewDTO> showReview( @PathVariable Long id) {
+        Map<String, Object> resultMap = new HashMap<>();
+        ReviewDTO reviewDTO = null;
+        try {
+            reviewDTO = reviewService.showReview(id);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<ReviewDTO>(reviewDTO, HttpStatus.OK);
+    }
+
+    //책에 대한 리뷰 목록
     @GetMapping("/book/{isbn}")
     public ResponseEntity<List<ReviewListDTO>> showBookReviewList( @PathVariable String isbn) {
         Map<String, Object> resultMap = new HashMap<>();
         List<ReviewListDTO> reviewListDTOS = null;
         try {
             reviewListDTOS = reviewService.showBookReviewList(isbn);
-            resultMap.put("message", "success");
+//            resultMap.put("message", "success");
         } catch (Exception e) {
             e.printStackTrace();
         }

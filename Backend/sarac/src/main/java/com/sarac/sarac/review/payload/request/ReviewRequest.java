@@ -21,7 +21,7 @@ public class ReviewRequest {
 
     private Integer bookScore;
 
-    private Boolean isSceret;
+    private Boolean isSecret;
 
     private Set<String> hashtag;
 

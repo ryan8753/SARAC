@@ -5,6 +5,7 @@ import com.sarac.sarac.global.util.FileUpload;
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.entity.ReviewHashtag;
 import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.payload.response.ReviewDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
@@ -48,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService{
 
 
     @Override
-    public Long registerReview(ReviewRequest review, String authorization) {
+    public Long registerReview(ReviewRequest review) {
 
         Review saveReview = new Review();
         saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
@@ -56,7 +57,7 @@ public class ReviewServiceImpl implements ReviewService{
         saveReview.setTitle(review.getTitle());
         saveReview.setUser(userRepository.findOneById(review.getWriter()));
         saveReview.setBookScore(review.getBookScore());
-        saveReview.setIsSecret(review.getIsSceret());
+        saveReview.setIsSecret(review.getIsSecret());
 
         Long id = reviewRepository.save(saveReview).getId();
 
@@ -89,11 +90,21 @@ public class ReviewServiceImpl implements ReviewService{
 
 
         Review originReview = reviewRepository.findOneById(reviewId);
-        originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
-        originReview.setContent(review.getContent());
-        originReview.setTitle(review.getTitle());
-        originReview.setBookScore(review.getBookScore());
-        originReview.setIsSecret(review.getIsSceret());
+        if(review.getIsbn()!=null) {
+            originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+        }
+        if(review.getContent()!=null) {
+            originReview.setContent(review.getContent());
+        }
+        if(review.getTitle()!=null) {
+            originReview.setTitle(review.getTitle());
+        }
+        if(review.getBookScore()!=null) {
+            originReview.setBookScore(review.getBookScore());
+        }
+        if(review.getIsSecret()!=null) {
+            originReview.setIsSecret(review.getIsSecret());
+        }
 
         Review saveReview=reviewRepository.save(originReview);
 
@@ -132,6 +143,21 @@ public class ReviewServiceImpl implements ReviewService{
             reviewListDTO.add(reviewListDTO1);
         }
         return reviewListDTO;
+    }
+
+    @Override
+    public ReviewDTO showReview(long reviewId) {
+
+        Review review = reviewRepository.findOneById(reviewId);
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setBookScore(review.getBookScore());
+        reviewDTO.setIsbn(review.getBook().getIsbn());
+        reviewDTO.setContent(review.getContent());
+        reviewDTO.setTitle(review.getTitle());
+        reviewDTO.setIsSecret(review.getIsSecret());
+
+
+        return reviewDTO;
     }
 
     @Override
