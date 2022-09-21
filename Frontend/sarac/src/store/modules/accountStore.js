@@ -5,9 +5,11 @@ const accountStore = {
   namespaced: true,
 
   state: {
-    user: {},
+    user: null,
   },
-  getters: {},
+  getters: {
+    isLoggedIn: (state)=>{return !!state.user}
+  },
   mutations: {
     SET_USER_INFO(state, userInfo){
       state.user = userInfo
@@ -17,7 +19,7 @@ const accountStore = {
       // 추후 수정
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      state.user = {};
+      state.user = null;
     },
   },
   actions: {

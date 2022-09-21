@@ -13,7 +13,7 @@ public interface ReviewHashtagRepository extends JpaRepository<ReviewHashtag, Lo
 
     ReviewHashtag save(ReviewHashtag reviewHashtag);
 
-    List<ReviewHashtag> findAllByReviewId(Long id);
+    List<ReviewHashtag> findAllByReviewId(Long reviewId);
 
     void deleteAllByReviewId(Long reviewId);
 

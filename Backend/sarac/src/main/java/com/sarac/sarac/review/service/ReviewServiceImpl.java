@@ -3,15 +3,16 @@ package com.sarac.sarac.review.service;
 import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.global.util.FileUpload;
 import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.entity.ReviewComment;
 import com.sarac.sarac.review.entity.ReviewHashtag;
 import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.payload.response.ReviewCommentDTO;
 import com.sarac.sarac.review.payload.response.ReviewDTO;
+import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
-import com.sarac.sarac.review.repository.ReviewHashtagRepository;
-import com.sarac.sarac.review.repository.ReviewPhotoRepository;
-import com.sarac.sarac.review.repository.ReviewRepository;
+import com.sarac.sarac.review.repository.*;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,9 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewPhotoRepository reviewPhotoRepository;
 
+    private final ReviewLikeRepository reviewLikeRepository;
+
+    private final ReviewCommentRepository reviewCommentRepository;
     private final JwtUtil jwtUtil;
 
 
@@ -190,5 +194,45 @@ public class ReviewServiceImpl implements ReviewService{
     private String extractExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
+    }
+
+
+    @Override
+    public ReviewDetailDTO showDetailReview(long reviewId) {
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow();
+        ReviewDetailDTO reviewDetailDTO = new ReviewDetailDTO();
+        reviewDetailDTO.setId(reviewId);
+        reviewDetailDTO.setBookScore(review.getBookScore());
+        reviewDetailDTO.setIsbn(review.getBook().getIsbn());
+        reviewDetailDTO.setContent(review.getContent());
+        reviewDetailDTO.setTitle(review.getTitle());
+        reviewDetailDTO.setIsSecret(review.getIsSecret());
+
+
+        reviewDetailDTO.setLikeCount(reviewLikeRepository.countReviewLikeByReview(review));
+        reviewDetailDTO.setPhotoUrlList(reviewPhotoRepository.findAllByReviewId(reviewId));
+        reviewDetailDTO.setReviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review));
+
+        List<ReviewCommentDTO> reviewCommentDTOList = new ArrayList<>();
+        for (ReviewComment reviewComment:reviewCommentRepository.findAllByReview(review).orElseThrow()) {
+            ReviewCommentDTO reviewCommentDTO = new ReviewCommentDTO();
+            reviewCommentDTO.setCommentId(reviewComment.getId());
+            reviewCommentDTO.setUserId(reviewComment.getUser().getId());
+            reviewCommentDTO.setContent(reviewComment.getContents());
+            reviewCommentDTO.setUserImagePath((reviewComment.getUser().getImagePath()));
+            reviewCommentDTO.setDepth(reviewComment.getDepth());
+            reviewCommentDTO.setParentId(reviewComment.getParent().getId());
+
+            reviewCommentDTOList.add(reviewCommentDTO);
+        }
+        reviewDetailDTO.setReviewCommentList(reviewCommentDTOList);
+        List<String> HashtagList = new ArrayList<>();
+        for(ReviewHashtag reviewHashtag : reviewHashtagRepository.findAllByReviewId(reviewId)){
+            HashtagList.add(reviewHashtag.getContent());
+        }
+        reviewDetailDTO.setReviewHashtagList(HashtagList);
+
+        return reviewDetailDTO;
     }
 }
