@@ -1,22 +1,14 @@
 <template>
   <div>
-    
-    <!-- <img
-      class="profile"
-      :src="require('${path}')"
-      alt=""
-    /> -->
-    <div>{{user.imagePath}}</div>
-
      <img
       class="profile"
-      :src="path"
+      :src="user.imagePath"
       alt=""
     />
 
     <div>
       {{user.nickname}}
-      <v-btn>
+      <v-btn small>
         <v-icon> mdi-pencil</v-icon>
       </v-btn>
     </div>
@@ -46,11 +38,6 @@ export default {
       this.logout();
     },
   },
-  data(){
-    return{
-      path:this.user.imagePath
-    }
-  }
 };
 </script>
 
