@@ -1,11 +1,21 @@
 <template>
   <div>
-    <img
-      src="https://sarac-a505.s3.ap-northeast-2.amazonaws.com/review/0e3f7785-e374-4013-b268-601cc2b5881a-50.png"
+    
+    <!-- <img
+      class="profile"
+      :src="require('${path}')"
+      alt=""
+    /> -->
+    <div>{{user.imagePath}}</div>
+
+     <img
+      class="profile"
+      :src="path"
       alt=""
     />
+
     <div>
-      닉네임
+      {{user.nickname}}
       <v-btn>
         <v-icon> mdi-pencil</v-icon>
       </v-btn>
@@ -17,6 +27,7 @@
       로그아웃
     </v-btn>
     <v-btn color="error" large dark @click="signout">회원탈퇴</v-btn>
+    
   </div>
 </template>
 
@@ -27,7 +38,7 @@ const accountStore = "accountStore";
 export default {
   name: "MypageView",
   computed: {
-    ...mapState(["user"]),
+    ...mapState(accountStore,["user"]),
   },
   methods: {
     ...mapActions(accountStore, ["logout", "signout"]),
@@ -35,7 +46,18 @@ export default {
       this.logout();
     },
   },
+  data(){
+    return{
+      path:this.user.imagePath
+    }
+  }
 };
 </script>
 
-<style></style>
+<style>
+.profile {
+  width: 200px;
+  height: 200px;
+  border-radius: 70%;
+}
+</style>
