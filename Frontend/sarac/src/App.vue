@@ -1,53 +1,18 @@
 <template>
-  <div class="container">
-    <!-- <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-  </v-app> -->
+  <v-app class="container">
+    
     <v-main>
       <router-view />
     </v-main>
-  </div>
+      <Footer v-if="footerOn"/>
+  </v-app>
 </template>
 
 <script>
 // vuex 라이브러리에서 mapActions, mapGetters 함수를 가져옵니다.
 import { mapActions, mapGetters } from "vuex";
+import Footer from './components/common/Footer.vue'
+// import store from "./store/index.js";
 
 const accountStore = "accountStore";
 function setScreenSize() {
@@ -59,14 +24,18 @@ window.addEventListener('resize', setScreenSize);
 
 export default {
   name: "App",
-  data: () => {
-    return {vh: window.innerHeight};
+  components:{
+    Footer:Footer,
   },
-  // watch: {
-  //   vh(newVal){ setScreenSize(newVal); }
-  // },
+  data: () => {
+    return {
+      vh: window.innerHeight,
+      footerOn : null,
+      }
+  },
+  
   computed: {
-    ...mapGetters(accountStore, []),
+    ...mapGetters(accountStore, ['isLoggedIn']),
   },
   methods: {
     ...mapActions(accountStore, ["getUserInfo"]),
@@ -81,8 +50,13 @@ export default {
     if (accessToken) {
       this.getUserInfo(payload);
     }
-    // setScreenSize();
-  }
+    
+    if (window.location.pathname !='/login'){
+      this.footerOn= true
+    }
+    
+
+  },
 };
 </script>
 
@@ -98,9 +72,7 @@ export default {
   .container {
     background-color: white;
     height: calc(var(--vh, 1vh)*100);
+    padding: 0px;
   }
-  /* :root {
-    height: calc(var(--vh, 1vh)*100);
-    
-  } */
+
 </style>>
