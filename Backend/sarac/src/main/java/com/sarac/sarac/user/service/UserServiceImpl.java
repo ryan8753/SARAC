@@ -2,6 +2,7 @@ package com.sarac.sarac.user.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.sarac.sarac.global.util.FileUpload;
 import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements  UserService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final AmazonS3 amazonS3;
+    private final FileUpload fileUpload;
 
     @Autowired
     UserRepository userRepository;
@@ -72,15 +73,7 @@ public class UserServiceImpl implements  UserService {
     public String uploadFile(MultipartFile file, String token) throws IOException {
         Long kakaoId = ((Long) jwtUtil.parseJwtToken(token).get("id"));
 
-        String s3FileName = String.valueOf(kakaoId)+"."+extractExt(file.getOriginalFilename());
-
-        ObjectMetadata objMeta = new ObjectMetadata();
-        objMeta.setContentLength(file.getInputStream().available());
-
-        amazonS3.putObject(bucket+"/profile", s3FileName, file.getInputStream(), objMeta);
-
-        String newImagePath = amazonS3.getUrl(bucket, s3FileName).toString();
-
+        String newImagePath = fileUpload.fileUpload(file,kakaoId,"profile");
         User user = userRepository.findOneByKakaoId(kakaoId);
         user.setImagePath(newImagePath);
         userRepository.save(user);
@@ -88,10 +81,7 @@ public class UserServiceImpl implements  UserService {
         return newImagePath;
 
     }
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
-    }
+
 
 
 
