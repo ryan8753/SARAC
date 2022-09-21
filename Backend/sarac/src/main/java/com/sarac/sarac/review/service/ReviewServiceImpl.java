@@ -227,8 +227,6 @@ public class ReviewServiceImpl implements ReviewService{
             reviewCommentDTOList.add(reviewCommentDTO);
         }
         reviewDetailDTO.setReviewCommentList(reviewCommentDTOList);
-
-
         List<String> HashtagList = new ArrayList<>();
         for(ReviewHashtag reviewHashtag : reviewHashtagRepository.findAllByReviewId(reviewId)){
             HashtagList.add(reviewHashtag.getContent());
