@@ -2,6 +2,7 @@ package com.sarac.sarac.review.service;
 
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.payload.response.ReviewDTO;
+import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,5 +24,7 @@ public interface ReviewService {
     List<ReviewListDTO> showBookReviewList(String isbn);
 
     void uploadReviewFile(List<MultipartFile> files, Long id) throws IOException;
+
+    ReviewDetailDTO showDetailReview(long id);
 
 }
