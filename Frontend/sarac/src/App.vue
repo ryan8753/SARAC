@@ -49,6 +49,9 @@ export default {
     };
     if (accessToken) {
       this.getUserInfo(payload);
+      this.$router.push('/mypage')
+    } else {
+      // this.$router.push('/login')
     }
     
     if (window.location.pathname !='/login'){

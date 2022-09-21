@@ -40,9 +40,23 @@
 
 <script>
   export default {
-    data: () => ({ value: 'home' }),
+    data: () => {
+      return { value: 'home' }},
+    watch : {
+      value: function (newRoute) {
+        this.$router.replace({path: `/`+ newRoute})
+      }
+    }
   }
+
+
+
+
+
 </script>
+
+
+
 <style scoped>
 @media(min-width: 600px) {
   button {
