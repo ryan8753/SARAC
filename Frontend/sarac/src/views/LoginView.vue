@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div>로그인페이지</div>
+    <div class="title">사詞 락樂</div>
+    <div class="subtitle">글을 즐기다</div>
+    <img src="" alt="">
+
     <a :href="URL">
       <img
         className="kakao-box-login block"
@@ -8,7 +11,6 @@
         src="icons/kakaoLogo.png"
       />
     </a>
-    <button @click="redirectClick">클릭클릭</button>
   </div>
 </template>
 

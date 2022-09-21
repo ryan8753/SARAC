@@ -24,6 +24,7 @@ export default {
     //   accessToken: accessToken,
     //   refreshToken: refreshToken,
     // };
+    return{}
   },
   methods: {
     ...mapActions(accountStore, ["getUserInfo"]),
