@@ -8,7 +8,6 @@
         src="icons/kakaoLogo.png"
       />
     </a>
-    <button @click="redirectClick">클릭클릭</button>
   </div>
 </template>
 
