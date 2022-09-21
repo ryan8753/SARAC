@@ -1,6 +1,7 @@
 package com.sarac.sarac.myfeed.dto.response;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -9,17 +10,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@SuperBuilder
 public class MyFeedUserInfo extends MyFeedUser{
 
-    private Long statusDone;
-    private Long statusIng;
-    private Long statusTodo;
+    private Long wish;
+    private Long reading;
+    private Long read;
 
-    @Builder
-    public MyFeedUserInfo(Long userId, String imagePath, String nickname, List<String> userHashtag, Long statusDone, Long statusIng, Long statusTodo) {
+    public MyFeedUserInfo(Long userId, String imagePath, String nickname, List<String> userHashtag, Long wish, Long reading, Long read) {
         super(userId, imagePath, nickname, userHashtag);
-        this.statusDone = statusDone;
-        this.statusIng = statusIng;
-        this.statusTodo = statusTodo;
+        this.wish = wish;
+        this.reading = reading;
+        this.read = read;
     }
 }

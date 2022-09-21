@@ -1,6 +1,7 @@
 package com.sarac.sarac.myfeed.dto.response;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Builder
+@SuperBuilder
 public class MyFeedUser {
 
     private Long userId;
