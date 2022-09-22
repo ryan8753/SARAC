@@ -1,6 +1,7 @@
 package com.sarac.sarac.review.controller;
 
 import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
 import com.sarac.sarac.review.payload.response.ReviewDTO;
 import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/review")
+@RequestMapping("review")
 public class ReviewController {
 
     @Autowired
@@ -137,6 +138,7 @@ public class ReviewController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
+    // 리뷰 상세보기
     @GetMapping("/detail/{id}")
     public ResponseEntity<ReviewDetailDTO> showDetailReview(@PathVariable Long id) {
         ReviewDetailDTO reviewDetailDTO = null;
@@ -147,6 +149,40 @@ public class ReviewController {
             e.printStackTrace();
         }
         return new ResponseEntity<ReviewDetailDTO>(reviewDetailDTO, HttpStatus.OK);
+    }
+
+    // 피드모아보기
+//    @PostMapping("")
+//    public ResponseEntity<ReviewDetailDTO> showRandomFeeds() {
+//        ReviewDetailDTO reviewDetailDTO = null;
+//        try {
+//            reviewDetailDTO = reviewService.showDetailReview();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return new ResponseEntity<ReviewDetailDTO>(reviewDetailDTO, HttpStatus.OK);
+//    }
+
+    // 리뷰 댓글 추가하기
+    @PostMapping("/comment")
+    public ResponseEntity<Map<String, Object>> registComment(@RequestBody ReviewCommentRequest reviewCommentRequest){
+        Map<String, Object> resultMap = new HashMap<>();
+        Long result = 0L;
+        try {
+            result = reviewService.registComment(reviewCommentRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if(result<=0){
+            resultMap.put("message", "등록 실패");
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
 
