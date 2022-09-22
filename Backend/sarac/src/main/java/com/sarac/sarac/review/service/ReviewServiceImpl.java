@@ -1,19 +1,21 @@
 package com.sarac.sarac.review.service;
 
+import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.global.util.FileUpload;
+import com.sarac.sarac.library.entity.Library;
+import com.sarac.sarac.library.repository.LibraryRepository;
+import com.sarac.sarac.library.type.LibraryType;
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.entity.ReviewComment;
 import com.sarac.sarac.review.entity.ReviewHashtag;
 import com.sarac.sarac.review.entity.ReviewPhoto;
 import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
-import com.sarac.sarac.review.payload.response.ReviewCommentDTO;
-import com.sarac.sarac.review.payload.response.ReviewDTO;
-import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
-import com.sarac.sarac.review.payload.response.ReviewListDTO;
+import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
+import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -42,6 +45,8 @@ public class ReviewServiceImpl implements ReviewService{
     private final UserRepository userRepository;
 
     private final BookRepository bookRepository;
+
+    private final LibraryRepository libraryRepository;
 
     private final ReviewHashtagRepository reviewHashtagRepository;
 
@@ -248,5 +253,57 @@ public class ReviewServiceImpl implements ReviewService{
         ReviewComment savedReviewComment = reviewCommentRepository.save(reviewComment);
 
         return savedReviewComment.getId();
+    }
+
+    @Override
+    public List<RandomReviewDTO> showRandomFeeds(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        // 총 30개
+        // 약 내가 보고싶은 책과 관련된 리뷰 20개, 리뷰가 많은 책 10개
+        // 책당 리뷰는 4개씩
+        List<RandomReviewDTO> list = new ArrayList<>();
+        List<RandomReviewDTO> wishlist = getWishReviewList(user);
+        list.addAll(wishlist);
+        List<RandomReviewDTO> hotlist = getHotReviewList(30-wishlist.size());
+        list.addAll(hotlist);
+
+        // TODO: 2022-09-22 정렬방법에 의해 리뷰 순서가 섞임 
+        HashSet<RandomReviewDTO> listset = new HashSet<>(list);
+        return new ArrayList<>(listset);
+    }
+
+    public List<RandomReviewDTO> getWishReviewList(User user){
+
+        List<RandomReviewDTO> wishlist = new ArrayList<>();
+        List<Library> wishLibraries = libraryRepository.findAllByUserAndLibraryType(user, LibraryType.WISH);
+        for (Library library: wishLibraries) {
+            List<Review> tmp = reviewRepository.findTop4ByBookOrderByIdDesc(library.getBook());
+            for (Review review: tmp) {
+                wishlist.add(RandomReviewDTO.createRandomReview().
+                        review(review).
+                        likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
+                        reviewPhotos(reviewPhotoRepository.findAllByReviewId(review.getId())).
+                        build());
+                if(wishlist.size()>=20) return wishlist;
+            }
+        }
+        return wishlist;
+    }
+
+    public List<RandomReviewDTO> getHotReviewList(int size){
+        List<RandomReviewDTO> hotList = new ArrayList<>();
+        // TODO: 2022-09-22 리뷰별 갯수 제한
+        List<Review> reviewList = reviewRepository.findByBook_IsbnIn(reviewRepository.findHotBooks());
+
+        for (Review review: reviewList) {
+            hotList.add(RandomReviewDTO.createRandomReview().
+                    review(review).
+                    likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
+                    reviewPhotos(reviewPhotoRepository.findAllByReviewId(review.getId())).
+                    build());
+            if(hotList.size()>=size) return hotList;
+        }
+
+        return hotList;
     }
 }
