@@ -1,3 +1,9 @@
+#server
+server:
+  servlet:
+    context-path: /api/v1/
+
+
 #JPA
 spring:
   datasource:
