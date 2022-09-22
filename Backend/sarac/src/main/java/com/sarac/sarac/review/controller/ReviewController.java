@@ -2,6 +2,7 @@ package com.sarac.sarac.review.controller;
 
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
+import com.sarac.sarac.review.payload.response.RandomReviewDTO;
 import com.sarac.sarac.review.payload.response.ReviewDTO;
 import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,17 +154,19 @@ public class ReviewController {
     }
 
     // 피드모아보기
-//    @PostMapping("")
-//    public ResponseEntity<ReviewDetailDTO> showRandomFeeds() {
-//        ReviewDetailDTO reviewDetailDTO = null;
-//        try {
-//            reviewDetailDTO = reviewService.showDetailReview();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return new ResponseEntity<ReviewDetailDTO>(reviewDetailDTO, HttpStatus.OK);
-//    }
+    // TODO: 2022-09-22 토큰에서 userID를 뽑아오도록 변경 필요
+    @GetMapping("/feeds/{userId}")
+    public ResponseEntity<List<RandomReviewDTO>> showRandomFeeds(@PathVariable Long userId) {
+        List<RandomReviewDTO> randomReviewDTOList = new ArrayList<>();
+        try {
+            randomReviewDTOList = reviewService.showRandomFeeds(userId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<List<RandomReviewDTO>>(randomReviewDTOList, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<List<RandomReviewDTO>>(randomReviewDTOList, HttpStatus.OK);
+    }
 
     // 리뷰 댓글 추가하기
     @PostMapping("/comment")

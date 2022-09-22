@@ -24,7 +24,7 @@ export default {
     //   accessToken: accessToken,
     //   refreshToken: refreshToken,
     // };
-    return{}
+    return {};
   },
   methods: {
     ...mapActions(accountStore, ["getUserInfo"]),
@@ -44,8 +44,7 @@ export default {
     };
 
     this.getUserInfo(payload);
-    this.$router.push('/mypage')
-    
+    // this.$router.push('/mypage')
   },
 };
 </script>
