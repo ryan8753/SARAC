@@ -16,7 +16,7 @@ import java.util.Set;
 public class Book {
 
     @Id
-    @Column(unique = true)
+    @Column(unique = true, length = 13)
     private String isbn;
 
     @Column(length=1000)
