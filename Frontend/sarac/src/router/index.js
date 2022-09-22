@@ -39,6 +39,19 @@ const routes = [
     name: "mypage",
     component: MypageView,
   },
+  {
+    path: "/review",
+    name: "review",
+    component: () => import("@/views/ReviewView.vue"),
+    redirect: "/review/regist",
+    children: [
+      {
+        path: "regist",
+        name: "reviewRegist",
+        component: () => import("@/components/review/ReviewRegistView.vue"),
+      },
+    ],
+  },
 ];
 
 
