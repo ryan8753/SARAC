@@ -10,8 +10,6 @@ import javax.transaction.Transactional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User save(User user);
-
     User findOneByKakaoId(Long KakaoId);
 
     User findOneById(Long id);
