@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("user")
 public class UserController {
 
     @Autowired

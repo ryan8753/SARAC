@@ -6,6 +6,7 @@ import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.entity.ReviewComment;
 import com.sarac.sarac.review.entity.ReviewHashtag;
 import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
 import com.sarac.sarac.review.payload.response.ReviewCommentDTO;
 import com.sarac.sarac.review.payload.response.ReviewDTO;
 import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
@@ -234,5 +235,18 @@ public class ReviewServiceImpl implements ReviewService{
         reviewDetailDTO.setReviewHashtagList(HashtagList);
 
         return reviewDetailDTO;
+    }
+
+    @Override
+    public Long registComment(ReviewCommentRequest reviewCommentRequest){
+        ReviewComment reviewComment =ReviewComment.registReviewComment().
+                reviewCommentRequest(reviewCommentRequest).
+                user(userRepository.findById(reviewCommentRequest.getUserId()).orElseThrow()).
+                review(reviewRepository.findById(reviewCommentRequest.getReviewId()).orElseThrow()).
+                parent(reviewCommentRepository.findById(reviewCommentRequest.getParentId()).orElseThrow()).build();
+
+        ReviewComment savedReviewComment = reviewCommentRepository.save(reviewComment);
+
+        return savedReviewComment.getId();
     }
 }
