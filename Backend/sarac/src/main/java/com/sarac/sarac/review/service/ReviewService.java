@@ -1,6 +1,7 @@
 package com.sarac.sarac.review.service;
 
 import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
 import com.sarac.sarac.review.payload.response.ReviewDTO;
 import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
 import com.sarac.sarac.review.payload.response.ReviewListDTO;
@@ -26,5 +27,7 @@ public interface ReviewService {
     void uploadReviewFile(List<MultipartFile> files, Long id) throws IOException;
 
     ReviewDetailDTO showDetailReview(long id);
+
+    Long registComment(ReviewCommentRequest reviewComment);
 
 }
