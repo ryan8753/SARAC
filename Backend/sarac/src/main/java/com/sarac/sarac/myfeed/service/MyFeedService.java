@@ -1,6 +1,7 @@
 package com.sarac.sarac.myfeed.service;
 
 import com.sarac.sarac.myfeed.dto.response.MyFeedLibraryRes;
+import com.sarac.sarac.myfeed.dto.response.MyFeedReviewListRes;
 import com.sarac.sarac.myfeed.dto.response.MyFeedUserRes;
 import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfoRes;
 import com.sarac.sarac.user.entitiy.User;
@@ -15,4 +16,5 @@ public interface MyFeedService {
 
     Map<String, List<MyFeedLibraryRes>> getLibraryList(String token, Long userId);
 
+    List<MyFeedReviewListRes> getReviewList(String token, Long userId);
 }

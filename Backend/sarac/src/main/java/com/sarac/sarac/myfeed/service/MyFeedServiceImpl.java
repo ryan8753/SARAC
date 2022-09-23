@@ -6,8 +6,13 @@ import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.library.type.LibraryType;
 import com.sarac.sarac.myfeed.dto.response.MyFeedLibraryRes;
+import com.sarac.sarac.myfeed.dto.response.MyFeedReviewListRes;
 import com.sarac.sarac.myfeed.dto.response.MyFeedUserRes;
 import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfoRes;
+import com.sarac.sarac.review.entity.Review;
+import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.repository.ReviewPhotoRepository;
+import com.sarac.sarac.review.repository.ReviewRepository;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.entitiy.UserHashtag;
 import com.sarac.sarac.user.repository.UserHashtagRepository;
@@ -37,6 +42,12 @@ public class MyFeedServiceImpl implements MyFeedService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private ReviewPhotoRepository reviewPhotoRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -118,10 +129,28 @@ public class MyFeedServiceImpl implements MyFeedService {
         return resultMap;
     }
 
+    // 리뷰목록 가져오기
+    @Override
+    public List<MyFeedReviewListRes> getReviewList(String token, Long userId) {
+        // userId가 현재 user의 id값과 같으면 (자기 자신의 리뷰를 보고싶은 경우)
+        if( userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId() == userId ) {
+            List<Review> userReviewList = reviewRepository.findAllByUserId(userId);
+
+            return addReviewsToReviewList(userReviewList);
+        }
+
+        // (타인의 리뷰를 보고싶은 경우 - 리뷰별 공개 여부 확인 필요)
+        List<Review> othersReviewList = reviewRepository.findAllByUserIdAndIsSecret(userId, false);
+
+        return addReviewsToReviewList(othersReviewList);
+    }
+
+    // 유저 해시태그 객체 목록에서 해시태그컨텐츠들만 가져옴
     public List<String> convertUserHashtagListToTagList(List<UserHashtag> userHashtags) {
         return userHashtags.stream().map(UserHashtag::getContent).collect(Collectors.toList());
     }
 
+    // 검색어로 찾은 유저들에 대해 필요한 내용들을 리스트에 담아줌
     public void addUsersToUserList(List<MyFeedUserRes> userListArr, List<User> searchedUsers) {
         for(User user : searchedUsers) {
             List<String> hashtagList = convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId()));
@@ -136,6 +165,7 @@ public class MyFeedServiceImpl implements MyFeedService {
         }
     }
 
+    // 서재에 있는 책들에 대해 필요한 내용들을 리스트에 담아줌
     public void addBooksToLibraryList(List<MyFeedLibraryRes> libraryList, List<Library> userBookList) {
         for(Library userBook : userBookList) {
             Book book = userBook.getBook();
@@ -149,6 +179,44 @@ public class MyFeedServiceImpl implements MyFeedService {
                         .libraryType(userBook.getLibraryType())
                         .build());
         }
+    }
+
+    // 리뷰목록에서 필요한 내용들만 가져와서 리스트에 담아줌
+    public List<MyFeedReviewListRes> addReviewsToReviewList(List<Review> tmpReviewList) {
+        List<MyFeedReviewListRes> reviewList = new ArrayList<>();
+
+        for (Review review : tmpReviewList) {
+            List<ReviewPhoto> reviewPhotoList = reviewPhotoRepository.findAllByReviewId(review.getId());
+            List<String> photoUrlList;
+            
+            // 리뷰에 등록된 사진이 한 개도 없을 경우
+            if(reviewPhotoList.size() == 0) {
+                photoUrlList = new ArrayList<>();
+                // 책 썸네일 대신 보내줌
+                photoUrlList.add(review.getBook().getBookImgUrl());
+            }
+            // 등록된 사진 있을 경우
+            else {
+                // url만 뽑아내서 보내줌
+                photoUrlList = convertReviewPhotoListToUrlList(reviewPhotoList);
+            }
+
+            reviewList.add(
+                    MyFeedReviewListRes.builder()
+                            .reviewId(review.getId())
+                            .bookTitle(review.getBook().getBookTitle())
+                            .title(review.getTitle())
+                            .photoUrlList(photoUrlList)
+                            .isSecret(review.getIsSecret())
+                            .build());
+        }
+        
+        return reviewList;
+    }
+
+    // 리뷰에 연결된 사진 객체들에서 url만 가져옴
+    public List<String> convertReviewPhotoListToUrlList(List<ReviewPhoto> reviewPhoto){
+        return reviewPhoto.stream().map(ReviewPhoto::getPhotoUrl).collect(Collectors.toList());
     }
 }
 
