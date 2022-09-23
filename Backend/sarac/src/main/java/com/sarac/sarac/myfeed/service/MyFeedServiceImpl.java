@@ -2,8 +2,9 @@ package com.sarac.sarac.myfeed.service;
 
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.library.type.LibraryType;
+import com.sarac.sarac.myfeed.dto.response.MyFeedLibraryRes;
 import com.sarac.sarac.myfeed.dto.response.MyFeedUserRes;
-import com.sarac.sarac.myfeed.dto.response.MyFeedUserResInfoRes;
+import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfoRes;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.entitiy.UserHashtag;
 import com.sarac.sarac.user.repository.UserHashtagRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("myFeedService")
 public class MyFeedServiceImpl implements MyFeedService {
@@ -29,8 +31,8 @@ public class MyFeedServiceImpl implements MyFeedService {
 
     // 유저 상세 정보
     @Override
-    public MyFeedUserResInfoRes getInfoByUserInfo(Long userId) {
-        MyFeedUserResInfoRes userInfo = new MyFeedUserResInfoRes();
+    public MyFeedUserInfoRes getInfoByUserInfo(Long userId) {
+        MyFeedUserInfoRes userInfo = new MyFeedUserInfoRes();
 
         Optional<User> userTmp = userRepository.findById(userId);
         userTmp.ifPresent(user -> {
@@ -38,11 +40,7 @@ public class MyFeedServiceImpl implements MyFeedService {
             userInfo.setImagePath(user.getImagePath());
             userInfo.setNickname(user.getNickname());
 
-            List<UserHashtag> userHashtags = userHashtagRepository.findByUserId(userId);
-            List<String> hashtagList = new ArrayList<>();
-            for(UserHashtag tag : userHashtags) {
-                hashtagList.add(tag.getContent());
-            }
+            List<String> hashtagList = convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId()));
             userInfo.setUserHashtag(hashtagList);
 
             Long wish = libraryRepository.countByUserIdAndLibraryType(userId, LibraryType.WISH);
@@ -65,15 +63,27 @@ public class MyFeedServiceImpl implements MyFeedService {
 
         // 닉네임 기반 검색 결과
         List<User> searchNickname = userRepository.findByNicknameContaining(keyWord);
-        for(User user : searchNickname) {
-            List<String> hashtagList = new ArrayList<>();
-            List<UserHashtag> userHashtags = userHashtagRepository.findByUserId(user.getId());
+        addUsersToUserList(userList, searchNickname);
 
-            for(UserHashtag tags : userHashtags) {
-                hashtagList.add(tags.getContent());
-            }
+        // 회원 태그(코드)기반 검색 결과 (keyword가 숫자면 수행)
+        if(keyWord != null && keyWord.matches("[0-9]+")) {
+            List<User> searchUserCode = userRepository.findByIdContaining(Long.parseLong(keyWord));
+            addUsersToUserList(userList, searchUserCode);
+        }
 
-            userList.add(
+        return userList;
+    }
+
+    @Override
+    public List<MyFeedLibraryRes> getBookList(Long userId) {
+        return null; //공개여부 확인 후 리턴
+    }
+
+    public void addUsersToUserList(List<MyFeedUserRes> userListArr, List<User> searchedUsers) {
+        for(User user : searchedUsers) {
+            List<String> hashtagList = convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId()));
+
+            userListArr.add(
                     MyFeedUserRes.builder()
                             .userId(user.getId())
                             .imagePath(user.getImagePath())
@@ -81,28 +91,10 @@ public class MyFeedServiceImpl implements MyFeedService {
                             .userHashtag(hashtagList)
                             .build());
         }
+    }
 
-        // 회원 태그(코드)기반 검색 결과 (keyword가 숫자면 수행)
-        if(keyWord != null && keyWord.matches("[0-9]+")) {
-            List<User> searchUserCode = userRepository.findByIdContaining(Long.parseLong(keyWord));
-            for(User user : searchUserCode) {
-                List<String> hashtagList = new ArrayList<>();
-                List<UserHashtag> userHashtags = userHashtagRepository.findByUserId(user.getId());
-
-                for(UserHashtag tags : userHashtags) {
-                    hashtagList.add(tags.getContent());
-                }
-
-                userList.add(
-                        MyFeedUserRes.builder()
-                                .userId(user.getId())
-                                .imagePath(user.getImagePath())
-                                .nickname(user.getNickname())
-                                .userHashtag(hashtagList)
-                                .build());
-            }
-        }
-
-        return userList;
+    public List<String> convertUserHashtagListToTagList(List<UserHashtag> userHashtags) {
+        return userHashtags.stream().map(UserHashtag::getContent).collect(Collectors.toList());
     }
 }
+
