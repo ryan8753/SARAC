@@ -20,8 +20,6 @@ public interface ReviewService {
 
     void updateReview(ReviewRequest review, Long id,List<MultipartFile> files) throws IOException;
 
-//    List<ReviewListDTO> showUserReviewList(String token);
-
     ReviewDTO showReview(long id);
 
     List<ReviewListDTO> showBookReviewList(String isbn);
