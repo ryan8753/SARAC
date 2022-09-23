@@ -282,7 +282,7 @@ public class ReviewServiceImpl implements ReviewService{
                 wishlist.add(RandomReviewDTO.createRandomReview().
                         review(review).
                         likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
-                        reviewPhotos(reviewPhotoRepository.findAllByReviewId(review.getId())).
+                        reviewPhotos(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId()))).
                         build());
                 if(wishlist.size()>=20) return wishlist;
             }
@@ -295,15 +295,20 @@ public class ReviewServiceImpl implements ReviewService{
         // TODO: 2022-09-22 리뷰별 갯수 제한
         List<Review> reviewList = reviewRepository.findByBook_IsbnIn(reviewRepository.findHotBooks());
 
+
         for (Review review: reviewList) {
             hotList.add(RandomReviewDTO.createRandomReview().
                     review(review).
                     likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
-                    reviewPhotos(reviewPhotoRepository.findAllByReviewId(review.getId())).
+                    reviewPhotos(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId()))).
                     build());
             if(hotList.size()>=size) return hotList;
         }
 
         return hotList;
+    }
+
+    public List<String> convertReviewPhotoListtoUrlList(List<ReviewPhoto> reviewPhoto){
+        return reviewPhoto.stream().map(ReviewPhoto::getPhotoUrl).collect(Collectors.toList());
     }
 }
