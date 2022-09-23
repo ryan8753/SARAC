@@ -11,13 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @SuperBuilder
-public class MyFeedUserInfo extends MyFeedUser{
+public class MyFeedUserResInfoRes extends MyFeedUserRes {
 
     private Long wish;
     private Long reading;
     private Long read;
 
-    public MyFeedUserInfo(Long userId, String imagePath, String nickname, List<String> userHashtag, Long wish, Long reading, Long read) {
+    public MyFeedUserResInfoRes(Long userId, String imagePath, String nickname, List<String> userHashtag, Long wish, Long reading, Long read) {
         super(userId, imagePath, nickname, userHashtag);
         this.wish = wish;
         this.reading = reading;
