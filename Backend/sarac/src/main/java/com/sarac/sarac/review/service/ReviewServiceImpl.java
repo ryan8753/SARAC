@@ -15,6 +15,7 @@ import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
+import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
@@ -25,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -260,8 +258,9 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<RandomReviewDTO> showRandomFeeds(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token) {
+        User user = userRepository.findOneByKakaoId(
+                (Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
         // 총 30개
         // 약 내가 보고싶은 책과 관련된 리뷰 20개, 리뷰가 많은 책 10개
         // 책당 리뷰는 4개씩
@@ -277,7 +276,6 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     public List<RandomReviewDTO> getWishReviewList(User user){
-
         List<RandomReviewDTO> wishlist = new ArrayList<>();
         List<Library> wishLibraries = libraryRepository.findAllByUserAndLibraryType(user, LibraryType.WISH);
         for (Library library: wishLibraries) {

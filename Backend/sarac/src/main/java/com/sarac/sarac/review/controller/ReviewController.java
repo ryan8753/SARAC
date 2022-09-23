@@ -155,11 +155,11 @@ public class ReviewController {
 
     // 피드모아보기
     // TODO: 2022-09-22 토큰에서 userID를 뽑아오도록 변경 필요
-    @GetMapping("/feeds/{userId}")
-    public ResponseEntity<List<RandomReviewDTO>> showRandomFeeds(@PathVariable Long userId) {
+    @GetMapping("/feeds")
+    public ResponseEntity<List<RandomReviewDTO>> showRandomFeeds(@RequestHeader Map<String, Object> token) {
         List<RandomReviewDTO> randomReviewDTOList = new ArrayList<>();
         try {
-            randomReviewDTOList = reviewService.showRandomFeeds(userId);
+            randomReviewDTOList = reviewService.showRandomFeeds(token);
 
         } catch (Exception e) {
             e.printStackTrace();
