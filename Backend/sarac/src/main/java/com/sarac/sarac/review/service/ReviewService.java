@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface ReviewService {
     Long registerReview(ReviewRequest review);
@@ -31,6 +32,6 @@ public interface ReviewService {
 
     Long registComment(ReviewCommentRequest reviewComment);
 
-    List<RandomReviewDTO> showRandomFeeds(Long userId);
+    List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token);
 
 }
