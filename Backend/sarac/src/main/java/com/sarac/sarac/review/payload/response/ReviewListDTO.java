@@ -1,15 +1,15 @@
 package com.sarac.sarac.review.payload.response;
 
 import com.sarac.sarac.review.entity.ReviewPhoto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewListDTO {
     private Long reviewId;
 
