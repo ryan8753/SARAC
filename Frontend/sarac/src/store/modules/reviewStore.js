@@ -9,7 +9,7 @@ const reviewStore = {
     async getRandomFeeds() {
       const accessToken = localStorage.getItem("accessToken");
       const response = await axios({
-        url: "api/v1/review/feeds/1",
+        url: "api/v1/review/feeds",
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,
