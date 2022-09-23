@@ -15,6 +15,7 @@ import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
+import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
@@ -25,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -141,22 +139,6 @@ public class ReviewServiceImpl implements ReviewService{
 
     }
 
-//    @Override
-//    public List<ReviewListDTO> showUserReviewList(String token) {
-//        List<Review> ReviewList = reviewRepository.findAllByUserId(userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId());
-//        List<ReviewListDTO> reviewListDTO = new ArrayList<>();
-//        for (Review review : ReviewList) {
-//            reviewListDTO.add(
-//                    ReviewListDTO.builder()
-//                            .bookTitle(review.getBook().getBookTitle())
-//                            .title(review.getTitle())
-//                            .reviewId(review.getId())
-//                            .photoUrlList(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId())))
-//                            .build());
-//        }
-//        return reviewListDTO;
-//    }
-
     @Override
     public ReviewDTO showReview(long reviewId) {
 
@@ -179,20 +161,9 @@ public class ReviewServiceImpl implements ReviewService{
         List<ReviewListDTO> reviewListDTO = new ArrayList<>();
         for (Review review : ReviewList) {
             List<ReviewPhoto> reviewPhotoList = reviewPhotoRepository.findAllByReviewId(review.getId());
-            List<String> photoUrlList;
-
-            // 리뷰에 등록된 사진이 한 개도 없을 경우
-            if(reviewPhotoList.size() == 0) {
-                photoUrlList = new ArrayList<>();
-                // 책 썸네일 대신 보내줌
-                photoUrlList.add(review.getBook().getBookImgUrl());
-            }
-            // 등록된 사진 있을 경우
-            else {
-                // url만 뽑아내서 보내줌
-                photoUrlList = convertReviewPhotoListtoUrlList(reviewPhotoList);
-            }
-
+            List<String> photoUrlList = new ArrayList<>();
+            photoUrlList.addAll(ifUrlIsEmpty(reviewPhotoList, review));
+            
             reviewListDTO.add(
                     ReviewListDTO.builder()
                             .bookTitle(review.getBook().getBookTitle())
@@ -275,8 +246,9 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<RandomReviewDTO> showRandomFeeds(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token) {
+        User user = userRepository.findOneByKakaoId(
+                (Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
         // 총 30개
         // 약 내가 보고싶은 책과 관련된 리뷰 20개, 리뷰가 많은 책 10개
         // 책당 리뷰는 4개씩
@@ -292,7 +264,6 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     public List<RandomReviewDTO> getWishReviewList(User user){
-
         List<RandomReviewDTO> wishlist = new ArrayList<>();
         List<Library> wishLibraries = libraryRepository.findAllByUserAndLibraryType(user, LibraryType.WISH);
         for (Library library: wishLibraries) {
@@ -301,7 +272,7 @@ public class ReviewServiceImpl implements ReviewService{
                 wishlist.add(RandomReviewDTO.createRandomReview().
                         review(review).
                         likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
-                        reviewPhotos(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId()))).
+                        reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
                         build());
                 if(wishlist.size()>=20) return wishlist;
             }
@@ -319,7 +290,7 @@ public class ReviewServiceImpl implements ReviewService{
             hotList.add(RandomReviewDTO.createRandomReview().
                     review(review).
                     likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
-                    reviewPhotos(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId()))).
+                    reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
                     build());
             if(hotList.size()>=size) return hotList;
         }
@@ -329,5 +300,19 @@ public class ReviewServiceImpl implements ReviewService{
 
     public List<String> convertReviewPhotoListtoUrlList(List<ReviewPhoto> reviewPhoto){
         return reviewPhoto.stream().map(ReviewPhoto::getPhotoUrl).collect(Collectors.toList());
+    }
+
+    public List<String> ifUrlIsEmpty(List<ReviewPhoto> reviewPhotos, Review review){
+        if(reviewPhotos.size() == 0) {
+            // 책 썸네일 대신 보내줌 이거는 Stirng이라 리스트로만 감싸도 되지않을까요?
+            List<String> tmp = new ArrayList<>();
+            tmp.add(review.getBook().getBookImgUrl());
+            return tmp;
+        }
+        // 등록된 사진 있을 경우
+        else {
+            // url만 뽑아내서 보내줌
+            return convertReviewPhotoListtoUrlList(reviewPhotos);
+        }
     }
 }

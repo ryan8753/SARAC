@@ -58,19 +58,6 @@ public class ReviewController {
 
     }
 
-    //개인의 리뷰 목록
-//    @GetMapping("/user")
-//    public ResponseEntity<List<ReviewListDTO>> showUserReviewList( @RequestHeader Map<String,Object> token) {
-//        Map<String, Object> resultMap = new HashMap<>();
-//        List<ReviewListDTO> reviewListDTOS = null;
-//        try {
-//            reviewListDTOS = reviewService.showUserReviewList((String) token.get("authorization"));
-//            resultMap.put("message", "success");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return new ResponseEntity<List<ReviewListDTO>>(reviewListDTOS, HttpStatus.OK);
-//    }
 
     @GetMapping("{id}")
     public ResponseEntity<ReviewDTO> showReview( @PathVariable Long id) {
@@ -155,11 +142,11 @@ public class ReviewController {
 
     // 피드모아보기
     // TODO: 2022-09-22 토큰에서 userID를 뽑아오도록 변경 필요
-    @GetMapping("/feeds/{userId}")
-    public ResponseEntity<List<RandomReviewDTO>> showRandomFeeds(@PathVariable Long userId) {
+    @GetMapping("/feeds")
+    public ResponseEntity<List<RandomReviewDTO>> showRandomFeeds(@RequestHeader Map<String, Object> token) {
         List<RandomReviewDTO> randomReviewDTOList = new ArrayList<>();
         try {
-            randomReviewDTOList = reviewService.showRandomFeeds(userId);
+            randomReviewDTOList = reviewService.showRandomFeeds(token);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface ReviewService {
     Long registerReview(ReviewRequest review);
@@ -18,8 +19,6 @@ public interface ReviewService {
     void deleteReview(Long id);
 
     void updateReview(ReviewRequest review, Long id,List<MultipartFile> files) throws IOException;
-
-//    List<ReviewListDTO> showUserReviewList(String token);
 
     ReviewDTO showReview(long id);
 
@@ -31,6 +30,6 @@ public interface ReviewService {
 
     Long registComment(ReviewCommentRequest reviewComment);
 
-    List<RandomReviewDTO> showRandomFeeds(Long userId);
+    List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token);
 
 }

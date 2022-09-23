@@ -52,15 +52,8 @@ export default {
   },
 
   created() {
-    if (this.review.photoUrl.length == 0) {
-      this.photoUrl = [
-        // 기본이미지 저장 *** 변경필요 ***
-        "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-        "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-      ];
-    } else {
-      this.photoUrl = this.review.photoUrl;
-    }
+    this.photoUrl = this.review.photoUrl;
+
     console.log(this.photoUrl);
   },
 };
