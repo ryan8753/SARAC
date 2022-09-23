@@ -59,18 +59,18 @@ public class ReviewController {
     }
 
     //개인의 리뷰 목록
-    @GetMapping("/user")
-    public ResponseEntity<List<ReviewListDTO>> showUserReviewList( @RequestHeader Map<String,Object> token) {
-        Map<String, Object> resultMap = new HashMap<>();
-        List<ReviewListDTO> reviewListDTOS = null;
-        try {
-            reviewListDTOS = reviewService.showUserReviewList((String) token.get("authorization"));
-            resultMap.put("message", "success");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ResponseEntity<List<ReviewListDTO>>(reviewListDTOS, HttpStatus.OK);
-    }
+//    @GetMapping("/user")
+//    public ResponseEntity<List<ReviewListDTO>> showUserReviewList( @RequestHeader Map<String,Object> token) {
+//        Map<String, Object> resultMap = new HashMap<>();
+//        List<ReviewListDTO> reviewListDTOS = null;
+//        try {
+//            reviewListDTOS = reviewService.showUserReviewList((String) token.get("authorization"));
+//            resultMap.put("message", "success");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return new ResponseEntity<List<ReviewListDTO>>(reviewListDTOS, HttpStatus.OK);
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<ReviewDTO> showReview( @PathVariable Long id) {
