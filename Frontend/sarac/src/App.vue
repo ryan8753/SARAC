@@ -1,6 +1,6 @@
 <template>
   <v-app class="container">
-    <v-main>
+    <v-main class="footerplease">
       <router-view />
     </v-main>
     <Footer v-if="footerOn" />
@@ -72,6 +72,11 @@ export default {
   background-color: white;
   height: calc(var(--vh, 1vh) * 100);
   padding: 0px;
+}
+
+.footerplease {
+  overflow: auto;
+  height: calc(100% - 3rem);
 }
 </style>
 >
