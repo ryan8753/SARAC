@@ -1,7 +1,7 @@
 package com.sarac.sarac.myfeed.controller;
 
-import com.sarac.sarac.myfeed.dto.response.MyFeedUser;
-import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfo;
+import com.sarac.sarac.myfeed.dto.response.MyFeedUserRes;
+import com.sarac.sarac.myfeed.dto.response.MyFeedUserResInfoRes;
 import com.sarac.sarac.myfeed.service.MyFeedService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +22,16 @@ public class MyFeedController {
 
     // 사용자 상세정보
     @GetMapping("/user-info")
-    public ResponseEntity<MyFeedUserInfo> getUserInfo(Long userId) {
-        MyFeedUserInfo userInfo = myFeedService.getInfoByUserInfo(userId);
+    public ResponseEntity<MyFeedUserResInfoRes> getUserInfo(Long userId) {
+        MyFeedUserResInfoRes userInfo = myFeedService.getInfoByUserInfo(userId);
 
         return ResponseEntity.status(200).body(userInfo);
     }
 
     // 유저 검색
     @GetMapping("/user-list")
-    public ResponseEntity<List<MyFeedUser>> getUserList(String keyWord) {
-        List<MyFeedUser> userList = myFeedService.getUserList(keyWord);
+    public ResponseEntity<List<MyFeedUserRes>> getUserList(String keyWord) {
+        List<MyFeedUserRes> userList = myFeedService.getUserList(keyWord);
 
         return ResponseEntity.status(200).body(userList);
     }

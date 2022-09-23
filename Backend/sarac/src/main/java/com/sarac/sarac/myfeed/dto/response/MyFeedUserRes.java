@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @SuperBuilder
-public class MyFeedUser {
+public class MyFeedUserRes {
 
     private Long userId;
     private String imagePath;

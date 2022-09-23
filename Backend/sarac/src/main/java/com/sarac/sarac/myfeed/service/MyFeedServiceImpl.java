@@ -2,8 +2,8 @@ package com.sarac.sarac.myfeed.service;
 
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.library.type.LibraryType;
-import com.sarac.sarac.myfeed.dto.response.MyFeedUser;
-import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfo;
+import com.sarac.sarac.myfeed.dto.response.MyFeedUserRes;
+import com.sarac.sarac.myfeed.dto.response.MyFeedUserResInfoRes;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.entitiy.UserHashtag;
 import com.sarac.sarac.user.repository.UserHashtagRepository;
@@ -29,8 +29,8 @@ public class MyFeedServiceImpl implements MyFeedService {
 
     // 유저 상세 정보
     @Override
-    public MyFeedUserInfo getInfoByUserInfo(Long userId) {
-        MyFeedUserInfo userInfo = new MyFeedUserInfo();
+    public MyFeedUserResInfoRes getInfoByUserInfo(Long userId) {
+        MyFeedUserResInfoRes userInfo = new MyFeedUserResInfoRes();
 
         Optional<User> userTmp = userRepository.findById(userId);
         userTmp.ifPresent(user -> {
@@ -59,9 +59,9 @@ public class MyFeedServiceImpl implements MyFeedService {
 
     // 유저 검색
     @Override
-    public List<MyFeedUser> getUserList(String keyWord) {
+    public List<MyFeedUserRes> getUserList(String keyWord) {
         // 검색된 유저 정보 리스트 넣을 배열
-        List<MyFeedUser> userList = new ArrayList<>();
+        List<MyFeedUserRes> userList = new ArrayList<>();
 
         // 닉네임 기반 검색 결과
         List<User> searchNickname = userRepository.findByNicknameContaining(keyWord);
@@ -74,7 +74,7 @@ public class MyFeedServiceImpl implements MyFeedService {
             }
 
             userList.add(
-                    MyFeedUser.builder()
+                    MyFeedUserRes.builder()
                             .userId(user.getId())
                             .imagePath(user.getImagePath())
                             .nickname(user.getNickname())
@@ -94,7 +94,7 @@ public class MyFeedServiceImpl implements MyFeedService {
                 }
 
                 userList.add(
-                        MyFeedUser.builder()
+                        MyFeedUserRes.builder()
                                 .userId(user.getId())
                                 .imagePath(user.getImagePath())
                                 .nickname(user.getNickname())
