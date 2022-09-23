@@ -7,12 +7,10 @@ import com.sarac.sarac.myfeed.service.MyFeedService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1/myfeed")
@@ -22,7 +20,7 @@ public class MyFeedController {
     @Autowired
     private MyFeedService myFeedService;
 
-    // 사용자 상세정보
+    // 유저 상세정보
     @GetMapping("/userinfo")
     public ResponseEntity<MyFeedUserInfoRes> getUserInfo(Long userId) {
         MyFeedUserInfoRes userInfo = myFeedService.getInfoByUserInfo(userId);
@@ -37,11 +35,13 @@ public class MyFeedController {
 
         return ResponseEntity.status(200).body(userList);
     }
-    
+
+    // 서재
     @GetMapping("/library")
-    public  ResponseEntity<List<MyFeedLibraryRes>> getBookList(Long userId) {
-        List<MyFeedLibraryRes> bookList = new ArrayList<>(); //고치기
+    public  ResponseEntity<Map<String, List<MyFeedLibraryRes>>> getLibraryList(@RequestHeader Map<String,Object> token, Long userId) {
+        Map<String, List<MyFeedLibraryRes>> libraryList = myFeedService.getLibraryList((String) token.get("authorization"), userId);
         
-        return ResponseEntity.status(200).body(bookList);
+        return ResponseEntity.status(200).body(libraryList);
     }
+
 }
