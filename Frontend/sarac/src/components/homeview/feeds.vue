@@ -1,9 +1,13 @@
 <template>
-  <div>
-    <p>개인리뷰모아보기 feeds</p>
+  <div class="container">
+    <!-- <p>개인리뷰모아보기 feeds</p> -->
 
     <div class="wrapper">
-      <div class="card" v-for="(review, index) in reviewList" :key="index">
+      <div
+        class="card"
+        v-for="(review, index) in reviewList"
+        :key="index + 'c'"
+      >
         <div>
           <aFeed :review="review"></aFeed>
         </div>
