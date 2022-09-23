@@ -27,10 +27,10 @@ public class RandomReviewDTO {
 
     private Integer likeCount;
 
-    private List<ReviewPhoto> photoUrl;
+    private List<String> photoUrl;
 
     @Builder(builderMethodName = "createRandomReview")
-    RandomReviewDTO(Review review, Integer likeCount, List<ReviewPhoto> reviewPhotos){
+    RandomReviewDTO(Review review, Integer likeCount, List<String> reviewPhotos){
         this.reviewId =review.getId();
         this.isbn=review.getBook().getIsbn();
         this.title=review.getTitle();
