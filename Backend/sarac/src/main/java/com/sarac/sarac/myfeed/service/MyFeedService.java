@@ -6,12 +6,13 @@ import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfoRes;
 import com.sarac.sarac.user.entitiy.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MyFeedService {
     MyFeedUserInfoRes getInfoByUserInfo(Long userId);
 
     List<MyFeedUserRes> getUserList(String keyWord);
 
-    List<MyFeedLibraryRes> getBookList(Long userId);
+    Map<String, List<MyFeedLibraryRes>> getLibraryList(String token, Long userId);
 
 }
