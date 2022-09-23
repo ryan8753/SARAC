@@ -146,11 +146,13 @@ public class ReviewServiceImpl implements ReviewService{
         List<Review> ReviewList = reviewRepository.findAllByUserId(userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId());
         List<ReviewListDTO> reviewListDTO = new ArrayList<>();
         for (Review review : ReviewList) {
-            ReviewListDTO reviewListDTO1 = new ReviewListDTO();
-            reviewListDTO1.setBookTitle(review.getBook().getBookTitle());
-            reviewListDTO1.setTitle(review.getTitle());
-
-            reviewListDTO.add(reviewListDTO1);
+            reviewListDTO.add(
+                    ReviewListDTO.builder()
+                            .bookTitle(review.getBook().getBookTitle())
+                            .title(review.getTitle())
+                            .reviewId(review.getId())
+                            .photoUrlList(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId())))
+                            .build());
         }
         return reviewListDTO;
     }
@@ -176,11 +178,13 @@ public class ReviewServiceImpl implements ReviewService{
         List<Review> ReviewList = reviewRepository.findAllByBookIsbn(isbn);
         List<ReviewListDTO> reviewListDTO = new ArrayList<>();
         for (Review review : ReviewList) {
-            ReviewListDTO reviewListDTO1 = new ReviewListDTO();
-            reviewListDTO1.setBookTitle(review.getBook().getBookTitle());
-            reviewListDTO1.setTitle(review.getTitle());
-
-            reviewListDTO.add(reviewListDTO1);
+            reviewListDTO.add(
+                    ReviewListDTO.builder()
+                            .bookTitle(review.getBook().getBookTitle())
+                            .title(review.getTitle())
+                            .reviewId(review.getId())
+                            .photoUrlList(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId())))
+                            .build());
         }
         return reviewListDTO;
     }

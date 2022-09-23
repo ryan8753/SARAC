@@ -17,6 +17,6 @@ public class ReviewListDTO {
 
     private String title;
 
-    private List<ReviewPhoto> photoUrlList;
+    private List<String> photoUrlList;
 
 }
