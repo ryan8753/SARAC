@@ -139,21 +139,21 @@ public class ReviewServiceImpl implements ReviewService{
 
     }
 
-    @Override
-    public List<ReviewListDTO> showUserReviewList(String token) {
-        List<Review> ReviewList = reviewRepository.findAllByUserId(userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId());
-        List<ReviewListDTO> reviewListDTO = new ArrayList<>();
-        for (Review review : ReviewList) {
-            reviewListDTO.add(
-                    ReviewListDTO.builder()
-                            .bookTitle(review.getBook().getBookTitle())
-                            .title(review.getTitle())
-                            .reviewId(review.getId())
-                            .photoUrlList(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId())))
-                            .build());
-        }
-        return reviewListDTO;
-    }
+//    @Override
+//    public List<ReviewListDTO> showUserReviewList(String token) {
+//        List<Review> ReviewList = reviewRepository.findAllByUserId(userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId());
+//        List<ReviewListDTO> reviewListDTO = new ArrayList<>();
+//        for (Review review : ReviewList) {
+//            reviewListDTO.add(
+//                    ReviewListDTO.builder()
+//                            .bookTitle(review.getBook().getBookTitle())
+//                            .title(review.getTitle())
+//                            .reviewId(review.getId())
+//                            .photoUrlList(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId())))
+//                            .build());
+//        }
+//        return reviewListDTO;
+//    }
 
     @Override
     public ReviewDTO showReview(long reviewId) {
@@ -173,15 +173,30 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<ReviewListDTO> showBookReviewList(String isbn) {
 
-        List<Review> ReviewList = reviewRepository.findAllByBookIsbn(isbn);
+        List<Review> ReviewList = reviewRepository.findAllByBookIsbnAndIsSecret(isbn, false); // 공개리뷰만 가져오도록 변경
         List<ReviewListDTO> reviewListDTO = new ArrayList<>();
         for (Review review : ReviewList) {
+            List<ReviewPhoto> reviewPhotoList = reviewPhotoRepository.findAllByReviewId(review.getId());
+            List<String> photoUrlList;
+
+            // 리뷰에 등록된 사진이 한 개도 없을 경우
+            if(reviewPhotoList.size() == 0) {
+                photoUrlList = new ArrayList<>();
+                // 책 썸네일 대신 보내줌
+                photoUrlList.add(review.getBook().getBookImgUrl());
+            }
+            // 등록된 사진 있을 경우
+            else {
+                // url만 뽑아내서 보내줌
+                photoUrlList = convertReviewPhotoListtoUrlList(reviewPhotoList);
+            }
+
             reviewListDTO.add(
                     ReviewListDTO.builder()
                             .bookTitle(review.getBook().getBookTitle())
                             .title(review.getTitle())
                             .reviewId(review.getId())
-                            .photoUrlList(convertReviewPhotoListtoUrlList(reviewPhotoRepository.findAllByReviewId(review.getId())))
+                            .photoUrlList(photoUrlList)
                             .build());
         }
         return reviewListDTO;
