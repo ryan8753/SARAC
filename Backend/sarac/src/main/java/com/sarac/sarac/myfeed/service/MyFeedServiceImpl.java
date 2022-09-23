@@ -115,7 +115,7 @@ public class MyFeedServiceImpl implements MyFeedService {
             }
         });
 
-        return null; //공개여부 확인 후 리턴
+        return resultMap;
     }
 
     public List<String> convertUserHashtagListToTagList(List<UserHashtag> userHashtags) {
