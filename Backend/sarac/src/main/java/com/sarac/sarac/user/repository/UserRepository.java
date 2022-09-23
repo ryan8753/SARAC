@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User save(User user);
-
     User findOneByKakaoId(Long KakaoId);
 
     User findOneById(Long id);
