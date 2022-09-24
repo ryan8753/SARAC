@@ -22,8 +22,8 @@ public class BookSearchController {
     }
 
     @GetMapping("/best")
-    public ResponseEntity<?> getBestBooks(String type) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> getBestBooks() {
+        return ResponseEntity.ok().body(bookSearchService.getBestBooks());
     }
 
     @GetMapping("/recommend")

@@ -22,25 +22,44 @@ public class BookSearchService {
 
     private final int EMPTY = 0;
 
+    private final int START_BOOK_INDEX = 0;
+
+    private final int MAX_BEST_BOOK_COUNT = 30;
+
     public BookSearchResultListDto getSearchResult(String keyword) {
         List<Book> bookList
                 = bookSearchRepository.findByIsbnOrAuthorContainsOrBookTitleContains(keyword, keyword, keyword);
 
-        List<BookSearchResultDto> bookSearchResultDtoList = bookList.stream()
-                .map(book -> BookSearchResultDto.builder()
-                            .isbn(book.getIsbn())
-                            .author(book.getAuthor())
-                            .title(book.getBookTitle())
-                            .thumbnail(book.getBookImgUrl())
-                            .score(reviewRepository.existsByBook(book) ?
-                                    reviewRepository.findAllByBook(book).stream()
-                                                .mapToInt(BookScore::getBookScore).average().getAsDouble() : EMPTY)
-                            .build()
-                ).collect(Collectors.toList());
+        return BookSearchResultListDto.builder()
+                .results(calcBookScores(bookList))
+                .build();
+    }
+
+    public BookSearchResultListDto getBestBooks() {
+
+        List<Book> bookList = bookSearchRepository.findBestBooks();
 
         return BookSearchResultListDto.builder()
-                .results(bookSearchResultDtoList)
+                .results(calcBookScores(bookList.subList(START_BOOK_INDEX, cutListCount(bookList))))
                 .build();
+    }
+
+    private List<BookSearchResultDto> calcBookScores(List<Book> bookList) {
+        return bookList.stream()
+                .map(book -> BookSearchResultDto.builder()
+                        .isbn(book.getIsbn())
+                        .author(book.getAuthor())
+                        .title(book.getBookTitle())
+                        .thumbnail(book.getBookImgUrl())
+                        .score(reviewRepository.existsByBook(book) ?
+                                reviewRepository.findAllByBook(book).stream()
+                                        .mapToInt(BookScore::getBookScore).average().getAsDouble() : EMPTY)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private int cutListCount(List<Book> bookList) {
+        return bookList.size() > MAX_BEST_BOOK_COUNT ? MAX_BEST_BOOK_COUNT : bookList.size();
     }
 
 }
