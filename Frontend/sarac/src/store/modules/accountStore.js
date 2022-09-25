@@ -8,12 +8,14 @@ const accountStore = {
     user: null,
   },
   getters: {
-    isLoggedIn: (state)=>{return !!state.user}
+    isLoggedIn: (state) => {
+      return !!state.user;
+    },
   },
   mutations: {
-    SET_USER_INFO(state, userInfo){
-      state.user = userInfo
-      console.log(userInfo)
+    SET_USER_INFO(state, userInfo) {
+      state.user = userInfo;
+      console.log(userInfo);
     },
     USER_LOGOUT(state) {
       // 추후 수정
@@ -23,8 +25,8 @@ const accountStore = {
     },
   },
   actions: {
-    async getUserInfo({commit}, { accessToken, refreshToken }) {
-      axios.defaults.baseURL = "http://localhost:8080";     
+    async getUserInfo({ commit }, { accessToken, refreshToken }) {
+      axios.defaults.baseURL = "http://localhost:8080";
       try {
         const response = await axios({
           method: "get",
@@ -33,8 +35,8 @@ const accountStore = {
             // Authorization: `Bearer ${getState().auth.token}`
             Authorization: `Bearer ${accessToken}`,
           },
-          });
-          commit('SET_USER_INFO', response.data)
+        });
+        commit("SET_USER_INFO", response.data);
         return response.data;
       } catch (err) {
         console.log("에러에러");
@@ -59,7 +61,7 @@ const accountStore = {
       });
     },
 
-    signout({commit}) {
+    signout({ commit }) {
       const accessToken = localStorage.getItem("accessToken");
       axios({
         url: "api/v1/user",
@@ -71,10 +73,10 @@ const accountStore = {
         if (res.data.message == "success") {
           commit("USER_LOGOUT");
           router.go();
-          alert('회원탈퇴성공')
+          alert("회원탈퇴성공");
         }
       });
-    }
+    },
   },
 };
 
