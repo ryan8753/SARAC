@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>ReviewVue</p>
+    <br/>
     <router-view></router-view>
   </div>
 </template>
