@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <!-- <p>개인리뷰모아보기 feeds</p> -->
 
     <div class="wrapper">
