@@ -28,7 +28,7 @@ public interface ReviewService {
 
     ReviewDetailDTO showDetailReview(long id);
 
-    Long registComment(ReviewCommentRequest reviewComment);
+    Long registComment(ReviewCommentRequest reviewComment, Map<String, Object> token);
 
     List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token);
 

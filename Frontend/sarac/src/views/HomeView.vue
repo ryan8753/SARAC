@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-container">
     <!-- <p>개인리뷰모아보기 home이요~</p> -->
     <feeds :reviewList="randomReviewList"></feeds>
   </div>
@@ -34,4 +34,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.home-container {
+  padding: 5%;
+}
+</style>

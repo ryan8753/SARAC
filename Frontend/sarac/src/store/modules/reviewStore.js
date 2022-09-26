@@ -35,6 +35,23 @@ const reviewStore = {
       });
       return response;
     },
+
+    async createCommentApi(commit, inputs) {
+      console.log(inputs);
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: `api/v1/review/comment`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: inputs,
+      }).then((res) => {
+        // this.randomReviewList = res.data;
+        return res.data;
+      });
+      return response;
+    },
   },
 };
 

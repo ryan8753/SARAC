@@ -15,8 +15,8 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/detailReview",
-    name: "detailReview",
+    path: "/detailReview/:reviewId",
+    name: "detailReview/:reviewId",
     component: DetailReview,
     props: true,
   },
