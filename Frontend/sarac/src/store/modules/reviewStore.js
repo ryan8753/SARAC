@@ -15,7 +15,6 @@ const reviewStore = {
           Authorization: `Bearer ${accessToken}`,
         },
       }).then((res) => {
-        console.log(res);
         // this.randomReviewList = res.data;
         return res.data;
       });
@@ -23,7 +22,6 @@ const reviewStore = {
     },
 
     async getDetailReview(commit, reviewId) {
-      console.log(reviewId);
       const accessToken = localStorage.getItem("accessToken");
       const response = await axios({
         url: `api/v1/review/detail/${reviewId}`,
@@ -32,7 +30,6 @@ const reviewStore = {
           Authorization: `Bearer ${accessToken}`,
         },
       }).then((res) => {
-        console.log(res);
         // this.randomReviewList = res.data;
         return res.data;
       });

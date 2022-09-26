@@ -8,7 +8,9 @@
       <v-row class="ml-auto" align="justify">
         <v-col>"{{ review.bookTitle }}" 에 대한</v-col>
         <v-col align="right" class="mr-auto"
-          ><v-btn x-small text @click="clickReview()">자세히보기</v-btn></v-col
+          ><v-btn x-small text @click="clickReview()" v-if="isHome"
+            >자세히보기</v-btn
+          ></v-col
         > </v-row
       ><br />
       <!-- 리뷰제목 -->
@@ -53,6 +55,7 @@ export default {
   data() {
     return {
       photoUrl: null,
+      isHome: true,
     };
   },
   methods: {
@@ -67,6 +70,9 @@ export default {
 
   created() {
     this.photoUrl = this.review.photoUrl;
+    if (document.location.href.indexOf("home") < 0) {
+      this.isHome = false;
+    }
 
     console.log(this.photoUrl);
   },
