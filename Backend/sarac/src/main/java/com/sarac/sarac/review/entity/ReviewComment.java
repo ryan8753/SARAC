@@ -1,7 +1,9 @@
 package com.sarac.sarac.review.entity;
 
+import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
 import com.sarac.sarac.user.entitiy.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,5 +40,14 @@ public class ReviewComment {
     @JoinColumn(name = "review_id", referencedColumnName = "id")
     private Review review;
 
+
+    @Builder(builderMethodName = "registReviewComment")
+    ReviewComment(ReviewCommentRequest reviewCommentRequest, User user, Review review, ReviewComment parent){
+        this.review =review;
+        this.user=user;
+        this.contents = reviewCommentRequest.getContents();
+        this.depth= reviewCommentRequest.getDepth();;
+        this.parent=parent;
+    }
 
 }
