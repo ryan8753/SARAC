@@ -15,6 +15,7 @@ import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
+import com.sarac.sarac.review.util.AladinUtil;
 import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
@@ -55,12 +56,20 @@ public class ReviewServiceImpl implements ReviewService{
     private final ReviewCommentRepository reviewCommentRepository;
     private final JwtUtil jwtUtil;
 
+    private final AladinUtil aladinUtil;
+
 
     @Override
     public Long registerReview(ReviewRequest review) {
 
         Review saveReview = new Review();
         saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+        //test용 코드
+        aladinUtil.getBookInfo();
+        //null체크
+        if(saveReview.getBook().getGenre()==null||saveReview.getBook().getDescription()==null){
+
+        }
         saveReview.setContent(review.getContent());
         saveReview.setTitle(review.getTitle());
         saveReview.setUser(userRepository.findOneById(review.getWriter()));
