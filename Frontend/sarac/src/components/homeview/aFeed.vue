@@ -1,11 +1,18 @@
 <template>
-  <div class="container">
+  <div>
     <!-- {{ review }} -->
     <br />
 
     <v-card class="mx-2">
       <!-- 책이름 -->
-      <v-row class="ml-auto"> "{{ review.bookTitle }}" 에 대한 </v-row><br />
+      <v-row class="ml-auto" align="justify">
+        <v-col>"{{ review.bookTitle }}" 에 대한</v-col>
+        <v-col align="right" class="mr-auto"
+          ><v-btn x-small text @click="clickReview()" v-if="isHome"
+            >자세히보기</v-btn
+          ></v-col
+        > </v-row
+      ><br />
       <!-- 리뷰제목 -->
       <v-row align="center" justify="center"> {{ review.title }}</v-row
       ><br />
@@ -48,13 +55,27 @@ export default {
   data() {
     return {
       photoUrl: null,
+      isHome: true,
     };
+  },
+  methods: {
+    clickReview() {
+      // console.log(this.review.reviewId);
+      // window.location.href = `/detailReview/${this.review.reviewId}`;
+      this.$router.push({
+        path: `detailReview/${this.review.reviewId}`,
+        params: { reviewId: this.review.reviewId },
+      });
+    },
   },
 
   created() {
     this.photoUrl = this.review.photoUrl;
+    if (document.location.href.indexOf("home") < 0) {
+      this.isHome = false;
+    }
 
-    console.log(this.photoUrl);
+    // console.log(this.photoUrl);
   },
 };
 </script>
