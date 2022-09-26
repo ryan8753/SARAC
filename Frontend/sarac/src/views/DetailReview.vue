@@ -1,15 +1,18 @@
 <template>
   <div>
     {{ review }}
+    <aFeed :review="review"></aFeed>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import aFeed from "@/components/homeview/aFeed.vue";
 const reviewStore = "reviewStore";
 
 export default {
   name: "detailReview",
+  components: { aFeed },
   props: {
     reviewId: {
       type: Number,
