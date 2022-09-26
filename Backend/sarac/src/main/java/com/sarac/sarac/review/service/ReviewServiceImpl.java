@@ -198,7 +198,8 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review review = reviewRepository.findById(reviewId).orElseThrow();
         ReviewDetailDTO reviewDetailDTO = new ReviewDetailDTO();
-        reviewDetailDTO.setId(reviewId);
+        reviewDetailDTO.setReviewId(reviewId);
+        reviewDetailDTO.setBookTitle(review.getBook().getBookTitle());
         reviewDetailDTO.setBookScore(review.getBookScore());
         reviewDetailDTO.setIsbn(review.getBook().getIsbn());
         reviewDetailDTO.setContent(review.getContent());
@@ -207,7 +208,7 @@ public class ReviewServiceImpl implements ReviewService{
 
 
         reviewDetailDTO.setLikeCount(reviewLikeRepository.countReviewLikeByReview(review));
-        reviewDetailDTO.setPhotoUrlList(reviewPhotoRepository.findAllByReviewId(reviewId));
+        reviewDetailDTO.setPhotoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review));
         reviewDetailDTO.setReviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review));
 
         List<ReviewCommentDTO> reviewCommentDTOList = new ArrayList<>();
