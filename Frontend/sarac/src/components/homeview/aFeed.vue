@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <!-- {{ review }} -->
     <br />
 
@@ -61,8 +61,9 @@ export default {
   methods: {
     clickReview() {
       // console.log(this.review.reviewId);
+      // window.location.href = `/detailReview/${this.review.reviewId}`;
       this.$router.push({
-        name: "detailReview",
+        path: `detailReview/${this.review.reviewId}`,
         params: { reviewId: this.review.reviewId },
       });
     },
@@ -74,7 +75,7 @@ export default {
       this.isHome = false;
     }
 
-    console.log(this.photoUrl);
+    // console.log(this.photoUrl);
   },
 };
 </script>
