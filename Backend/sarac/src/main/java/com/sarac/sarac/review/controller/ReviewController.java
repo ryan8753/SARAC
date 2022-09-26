@@ -157,11 +157,11 @@ public class ReviewController {
 
     // 리뷰 댓글 추가하기
     @PostMapping("/comment")
-    public ResponseEntity<Map<String, Object>> registComment(@RequestBody ReviewCommentRequest reviewCommentRequest){
+    public ResponseEntity<Map<String, Object>> registComment(@RequestBody ReviewCommentRequest reviewCommentRequest, @RequestHeader Map<String, Object> token){
         Map<String, Object> resultMap = new HashMap<>();
         Long result = 0L;
         try {
-            result = reviewService.registComment(reviewCommentRequest);
+            result = reviewService.registComment(reviewCommentRequest, token);
         }catch (Exception e){
             e.printStackTrace();
             resultMap.put("message", e.getMessage());
