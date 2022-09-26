@@ -53,6 +53,7 @@ const accountStore = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        
       }).then((res) => {
         if (res.data.message == "success") {
           commit("USER_LOGOUT");
