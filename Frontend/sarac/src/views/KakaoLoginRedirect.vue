@@ -44,7 +44,7 @@ export default {
     };
 
     this.getUserInfo(payload);
-    // this.$router.push('/mypage')
+    this.$router.push('/mypage')
   },
 };
 </script>
