@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-container">
     <!-- <p>개인리뷰모아보기 home이요~</p> -->
     <feeds :reviewList="randomReviewList"></feeds>
   </div>
@@ -19,8 +19,6 @@ export default {
     ...mapActions(reviewStore, ["getRandomFeeds"]),
 
     async getFeeds() {
-      // console.log(this.$store.state.accountStore.user.kakaoId);
-      // ID를 구해오는것 고민 필요
       this.randomReviewList = await this.getRandomFeeds();
     },
   },
@@ -36,4 +34,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.home-container {
+  padding: 5%;
+}
+</style>

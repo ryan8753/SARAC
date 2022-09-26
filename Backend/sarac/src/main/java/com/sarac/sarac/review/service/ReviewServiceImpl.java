@@ -198,7 +198,8 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review review = reviewRepository.findById(reviewId).orElseThrow();
         ReviewDetailDTO reviewDetailDTO = new ReviewDetailDTO();
-        reviewDetailDTO.setId(reviewId);
+        reviewDetailDTO.setReviewId(reviewId);
+        reviewDetailDTO.setBookTitle(review.getBook().getBookTitle());
         reviewDetailDTO.setBookScore(review.getBookScore());
         reviewDetailDTO.setIsbn(review.getBook().getIsbn());
         reviewDetailDTO.setContent(review.getContent());
@@ -207,7 +208,7 @@ public class ReviewServiceImpl implements ReviewService{
 
 
         reviewDetailDTO.setLikeCount(reviewLikeRepository.countReviewLikeByReview(review));
-        reviewDetailDTO.setPhotoUrlList(reviewPhotoRepository.findAllByReviewId(reviewId));
+        reviewDetailDTO.setPhotoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review));
         reviewDetailDTO.setReviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review));
 
         List<ReviewCommentDTO> reviewCommentDTOList = new ArrayList<>();
@@ -218,7 +219,12 @@ public class ReviewServiceImpl implements ReviewService{
             reviewCommentDTO.setContent(reviewComment.getContents());
             reviewCommentDTO.setUserImagePath((reviewComment.getUser().getImagePath()));
             reviewCommentDTO.setDepth(reviewComment.getDepth());
-            reviewCommentDTO.setParentId(reviewComment.getParent().getId());
+            if(reviewComment.getParent()==null){
+                reviewCommentDTO.setParentId(0L);
+            }else{
+                reviewCommentDTO.setParentId(reviewComment.getParent().getId());
+            }
+
 
             reviewCommentDTOList.add(reviewCommentDTO);
         }
@@ -233,12 +239,14 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Long registComment(ReviewCommentRequest reviewCommentRequest){
+    public Long registComment(ReviewCommentRequest reviewCommentRequest, Map<String, Object> token){
+        User user = userRepository.findOneByKakaoId(
+                (Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
         ReviewComment reviewComment =ReviewComment.registReviewComment().
                 reviewCommentRequest(reviewCommentRequest).
-                user(userRepository.findById(reviewCommentRequest.getUserId()).orElseThrow()).
+                user(user).
                 review(reviewRepository.findById(reviewCommentRequest.getReviewId()).orElseThrow()).
-                parent(reviewCommentRepository.findById(reviewCommentRequest.getParentId()).orElseThrow()).build();
+                parent(reviewCommentRepository.findById(reviewCommentRequest.getParentId()).orElse(null)).build();
 
         ReviewComment savedReviewComment = reviewCommentRepository.save(reviewComment);
 
