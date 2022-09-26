@@ -9,8 +9,6 @@ public class ReviewCommentRequest {
 
     private Long reviewId;
 
-    private Long userId;
-
     private String contents;
 
     private Integer depth;

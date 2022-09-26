@@ -2,18 +2,23 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
+import DetailReview from "@/views/DetailReview.vue";
 import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
 
 Vue.use(VueRouter);
-
-
 
 const routes = [
   {
     path: "/home",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/detailReview/:reviewId",
+    name: "detailReview/:reviewId",
+    component: DetailReview,
+    props: true,
   },
   {
     path: "/about",
@@ -54,23 +59,22 @@ const routes = [
   },
 ];
 
-
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
 });
 
-router.beforeEach(function(to,from,next) {
-  const accessToken = localStorage.getItem("accessToken") 
-  
+router.beforeEach(function (to, from, next) {
+  const accessToken = localStorage.getItem("accessToken");
+
   if (to.path === "/oauth2/redirect" || to.path === "/login") {
-    next()
+    next();
   } else if (accessToken) {
-    next()
+    next();
   } else {
-    next('/login')
+    next("/login");
   }
-})
+});
 
 export default router;

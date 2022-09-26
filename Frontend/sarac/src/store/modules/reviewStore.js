@@ -15,7 +15,38 @@ const reviewStore = {
           Authorization: `Bearer ${accessToken}`,
         },
       }).then((res) => {
-        console.log(res);
+        // this.randomReviewList = res.data;
+        return res.data;
+      });
+      return response;
+    },
+
+    async getDetailReview(commit, reviewId) {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: `api/v1/review/detail/${reviewId}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }).then((res) => {
+        // this.randomReviewList = res.data;
+        return res.data;
+      });
+      return response;
+    },
+
+    async createCommentApi(commit, inputs) {
+      console.log(inputs);
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: `api/v1/review/comment`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: inputs,
+      }).then((res) => {
         // this.randomReviewList = res.data;
         return res.data;
       });
