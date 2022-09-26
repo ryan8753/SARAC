@@ -21,6 +21,23 @@ const reviewStore = {
       });
       return response;
     },
+
+    async getDetailReview(commit, reviewId) {
+      console.log(reviewId);
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: `api/v1/review/detail/${reviewId}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }).then((res) => {
+        console.log(res);
+        // this.randomReviewList = res.data;
+        return res.data;
+      });
+      return response;
+    },
   },
 };
 

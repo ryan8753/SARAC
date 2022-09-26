@@ -19,8 +19,6 @@ export default {
     ...mapActions(reviewStore, ["getRandomFeeds"]),
 
     async getFeeds() {
-      // console.log(this.$store.state.accountStore.user.kakaoId);
-      // ID를 구해오는것 고민 필요
       this.randomReviewList = await this.getRandomFeeds();
     },
   },

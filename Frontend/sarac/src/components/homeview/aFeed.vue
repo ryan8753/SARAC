@@ -5,7 +5,12 @@
 
     <v-card class="mx-2">
       <!-- 책이름 -->
-      <v-row class="ml-auto"> "{{ review.bookTitle }}" 에 대한 </v-row><br />
+      <v-row class="ml-auto" align="justify">
+        <v-col>"{{ review.bookTitle }}" 에 대한</v-col>
+        <v-col align="right" class="mr-auto"
+          ><v-btn x-small text @click="clickReview()">자세히보기</v-btn></v-col
+        > </v-row
+      ><br />
       <!-- 리뷰제목 -->
       <v-row align="center" justify="center"> {{ review.title }}</v-row
       ><br />
@@ -49,6 +54,15 @@ export default {
     return {
       photoUrl: null,
     };
+  },
+  methods: {
+    clickReview() {
+      // console.log(this.review.reviewId);
+      this.$router.push({
+        name: "detailReview",
+        params: { reviewId: this.review.reviewId },
+      });
+    },
   },
 
   created() {
