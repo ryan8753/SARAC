@@ -5,16 +5,26 @@ const searchStore = {
 
   state: {
     searchResults: [],
+    isSearched: false,
   },
   getters: {
     searchResults: (state) => {
       return state.searchResults;
+    },
+    isSearched: (state) => {
+      return state.isSearched;
     },
   },
   mutations: {
     SET_BOOK_RESULT(state, searchResults) {
       state.searchResults = searchResults;
       console.log(state.searchResults);
+    },
+    SET_TEXT_TRUE(state) {
+      state.isSearched = true;
+    },
+    SET_TEXT_FALSE(state) {
+      state.isSearched = false;
     },
   },
   actions: {
