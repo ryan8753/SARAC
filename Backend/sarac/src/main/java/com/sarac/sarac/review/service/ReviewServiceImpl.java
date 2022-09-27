@@ -64,12 +64,6 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review saveReview = new Review();
         saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
-        //test용 코드
-        aladinUtil.getBookInfo();
-        //null체크
-        if(saveReview.getBook().getGenre()==null||saveReview.getBook().getDescription()==null){
-
-        }
         saveReview.setContent(review.getContent());
         saveReview.setTitle(review.getTitle());
         saveReview.setUser(userRepository.findOneById(review.getWriter()));
@@ -104,6 +98,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     @Transactional
     public void updateReview(ReviewRequest review,Long reviewId,List<MultipartFile> files) throws IOException {
+
 
 
         Review originReview = reviewRepository.findOneById(reviewId);
