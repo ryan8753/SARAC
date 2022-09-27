@@ -9,10 +9,13 @@
         #{{ hashtag }}
       </p> </v-row
     ><br />
+    <!-- 리뷰 수정 버튼(추가) -->
+    <!-- <v-row v-if="review."><v-btn></v-btn></v-row> -->
     <!-- 댓글 -->
     <v-row>
       <div v-if="review.reviewCommentCount">
         댓글 {{ review.reviewCommentCount }} 개 모두 보기
+        <comments :reviewCommentList="reviewCommentList"></comments>
       </div>
       <div v-else>등록된 댓글이 없습니다.</div> </v-row
     ><br />
@@ -27,28 +30,26 @@
 <script>
 import { mapActions } from "vuex";
 import aFeed from "@/components/homeview/aFeed.vue";
+import comments from "@/components/comment/comments.vue";
 import createComment from "@/components/comment/createComment.vue";
 const reviewStore = "reviewStore";
 
 export default {
   name: "detailReview",
-  components: { aFeed, createComment },
-  //   props: {
-  //     reviewId: {
-  //       type: Number,
-  //       default: 0,
-  //     },
-  //   },
+  components: { aFeed, createComment, comments },
+
   data() {
     return {
       review: null,
       reviewId: 0,
+      reviewCommentList: null,
     };
   },
   methods: {
     ...mapActions(reviewStore, ["getDetailReview"]),
     async getReview(reviewId) {
       this.review = await this.getDetailReview(reviewId);
+      this.reviewCommentList = this.review.reviewCommentList;
     },
     updateInfo() {
       this.getReview(this.reviewId);
