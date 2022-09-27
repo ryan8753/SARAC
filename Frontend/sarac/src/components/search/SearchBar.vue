@@ -7,6 +7,7 @@
         </v-col>
         <v-col cols="9">
           <v-text-field
+            hide-details
             v-model="keyword"
             append-icon="mdi-magnify"
             append-outer-icon="mdi-camera"
@@ -20,6 +21,7 @@
             @click:clear="clearKeyword"
             color="rgba(170, 83, 14, 1)"
             dense
+            @keydown.enter.prevent="searchBook"
           ></v-text-field>
         </v-col>
         <v-col cols="1"> </v-col>
@@ -32,7 +34,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import { StreamBarcodeReader } from "vue-barcode-reader";
 const searchStore = "searchStore";
 
@@ -49,11 +51,13 @@ export default {
   },
   methods: {
     ...mapActions(searchStore, ["getBookResults"]),
+    ...mapMutations(searchStore, { setTypeTrue: "SET_TEXT_TRUE" }),
     searchBook() {
       if (this.keyword === undefined || this.keyword.length < 2) {
         alert("2글자 이상 입력해주세요.");
         return;
       }
+      this.setTypeTrue();
       this.getBookResults(this.keyword);
     },
     getPicture() {
@@ -64,7 +68,6 @@ export default {
     },
     onDecode(text) {
       this.keyword = text;
-      console.log(text);
       this.showCamera = false;
     },
   },

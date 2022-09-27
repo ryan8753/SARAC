@@ -1,22 +1,25 @@
 <template>
   <div>
     <search-bar></search-bar>
-    <book-search-list></book-search-list>
+    <book-search-list :type="isSearched"></book-search-list>
   </div>
 </template>
 <script>
 import SearchBar from "@/components/search/SearchBar.vue";
 import BookSearchList from "@/components/search/BookSearchList.vue";
 
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 const searchStore = "searchStore";
 
 export default {
   components: { SearchBar, BookSearchList },
   computed: {
     ...mapState(["searchResults"]),
+    ...mapGetters(searchStore, ["isSearched"]),
+    ...mapMutations(searchStore, { setTypeFalse: "SET_TEXT_FALSE" }),
   },
   mounted() {
+    this.setTypeFalse;
     this.getBestBook();
   },
   methods: {
