@@ -16,7 +16,7 @@ const routes = [
   },
   {
     path: "/detailReview/:reviewId",
-    name: "detailReview/:reviewId",
+    name: "detailReview",
     component: DetailReview,
     props: true,
   },
