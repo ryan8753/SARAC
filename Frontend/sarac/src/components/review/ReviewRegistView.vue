@@ -70,24 +70,27 @@
           @change="onImageChange"
           v-model="files"
         />
-
+        <span>{{ review.hashtag }}</span>
+         <v-btn @click="deleteHashtag()">삭제</v-btn>
         <v-row>
-          <v-col cols="4">태그 입력</v-col>
-          <v-col cols="6">
-            <v-text-field
-              v-model="review.hashtag"
+          <v-col cols="8"><v-text-field
+              v-model="hashtag"
               label="해시태그 입력"
-              @keyup.enter="createComment()"
-            ></v-text-field>
+              type="text"
+            ></v-text-field></v-col>
+          <v-col cols="4">
+            
+            <v-btn @click="inputHashtag(hashtag)">Add</v-btn>
           </v-col>
         </v-row>
+
+        <!--  -->
         <v-row>
           <v-col>
-           
-            <v-btn type="submit"  v-if="this.type === 'modify'"> 리뷰 수정 </v-btn>
-           <v-btn type="submit" v-else>
-              리뷰 작성
+            <v-btn type="submit" v-if="this.type === 'modify'">
+              리뷰 수정
             </v-btn>
+            <v-btn type="submit" v-else> 리뷰 작성 </v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -104,12 +107,9 @@ export default {
 
   data() {
     return {
-      // data속성에서 추가되는 변수들
       uploadimageurl: [], // 업로드한 이미지의 미리보기 기능을 위해 url 저장하는 객체
-      imagecnt: 0, // 업로드한 이미지 개수 => 제출버튼 클릭시 back서버와 axios 통신하게 되는데,
-      // 이 때, 이 값도 넘겨줌
+      hashtag: "",
       review: {
-       
         writer: "",
         isbn: "",
         title: "",
@@ -117,10 +117,8 @@ export default {
         bookScore: 3,
         isSecret: false,
         hashtag: [],
-        
       },
-      files:[],
-      formData:"",
+      files: [],
     };
   },
 
@@ -133,7 +131,7 @@ export default {
   created() {
     //수정
     // if (this.type === "modify") {
-    //   this.udpdateReview();
+
     // }
     this.review.title = this.user.nickname + "님의 리뷰입니다.";
     this.review.writer = this.user.nickname;
@@ -141,20 +139,30 @@ export default {
 
   components: {},
   methods: {
-    ...mapActions(reviewStore, ["registReview","updateReview"]),
+    ...mapActions(reviewStore, ["registReview", "updateReview"]),
 
     onSubmit(event) {
       event.preventDefault();
 
       let err = true;
       let msg = "";
-        !this.review.content &&
-        ((msg = "내용을 입력해주세요"),
-        (err = false)
-        );
+      !this.review.content && ((msg = "내용을 입력해주세요"), (err = false));
 
       if (!err) alert(msg);
-      else this.type === "modify" ? this.modify() : this.regist() ;
+      else this.type === "modify" ? this.modify() : this.regist();
+    },
+    deleteHashtag(){
+      
+    },
+
+    inputHashtag(hashtag) {
+      if (!hashtag) {
+        return;
+      }
+      this.review.hashtag.push(hashtag);
+      console.log(this.review.hashtag);
+      this.hashtag = "";
+      console.log(this.hashtag);
     },
 
     onImageChange(file) {
@@ -165,7 +173,6 @@ export default {
       const formData = new FormData(); // 파일을 전송할때는 FormData 형식으로 전송
       this.uploadimageurl = []; // uploadimageurl은 미리보기용으로 사용
       file.forEach((item) => {
-        
         formData.append("files", item); // formData의 key: 'files', value: 이미지
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -174,17 +181,15 @@ export default {
         };
         reader.readAsDataURL(item);
       });
-      this.formData=formData
-      
+      this.formData = formData;
     },
     async regist() {
-      const review = this.review
-      const files = this.files
-      this.registReview({review,files});
+      const review = this.review;
+      const files = this.files;
+      this.registReview({ review, files });
     },
     async modify() {
-
-     await this.updateReview(this.review);
+      await this.updateReview(this.review);
     },
   },
 };
