@@ -3,7 +3,8 @@
     v-model="value"
     color="rgba(170, 83, 14, 1)"
     background-color="rgb(245,245,245)"
-    height="3rem"
+    height="4rem"
+    shift
   >
     <v-btn value="home" min-width="50px">
       <span>home</span>
