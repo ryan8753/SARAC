@@ -59,7 +59,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String makeRedirectUrl(String accessToken, String refreshToken) {
-        return UriComponentsBuilder.fromUriString("https://test.sarac.tk/oauth2/redirect?accessToken="+accessToken+"&refreshToken="+refreshToken)
+        return UriComponentsBuilder.fromUriString("https://test.sarac.tk/redirect?accessToken="+accessToken+"&refreshToken="+refreshToken)
                 .build().toUriString();
     }
 }
