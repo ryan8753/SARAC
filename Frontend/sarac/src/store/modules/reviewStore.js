@@ -1,5 +1,6 @@
 // import router from "@/router";
 import axios from "axios";
+
 const reviewStore = {
   namespaced: true,
   state: {},
@@ -52,22 +53,28 @@ const reviewStore = {
       });
       return response;
     },
-    registReview(context,review) {
+    async registReview(context,{review,files}) {
       context;
+      console.log(review);
+      console.log(files);
       const formData = new FormData();
-      // formData.append('review', new Blob([ JSON.stringify(data) ], {type : "application/json"}));
-      // formData.append("files", photoFile.files[0]);
+      formData.append('review', new Blob([ JSON.stringify(review) ], {type : "application/json"}));
+      // formData.append('review', review);
+      
+      for(let i=0; i<files.length ;i++){
+        formData.append("files", files[i]);
+      }
+      // formData.append("files", files);
       const accessToken = localStorage.getItem("accessToken");
-      const response = axios({
+      const response = await axios({
         url: "api/v1/review",
         method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data',
+          // 'Content-Type': 'multipart/form-data',
         },
-        data:{
-          formData,
-        },
+        data: formData,
+        
 
         
       }).then((res) => {
