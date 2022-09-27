@@ -81,7 +81,7 @@ public class UserController {
         try {
             if (file.getContentType().startsWith("image")) {
                 String image = userService.uploadFile(file, (String) token.get("authorization"));
-                resultMap.put("image_path", image);
+                resultMap.put("imagePath", image);
             } else {
                 resultMap.put("message", "이미지 파일만 업로드 가능합니다.");
             }
