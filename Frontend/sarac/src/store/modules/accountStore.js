@@ -31,7 +31,6 @@ const accountStore = {
   },
   actions: {
     async getUserInfo({ commit }, { accessToken, refreshToken }) {
-      axios.defaults.baseURL = "http://localhost:8080";
       try {
         const response = await axios({
           method: "get",
