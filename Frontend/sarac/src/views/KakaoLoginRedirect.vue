@@ -1,13 +1,6 @@
 <template>
   <div>
-    <div>로그인페이지</div>
-    <a :href="URL">
-      <img
-        className="kakao-box-login block"
-        alt="kakaoLoginBtn"
-        src="icons/kakaoLogo.png"
-      />
-    </a>
+    <div>로그인리다이렉트</div>
   </div>
 </template>
 

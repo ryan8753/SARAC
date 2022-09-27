@@ -65,7 +65,6 @@ export default {
   .container {
     width: 600px;
     padding: 0px;
-    /* position: static; */
   }
 }
 .container {
