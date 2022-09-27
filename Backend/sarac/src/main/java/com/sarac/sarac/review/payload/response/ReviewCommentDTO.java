@@ -11,6 +11,8 @@ public class ReviewCommentDTO {
     private Long commentId;
     private Long userId;
 
+    private String userNickname;
+
     private String content;
 
     private String userImagePath;

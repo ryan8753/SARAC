@@ -13,9 +13,9 @@
     <!-- <v-row v-if="review."><v-btn></v-btn></v-row> -->
     <!-- 댓글 -->
     <v-row>
-      <div v-if="review.reviewCommentCount">
+      <div v-if="review.reviewCommentCount" style="width: 100%">
         댓글 {{ review.reviewCommentCount }} 개 모두 보기
-        <comments :reviewCommentList="reviewCommentList"></comments>
+        <comments :reviewCommentList="review.reviewCommentList"></comments>
       </div>
       <div v-else>등록된 댓글이 없습니다.</div> </v-row
     ><br />
@@ -36,20 +36,18 @@ const reviewStore = "reviewStore";
 
 export default {
   name: "detailReview",
-  components: { aFeed, createComment, comments },
+  components: { aFeed, comments, createComment },
 
   data() {
     return {
       review: null,
       reviewId: 0,
-      reviewCommentList: null,
     };
   },
   methods: {
     ...mapActions(reviewStore, ["getDetailReview"]),
     async getReview(reviewId) {
       this.review = await this.getDetailReview(reviewId);
-      this.reviewCommentList = this.review.reviewCommentList;
     },
     updateInfo() {
       this.getReview(this.reviewId);
