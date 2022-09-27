@@ -5,6 +5,7 @@ import LoginView from "@/views/LoginView.vue";
 import DetailReview from "@/views/DetailReview.vue";
 import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
+import MyFeedView from "@/views/MyFeedView.vue";
 
 Vue.use(VueRouter);
 
@@ -44,6 +45,11 @@ const routes = [
     name: "mypage",
     component: MypageView,
   },
+  {
+    path: "/myfeed",
+    name: "myfeed",
+    component: MyFeedView,
+  }
 ];
 
 const router = new VueRouter({
