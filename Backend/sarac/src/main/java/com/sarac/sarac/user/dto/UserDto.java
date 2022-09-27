@@ -12,8 +12,9 @@ public class UserDto {
 
     private String imagePath;
 
-    private boolean isLabraryOpen;
+    private boolean LibraryOpen;
 
-    private boolean isReviewOpen;
+    private boolean ReviewOpen;
+
 
 }
