@@ -76,3 +76,7 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
+
+#알라딘
+aladin:
+  ttbkey: ttbdanijde711853001
