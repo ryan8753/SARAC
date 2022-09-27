@@ -14,14 +14,18 @@
             clear-icon="mdi-close-circle"
             clearable
             type="text"
-            placeholder="Search Keyword"
+            placeholder="검색어 입력"
             @click:append="searchBook"
             @click:append-outer="getPicture"
             @click:clear="clearKeyword"
             color="rgba(170, 83, 14, 1)"
+            dense
           ></v-text-field>
         </v-col>
         <v-col cols="1"> </v-col>
+      </v-row>
+      <v-row v-if="showCamera">
+        <StreamBarcodeReader @decode="onDecode"></StreamBarcodeReader>
       </v-row>
     </v-container>
   </v-form>
@@ -29,12 +33,17 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import { StreamBarcodeReader } from "vue-barcode-reader";
 const searchStore = "searchStore";
 
 export default {
   data: () => ({
     keyword: "",
+    showCamera: false,
   }),
+  components: {
+    StreamBarcodeReader,
+  },
   computed: {
     ...mapState(["searchResults"]),
   },
@@ -47,9 +56,16 @@ export default {
       }
       this.getBookResults(this.keyword);
     },
-    getPicture() {},
+    getPicture() {
+      this.showCamera = !this.showCamera;
+    },
     clearKeyword() {
       this.keyword = "";
+    },
+    onDecode(text) {
+      this.keyword = text;
+      console.log(text);
+      this.showCamera = false;
     },
   },
 };

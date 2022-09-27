@@ -2,9 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="4">
-        <v-img
-          src="https://bookthumb-phinf.pstatic.net/cover/120/221/12022171.jpg?type=m1&udate=20170502"
-        ></v-img>
+        <v-img :src="getThumbnail"></v-img>
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="7">
@@ -27,16 +25,19 @@
 
 <script>
 export default {
-  data: () => ({
-    thumbnailExistance: true,
-    thumbnailAddr: "",
-  }),
   props: {
     isbn: String,
     author: String,
     title: String,
     thumbnail: String,
     score: Number,
+  },
+  computed: {
+    getThumbnail() {
+      return !this.thumbnail
+        ? "https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png"
+        : this.thumbnail;
+    },
   },
 };
 </script>
