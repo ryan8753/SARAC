@@ -1,5 +1,6 @@
 // import router from "@/router";
 import axios from "axios";
+
 const reviewStore = {
   namespaced: true,
   state: {},
@@ -47,6 +48,63 @@ const reviewStore = {
         },
         data: inputs,
       }).then((res) => {
+        // this.randomReviewList = res.data;
+        return res.data;
+      });
+      return response;
+    },
+    async registReview(context,{review,files}) {
+      context;
+      console.log(review);
+      console.log(files);
+      const formData = new FormData();
+      formData.append('review', new Blob([ JSON.stringify(review) ], {type : "application/json"}));
+      
+      for(let i=0; i<files.length ;i++){
+        formData.append("files", files[i]);
+      }
+    
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: "api/v1/review",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          // 'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+        
+
+        
+      }).then((res) => {
+        console.log(res);
+        // this.randomReviewList = res.data;
+        return res.data;
+      });
+      return response;
+    },
+    async updateReview(context,{review,files}) {
+      context;
+      const formData = new FormData();
+      formData.append('review', new Blob([ JSON.stringify(review) ], {type : "application/json"}));
+      
+      for(let i=0; i<files.length ;i++){
+        formData.append("files", files[i]);
+      }
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: "api/v1/review/update",
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          // 'Content-Type': 'multipart/form-data',
+        },
+        data:{
+          formData,
+        },
+        
+      }).then((res) => {
+        console.log(res);
         // this.randomReviewList = res.data;
         return res.data;
       });
