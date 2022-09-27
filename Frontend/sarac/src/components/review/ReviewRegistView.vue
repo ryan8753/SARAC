@@ -70,8 +70,12 @@
           @change="onImageChange"
           v-model="files"
         />
-        <span>{{ review.hashtag }}</span>
-         <v-btn @click="deleteHashtag()">삭제</v-btn>
+        <span  v-for="(item, j) in review.hashtag"
+        :key="j"
+        >
+          
+          #{{ item }} <v-btn icon color="red" @click="deleteHashtag(j)">x</v-btn></span>
+        
         <v-row>
           <v-col cols="8"><v-text-field
               v-model="hashtag"
@@ -101,6 +105,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 const reviewStore = "reviewStore";
+const accountStore = "accountStore";
 
 export default {
   name: "ReviewRegist",
@@ -126,7 +131,7 @@ export default {
     type: { type: String },
   },
   computed: {
-    ...mapState(["user"]),
+    ...mapState(accountStore,["user"]),
   },
   created() {
     //수정
@@ -134,7 +139,7 @@ export default {
 
     // }
     this.review.title = this.user.nickname + "님의 리뷰입니다.";
-    this.review.writer = this.user.nickname;
+    // this.review.writer = this.user.userId;
   },
 
   components: {},
@@ -151,7 +156,14 @@ export default {
       if (!err) alert(msg);
       else this.type === "modify" ? this.modify() : this.regist();
     },
-    deleteHashtag(){
+    deleteHashtag(j){
+      let hashtagIndex = this.review.hashtag[j];
+      let temp = this.review.hashtag.filter(function(data){
+        return data!=hashtagIndex
+      
+      })
+      this.review.hashtag=temp
+  
       
     },
 
