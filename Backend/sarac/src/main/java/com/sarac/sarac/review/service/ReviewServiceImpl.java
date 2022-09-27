@@ -15,6 +15,7 @@ import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
+import com.sarac.sarac.review.util.AladinUtil;
 import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
@@ -54,6 +55,8 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewCommentRepository reviewCommentRepository;
     private final JwtUtil jwtUtil;
+
+    private final AladinUtil aladinUtil;
 
 
     @Override
@@ -95,6 +98,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     @Transactional
     public void updateReview(ReviewRequest review,Long reviewId,List<MultipartFile> files) throws IOException {
+
 
 
         Review originReview = reviewRepository.findOneById(reviewId);
