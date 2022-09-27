@@ -35,7 +35,7 @@ const routes = [
     component: LoginView,
   },
   {
-    path: "/oauth2/redirect",
+    path: "/redirect",
     name: "kakaoredirect",
     component: KakaoRedirect,
   },
@@ -55,7 +55,7 @@ const router = new VueRouter({
 router.beforeEach(function (to, from, next) {
   const accessToken = localStorage.getItem("accessToken");
 
-  if (to.path === "/oauth2/redirect" || to.path === "/login") {
+  if (to.path === "/redirect" || to.path === "/login") {
     next();
   } else if (accessToken) {
     next();
