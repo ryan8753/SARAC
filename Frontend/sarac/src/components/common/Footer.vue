@@ -18,7 +18,7 @@
       <v-icon>mdi-book-search</v-icon>
     </v-btn>
 
-    <v-btn value="write" min-width="50px">
+    <v-btn value="review" min-width="50px" >
       <span>Write</span>
 
       <v-icon>mdi-pencil</v-icon>
