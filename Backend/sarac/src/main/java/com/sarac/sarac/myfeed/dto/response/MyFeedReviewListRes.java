@@ -1,6 +1,5 @@
-package com.sarac.sarac.review.payload.response;
+package com.sarac.sarac.myfeed.dto.response;
 
-import com.sarac.sarac.review.entity.ReviewPhoto;
 import lombok.*;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewListDTO {
+public class MyFeedReviewListRes {
     private Long reviewId;
 
     private String bookTitle;
@@ -19,4 +18,5 @@ public class ReviewListDTO {
 
     private List<String> photoUrlList;
 
+    private Boolean isSecret;
 }

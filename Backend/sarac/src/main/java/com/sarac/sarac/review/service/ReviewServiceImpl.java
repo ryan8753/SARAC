@@ -1,19 +1,22 @@
 package com.sarac.sarac.review.service;
 
+import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.global.util.FileUpload;
+import com.sarac.sarac.library.entity.Library;
+import com.sarac.sarac.library.repository.LibraryRepository;
+import com.sarac.sarac.library.type.LibraryType;
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.entity.ReviewComment;
 import com.sarac.sarac.review.entity.ReviewHashtag;
 import com.sarac.sarac.review.entity.ReviewPhoto;
 import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
-import com.sarac.sarac.review.payload.response.ReviewCommentDTO;
-import com.sarac.sarac.review.payload.response.ReviewDTO;
-import com.sarac.sarac.review.payload.response.ReviewDetailDTO;
-import com.sarac.sarac.review.payload.response.ReviewListDTO;
+import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
+import com.sarac.sarac.user.dto.UserDto;
+import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -42,6 +43,8 @@ public class ReviewServiceImpl implements ReviewService{
     private final UserRepository userRepository;
 
     private final BookRepository bookRepository;
+
+    private final LibraryRepository libraryRepository;
 
     private final ReviewHashtagRepository reviewHashtagRepository;
 
@@ -137,20 +140,6 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<ReviewListDTO> showUserReviewList(String token) {
-        List<Review> ReviewList = reviewRepository.findAllByUserId(userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId());
-        List<ReviewListDTO> reviewListDTO = new ArrayList<>();
-        for (Review review : ReviewList) {
-            ReviewListDTO reviewListDTO1 = new ReviewListDTO();
-            reviewListDTO1.setBookTitle(review.getBook().getBookTitle());
-            reviewListDTO1.setTitle(review.getTitle());
-
-            reviewListDTO.add(reviewListDTO1);
-        }
-        return reviewListDTO;
-    }
-
-    @Override
     public ReviewDTO showReview(long reviewId) {
 
         Review review = reviewRepository.findOneById(reviewId);
@@ -168,14 +157,20 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<ReviewListDTO> showBookReviewList(String isbn) {
 
-        List<Review> ReviewList = reviewRepository.findAllByBookIsbn(isbn);
+        List<Review> ReviewList = reviewRepository.findAllByBookIsbnAndIsSecret(isbn, false); // 공개리뷰만 가져오도록 변경
         List<ReviewListDTO> reviewListDTO = new ArrayList<>();
         for (Review review : ReviewList) {
-            ReviewListDTO reviewListDTO1 = new ReviewListDTO();
-            reviewListDTO1.setBookTitle(review.getBook().getBookTitle());
-            reviewListDTO1.setTitle(review.getTitle());
-
-            reviewListDTO.add(reviewListDTO1);
+            List<ReviewPhoto> reviewPhotoList = reviewPhotoRepository.findAllByReviewId(review.getId());
+            List<String> photoUrlList = new ArrayList<>();
+            photoUrlList.addAll(ifUrlIsEmpty(reviewPhotoList, review));
+            
+            reviewListDTO.add(
+                    ReviewListDTO.builder()
+                            .bookTitle(review.getBook().getBookTitle())
+                            .title(review.getTitle())
+                            .reviewId(review.getId())
+                            .photoUrlList(photoUrlList)
+                            .build());
         }
         return reviewListDTO;
     }
@@ -203,7 +198,8 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review review = reviewRepository.findById(reviewId).orElseThrow();
         ReviewDetailDTO reviewDetailDTO = new ReviewDetailDTO();
-        reviewDetailDTO.setId(reviewId);
+        reviewDetailDTO.setReviewId(reviewId);
+        reviewDetailDTO.setBookTitle(review.getBook().getBookTitle());
         reviewDetailDTO.setBookScore(review.getBookScore());
         reviewDetailDTO.setIsbn(review.getBook().getIsbn());
         reviewDetailDTO.setContent(review.getContent());
@@ -212,7 +208,7 @@ public class ReviewServiceImpl implements ReviewService{
 
 
         reviewDetailDTO.setLikeCount(reviewLikeRepository.countReviewLikeByReview(review));
-        reviewDetailDTO.setPhotoUrlList(reviewPhotoRepository.findAllByReviewId(reviewId));
+        reviewDetailDTO.setPhotoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review));
         reviewDetailDTO.setReviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review));
 
         List<ReviewCommentDTO> reviewCommentDTOList = new ArrayList<>();
@@ -223,7 +219,12 @@ public class ReviewServiceImpl implements ReviewService{
             reviewCommentDTO.setContent(reviewComment.getContents());
             reviewCommentDTO.setUserImagePath((reviewComment.getUser().getImagePath()));
             reviewCommentDTO.setDepth(reviewComment.getDepth());
-            reviewCommentDTO.setParentId(reviewComment.getParent().getId());
+            if(reviewComment.getParent()==null){
+                reviewCommentDTO.setParentId(0L);
+            }else{
+                reviewCommentDTO.setParentId(reviewComment.getParent().getId());
+            }
+
 
             reviewCommentDTOList.add(reviewCommentDTO);
         }
@@ -238,15 +239,88 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Long registComment(ReviewCommentRequest reviewCommentRequest){
+    public Long registComment(ReviewCommentRequest reviewCommentRequest, Map<String, Object> token){
+        User user = userRepository.findOneByKakaoId(
+                (Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
         ReviewComment reviewComment =ReviewComment.registReviewComment().
                 reviewCommentRequest(reviewCommentRequest).
-                user(userRepository.findById(reviewCommentRequest.getUserId()).orElseThrow()).
+                user(user).
                 review(reviewRepository.findById(reviewCommentRequest.getReviewId()).orElseThrow()).
-                parent(reviewCommentRepository.findById(reviewCommentRequest.getParentId()).orElseThrow()).build();
+                parent(reviewCommentRepository.findById(reviewCommentRequest.getParentId()).orElse(null)).build();
 
         ReviewComment savedReviewComment = reviewCommentRepository.save(reviewComment);
 
         return savedReviewComment.getId();
+    }
+
+    @Override
+    public List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token) {
+        User user = userRepository.findOneByKakaoId(
+                (Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
+        // 총 30개
+        // 약 내가 보고싶은 책과 관련된 리뷰 20개, 리뷰가 많은 책 10개
+        // 책당 리뷰는 4개씩
+        List<RandomReviewDTO> list = new ArrayList<>();
+        List<RandomReviewDTO> wishlist = getWishReviewList(user);
+        list.addAll(wishlist);
+        List<RandomReviewDTO> hotlist = getHotReviewList(30-wishlist.size());
+        list.addAll(hotlist);
+
+        // TODO: 2022-09-22 정렬방법에 의해 리뷰 순서가 섞임 
+        HashSet<RandomReviewDTO> listset = new HashSet<>(list);
+        return new ArrayList<>(listset);
+    }
+
+    public List<RandomReviewDTO> getWishReviewList(User user){
+        List<RandomReviewDTO> wishlist = new ArrayList<>();
+        List<Library> wishLibraries = libraryRepository.findAllByUserAndLibraryType(user, LibraryType.WISH);
+        for (Library library: wishLibraries) {
+            List<Review> tmp = reviewRepository.findTop4ByBookOrderByIdDesc(library.getBook());
+            for (Review review: tmp) {
+                wishlist.add(RandomReviewDTO.createRandomReview().
+                        review(review).
+                        likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
+                        reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
+                        build());
+                if(wishlist.size()>=20) return wishlist;
+            }
+        }
+        return wishlist;
+    }
+
+    public List<RandomReviewDTO> getHotReviewList(int size){
+        List<RandomReviewDTO> hotList = new ArrayList<>();
+        // TODO: 2022-09-22 리뷰별 갯수 제한
+        List<Review> reviewList = reviewRepository.findByBook_IsbnIn(reviewRepository.findHotBooks());
+
+
+        for (Review review: reviewList) {
+            hotList.add(RandomReviewDTO.createRandomReview().
+                    review(review).
+                    likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
+                    reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
+                    build());
+            if(hotList.size()>=size) return hotList;
+        }
+
+        return hotList;
+    }
+
+    public List<String> convertReviewPhotoListtoUrlList(List<ReviewPhoto> reviewPhoto){
+        return reviewPhoto.stream().map(ReviewPhoto::getPhotoUrl).collect(Collectors.toList());
+    }
+
+    public List<String> ifUrlIsEmpty(List<ReviewPhoto> reviewPhotos, Review review){
+        if(reviewPhotos.size() == 0) {
+            // 책 썸네일 대신 보내줌 이거는 Stirng이라 리스트로만 감싸도 되지않을까요?
+            List<String> tmp = new ArrayList<>();
+            tmp.add(review.getBook().getBookImgUrl());
+            return tmp;
+        }
+        // 등록된 사진 있을 경우
+        else {
+            // url만 뽑아내서 보내줌
+            return convertReviewPhotoListtoUrlList(reviewPhotos);
+        }
     }
 }

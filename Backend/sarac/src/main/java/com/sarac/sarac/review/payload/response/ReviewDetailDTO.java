@@ -11,11 +11,13 @@ import java.util.List;
 @Setter
 public class ReviewDetailDTO {
 
-    private Long id;
+    private Long reviewId;
 
     private String isbn;
 
     private String title;
+
+    private String bookTitle;
 
     private String content;
 
@@ -25,7 +27,7 @@ public class ReviewDetailDTO {
 
     private Integer likeCount;
 
-    private List<ReviewPhoto> photoUrlList;
+    private List<String> photoUrl;
 
     private Integer reviewCommentCount;
 
