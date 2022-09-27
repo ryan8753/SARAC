@@ -2,7 +2,7 @@
   <div>
     <div class="title">사詞 락樂</div>
     <div class="subtitle">글을 즐기다</div>
-    <img src="" alt="">
+    <img src="" alt="" />
 
     <a :href="URL">
       <img
@@ -21,15 +21,13 @@ export default {
   components: {},
   data() {
     return {
-      URL: "http://localhost:8080/oauth2/authorization/kakao",
+      URL: process.env.VUE_APP_API_URL_KAKAO,
     };
   },
 };
 </script>
 <style scoped>
-
 img {
   width: 80%;
 }
-
 </style>
