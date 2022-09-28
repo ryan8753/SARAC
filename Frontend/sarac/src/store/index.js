@@ -7,6 +7,7 @@ import axios from "axios";
 import accountStore from "@/store/modules/accountStore";
 import reviewStore from "@/store/modules/reviewStore";
 import myFeedStore from "@/store/modules/myFeedStore";
+import bookStore from "@/store/modules/bookStore";
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
     accountStore: accountStore,
     reviewStore: reviewStore,
     myFeedStore: myFeedStore,
+    bookStore: bookStore,
   },
 });
 
