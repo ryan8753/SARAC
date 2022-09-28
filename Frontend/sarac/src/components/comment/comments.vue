@@ -3,7 +3,7 @@
     <!-- {{ CommentsList }} -->
     <div v-for="(comments, index) in CommentsList" :key="index">
       <!-- {{ comments }} -->
-      <v-row>
+      <v-row v-if="comments[0].comment.content !== `deleted`">
         <!-- 이미지 -->
         <v-col cols="2">
           <v-avatar>
@@ -21,7 +21,7 @@
         </v-col>
         <!-- 수정 및 삭제 또는 답글 작성 토글 버튼 -->
         <v-col cols="2">
-          <div v-if="kakaoId === comments[0].comment.kakaoId">
+          <div>
             <!-- <v-btn small class="mx-2" @click="modifyComment()">
               <v-icon dark> mdi-pencil </v-icon>
             </v-btn>
@@ -29,7 +29,7 @@
               <v-icon dark> mdi-delete </v-icon>
             </v-btn> -->
           </div>
-          <div v-else>
+          <div>
             <v-btn
               small
               class="mx-2"
@@ -40,8 +40,20 @@
             >
               답글
             </v-btn>
+            <v-btn
+              v-if="kakaoId === comments[0].comment.kakaoId"
+              small
+              class="mx-2"
+              @click="deleteComment(comments[0].comment.commentId)"
+            >
+              삭제
+            </v-btn>
           </div>
         </v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col cols="2"></v-col>
+        <v-col cols="10">삭제된 댓글입니다.</v-col>
       </v-row>
       <!-- 대댓글 -->
       <!-- {{ comments[0].childList }} -->
@@ -63,6 +75,8 @@
 
 <script>
 import subComment from "@/components/comment/subComment.vue";
+import { mapActions } from "vuex";
+const reviewStore = "reviewStore";
 export default {
   components: { subComment },
   props: ["reviewCommentList", "reviewId"],
@@ -80,6 +94,11 @@ export default {
     },
   },
   methods: {
+    ...mapActions(reviewStore, ["deleteCommentApi"]),
+    async deleteComment(commentId) {
+      console.log(await this.deleteCommentApi(commentId));
+      this.updateInfo();
+    },
     updateInfo() {
       this.$emit("commentChanged");
     },

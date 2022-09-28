@@ -203,6 +203,7 @@ public class ReviewServiceImpl implements ReviewService{
         Review review = reviewRepository.findById(reviewId).orElseThrow();
         ReviewDetailDTO reviewDetailDTO = new ReviewDetailDTO();
         reviewDetailDTO.setReviewId(reviewId);
+        reviewDetailDTO.setAuthorKakaoId(review.getUser().getKakaoId());
         reviewDetailDTO.setBookTitle(review.getBook().getBookTitle());
         reviewDetailDTO.setBookScore(review.getBookScore());
         reviewDetailDTO.setIsbn(review.getBook().getIsbn());
@@ -258,6 +259,21 @@ public class ReviewServiceImpl implements ReviewService{
 
         return savedReviewComment.getId();
     }
+
+    @Override
+    public void deleteComment(Long commentId){
+        ReviewComment reviewComment= reviewCommentRepository.findById(commentId).orElseThrow();
+        // 댓글인경우 + 답글이 달린경우
+        if(reviewComment.getDepth()==0 && reviewComment.getChildren().size()!=0){
+            //내용을 "deleted"로 변경
+            reviewComment.deleteComment();
+            reviewCommentRepository.save(reviewComment);
+
+        //답글인경우
+        }else{
+            reviewCommentRepository.delete(reviewComment);
+        }
+   }
 
     @Override
     public List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token) {
