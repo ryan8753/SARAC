@@ -7,6 +7,7 @@ import DetailReview from "@/views/DetailReview.vue";
 import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
 import MyFeedView from "@/views/MyFeedView.vue";
+import BookDetailView from "@/views/BookDetailView.vue";
 // component
 import UserReview from "@/components/MyFeedView/UserReview";
 import UserStatistics from "@/components/MyFeedView/UserStatistics";
@@ -79,7 +80,13 @@ const routes = [
         component: UserStatistics,
       }
     ]
-  }
+  },
+  {
+    path: "/book/detail/:bookId",
+    name: "bookDetail",
+    component: BookDetailView,
+    children : []
+  },
 ];
 
 const router = new VueRouter({
