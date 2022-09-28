@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row @click="moveDetailPage">
       <v-col cols="4">
         <v-img :src="getThumbnail"></v-img>
       </v-col>
@@ -37,6 +37,11 @@ export default {
       return !this.thumbnail
         ? "https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png"
         : this.thumbnail;
+    },
+  },
+  methods: {
+    moveDetailPage() {
+      this.$router.replace({ path: "/book/detail/" + this.isbn });
     },
   },
 };

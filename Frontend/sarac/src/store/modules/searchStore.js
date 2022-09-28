@@ -29,7 +29,6 @@ const searchStore = {
   },
   actions: {
     getBestBook({ commit }) {
-      axios.defaults.baseURL = "http://localhost:8080";
       axios({
         method: "get",
         url: "api/v1/book/search/best",
