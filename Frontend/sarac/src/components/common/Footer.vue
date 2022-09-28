@@ -3,7 +3,8 @@
     v-model="value"
     color="rgba(170, 83, 14, 1)"
     background-color="rgb(245,245,245)"
-    height="3rem"
+    height="4rem"
+    shift
   >
     <v-btn value="home" min-width="50px">
       <span>home</span>
@@ -17,7 +18,7 @@
       <v-icon>mdi-book-search</v-icon>
     </v-btn>
 
-    <v-btn value="write" min-width="50px">
+    <v-btn value="review" min-width="50px" >
       <span>Write</span>
 
       <v-icon>mdi-pencil</v-icon>
