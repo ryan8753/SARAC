@@ -41,7 +41,7 @@ const routes = [
     component: LoginView,
   },
   {
-    path: "/oauth2/redirect",
+    path: "/redirect",
     name: "kakaoredirect",
     component: KakaoRedirect,
   },
@@ -49,6 +49,19 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: MypageView,
+  },
+  {
+    path: "/review",
+    name: "review",
+    component: () => import("@/views/ReviewView.vue"),
+    redirect: "/review/regist",
+    children: [
+      {
+        path: "regist",
+        name: "reviewRegist",
+        component: () => import("@/components/review/ReviewRegistView.vue"),
+      },
+    ],
   },
   {
     path: "/myfeed",
@@ -78,7 +91,7 @@ const router = new VueRouter({
 router.beforeEach(function (to, from, next) {
   const accessToken = localStorage.getItem("accessToken");
 
-  if (to.path === "/oauth2/redirect" || to.path === "/login") {
+  if (to.path === "/redirect" || to.path === "/login") {
     next();
   } else if (accessToken) {
     next();
