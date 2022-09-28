@@ -24,7 +24,7 @@
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
 
-    <v-btn value="myFeed" min-width="50px">
+    <v-btn value="myfeed" min-width="50px">
       <span>myFeed</span>
 
       <v-icon>mdi-account-circle</v-icon>
