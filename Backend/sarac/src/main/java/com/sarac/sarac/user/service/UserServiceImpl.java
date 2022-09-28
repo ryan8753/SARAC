@@ -118,11 +118,12 @@ public class UserServiceImpl implements  UserService {
         User originUser = userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id"));
 
         UserDto userDto = new UserDto();
+        userDto.setUserId(originUser.getId());
         userDto.setKakaoId(originUser.getKakaoId());
         userDto.setNickname(originUser.getNickname());
         userDto.setImagePath(originUser.getImagePath());
         userDto.setReviewOpen(originUser.getIsReviewOpen());
-        userDto.setLabraryOpen(originUser.getIsLibraryOpen());
+        userDto.setLibraryOpen(originUser.getIsLibraryOpen());
 
         return userDto;
     }
