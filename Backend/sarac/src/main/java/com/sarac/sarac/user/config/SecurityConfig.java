@@ -35,7 +35,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http.cors().configurationSource(request -> {
             CorsConfiguration cors = new CorsConfiguration();
-            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:8081","https://test.sarac.tk/api/v1"));
+            cors.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:8081","https://test.sarac.tk/api/v1","https://test.sarac.tk"));
             cors.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
             cors.setAllowedHeaders(Arrays.asList("*"));
             return cors;
