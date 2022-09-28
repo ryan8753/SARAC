@@ -1,11 +1,16 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+// view
 import HomeView from "../views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import DetailReview from "@/views/DetailReview.vue";
 import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
 import SearchView from "@/views/SearchView.vue";
+import MyFeedView from "@/views/MyFeedView.vue";
+// component
+import UserReview from "@/components/MyFeedView/UserReview";
+import UserStatistics from "@/components/MyFeedView/UserStatistics";
 
 Vue.use(VueRouter);
 
@@ -36,7 +41,7 @@ const routes = [
     component: LoginView,
   },
   {
-    path: "/oauth2/redirect",
+    path: "/redirect",
     name: "kakaoredirect",
     component: KakaoRedirect,
   },
@@ -50,6 +55,36 @@ const routes = [
     name: "search",
     component: SearchView,
   },
+  {
+    path: "/review",
+    name: "review",
+    component: () => import("@/views/ReviewView.vue"),
+    redirect: "/review/regist",
+    children: [
+      {
+        path: "regist",
+        name: "reviewRegist",
+        component: () => import("@/components/review/ReviewRegistView.vue"),
+      },
+    ],
+  },
+  {
+    path: "/myfeed",
+    name: "myfeed",
+    component: MyFeedView,
+    children: [
+      {
+        path: "review",
+        name: "userreview",
+        component: UserReview,
+      },
+      {
+        path: "statistics",
+        name: "userstatistics",
+        component: UserStatistics,
+      }
+    ]
+  }
 ];
 
 const router = new VueRouter({
@@ -61,7 +96,7 @@ const router = new VueRouter({
 router.beforeEach(function (to, from, next) {
   const accessToken = localStorage.getItem("accessToken");
 
-  if (to.path === "/oauth2/redirect" || to.path === "/login") {
+  if (to.path === "/redirect" || to.path === "/login") {
     next();
   } else if (accessToken) {
     next();
