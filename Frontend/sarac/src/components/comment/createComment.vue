@@ -19,7 +19,7 @@
 import { mapActions } from "vuex";
 const reviewStore = "reviewStore";
 export default {
-  props: ["reviewid"],
+  props: ["reviewid", "parentId"],
   data() {
     return {
       inputs: {
@@ -37,6 +37,11 @@ export default {
 
     async createComment() {
       console.log(this.inputs.contents);
+      if (this.parentId != 0) {
+        this.inputs.depth = 1;
+        this.inputs.parentId = this.parentId;
+      }
+      console.log(this.inputs);
       await this.createCommentApi(this.inputs);
       this.$emit("commentChanged");
       await this.resetContent();

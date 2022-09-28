@@ -15,13 +15,18 @@
     <v-row>
       <div v-if="review.reviewCommentCount" style="width: 100%">
         댓글 {{ review.reviewCommentCount }} 개 모두 보기
-        <comments :reviewCommentList="review.reviewCommentList"></comments>
+        <comments
+          :reviewCommentList="review.reviewCommentList"
+          :reviewId="review.reviewId"
+          v-on:commentChanged="updateInfo()"
+        ></comments>
       </div>
       <div v-else>등록된 댓글이 없습니다.</div> </v-row
     ><br />
     <!-- 댓글작성폼 -->
     <create-comment
       :reviewid="review.reviewId"
+      :parentId="0"
       v-on:commentChanged="updateInfo()"
     ></create-comment>
   </div>

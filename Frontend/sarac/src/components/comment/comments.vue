@@ -19,12 +19,44 @@
             }}
           </tr>
         </v-col>
-        <!-- 수정 및 삭제 또는 대댓글 작성 토글 버튼 -->
-        <v-col cols="2"></v-col>
+        <!-- 수정 및 삭제 또는 답글 작성 토글 버튼 -->
+        <v-col cols="2">
+          <div v-if="kakaoId === comments[0].comment.kakaoId">
+            <!-- <v-btn small class="mx-2" @click="modifyComment()">
+              <v-icon dark> mdi-pencil </v-icon>
+            </v-btn>
+            <v-btn small class="mx-2" @click="deleteComment()">
+              <v-icon dark> mdi-delete </v-icon>
+            </v-btn> -->
+          </div>
+          <div v-else>
+            <v-btn
+              small
+              class="mx-2"
+              @click="
+                comments[0].toggleRegistSubComment =
+                  !comments[0].toggleRegistSubComment
+              "
+            >
+              답글
+            </v-btn>
+          </div>
+        </v-col>
       </v-row>
       <!-- 대댓글 -->
       <!-- {{ comments[0].childList }} -->
-      <sub-comment :childList="comments[0].childList"></sub-comment>
+      <v-row>
+        <v-col cols="2"></v-col>
+        <v-col cols="10">
+          <sub-comment
+            :childList="comments[0].childList"
+            :toggle="comments[0].toggleRegistSubComment"
+            :parentId="comments[0].comment.commentId"
+            :reviewId="reviewId"
+            v-on:commentChanged="updateInfo()"
+          ></sub-comment>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
@@ -33,11 +65,12 @@
 import subComment from "@/components/comment/subComment.vue";
 export default {
   components: { subComment },
-  props: ["reviewCommentList"],
+  props: ["reviewCommentList", "reviewId"],
   data() {
     return {
       Cs: [],
       CommentsList: [],
+      kakaoId: Number,
     };
   },
   watch: {
@@ -47,6 +80,9 @@ export default {
     },
   },
   methods: {
+    updateInfo() {
+      this.$emit("commentChanged");
+    },
     getCommentData() {
       this.CommentsList = [];
       this.Cs = JSON.parse(JSON.stringify(this.reviewCommentList));
@@ -59,7 +95,9 @@ export default {
         } else return -1;
       }).forEach((comment) => {
         if (comment.depth === 0) {
-          this.CommentsList.push([{ comment, childList: [] }]);
+          this.CommentsList.push([
+            { comment, childList: [], toggleRegistSubComment: false },
+          ]);
         } else {
           this.CommentsList.forEach((p) => {
             if (p[0].comment.commentId === comment.parentId) {
@@ -71,6 +109,7 @@ export default {
     },
   },
   created() {
+    this.kakaoId = this.$store.state.accountStore.user.kakaoId;
     this.getCommentData();
   },
 };

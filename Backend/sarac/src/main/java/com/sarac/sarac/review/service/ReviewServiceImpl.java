@@ -221,6 +221,7 @@ public class ReviewServiceImpl implements ReviewService{
             reviewCommentDTO.setCommentId(reviewComment.getId());
             reviewCommentDTO.setUserId(reviewComment.getUser().getId());
             reviewCommentDTO.setUserNickname(reviewComment.getUser().getNickname());
+            reviewCommentDTO.setKakaoId(reviewComment.getUser().getKakaoId());
             reviewCommentDTO.setContent(reviewComment.getContents());
             reviewCommentDTO.setUserImagePath((reviewComment.getUser().getImagePath()));
             reviewCommentDTO.setDepth(reviewComment.getDepth());
