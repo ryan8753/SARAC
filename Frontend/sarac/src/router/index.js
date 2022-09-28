@@ -1,11 +1,16 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+// view
 import HomeView from "../views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import DetailReview from "@/views/DetailReview.vue";
 import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
 import MyFeedView from "@/views/MyFeedView.vue";
+// component
+import UserReview from "@/components/MyFeedView/UserReview";
+import UserStatistics from "@/components/MyFeedView/UserStatistics";
+
 
 Vue.use(VueRouter);
 
@@ -49,6 +54,18 @@ const routes = [
     path: "/myfeed",
     name: "myfeed",
     component: MyFeedView,
+    children: [
+      {
+        path: "review",
+        name: "userreview",
+        component: UserReview,
+      },
+      {
+        path: "statistics",
+        name: "userstatistics",
+        component: UserStatistics,
+      }
+    ]
   }
 ];
 
