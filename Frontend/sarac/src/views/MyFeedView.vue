@@ -105,16 +105,15 @@ export default {
     };
   },
   methods: {
-    ...mapActions(myFeedStore, ["getUserInfo"]),
+    ...mapActions(myFeedStore, ["getUserInfo", "getLibrary"]),
     ...mapMutations(myFeedStore, ["SET_LIBRARY_NUM"]),
 
     getCurrentUser(currentUser) {
       this.getUserInfo(currentUser);
     },
     goLibrary() {
-      // 라이브러리 보내는 로직
       this.SET_LIBRARY_NUM(this.currentUser.userId);
-      this.$router.push("/library/" + this.currentUser.userId);
+      this.getLibrary(this.currentUser);
     },
     showReview() {
       this.clickR = true;
