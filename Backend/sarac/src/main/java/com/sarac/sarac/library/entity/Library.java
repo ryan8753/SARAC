@@ -3,15 +3,16 @@ package com.sarac.sarac.library.entity;
 import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.library.type.LibraryType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Builder
+@Setter
 public class Library {
 
     @Id

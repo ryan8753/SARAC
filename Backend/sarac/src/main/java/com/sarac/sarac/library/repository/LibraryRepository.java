@@ -6,7 +6,9 @@ import com.sarac.sarac.user.entitiy.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LibraryRepository extends JpaRepository<Library, Long> {
@@ -16,4 +18,9 @@ public interface LibraryRepository extends JpaRepository<Library, Long> {
     public List<Library> findAllByUserAndLibraryType(User user, LibraryType libraryType);
 
     public List<Library> findByUserId(Long userId);
+
+    Library findByUserIdAndBookIsbn(Long userId, String isbn);
+
+    @Transactional
+    void deleteByUserIdAndBookIsbn(Long userId, String isbn);
 }
