@@ -6,12 +6,12 @@ import LoginView from "@/views/LoginView.vue";
 import DetailReview from "@/views/DetailReview.vue";
 import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
+import SearchView from "@/views/SearchView.vue";
 import MyFeedView from "@/views/MyFeedView.vue";
 import BookDetailView from "@/views/BookDetailView.vue";
 // component
 import UserReview from "@/components/MyFeedView/UserReview";
 import UserStatistics from "@/components/MyFeedView/UserStatistics";
-
 
 Vue.use(VueRouter);
 
@@ -50,6 +50,11 @@ const routes = [
     path: "/mypage",
     name: "mypage",
     component: MypageView,
+  },
+  {
+    path: "/search",
+    name: "search",
+    component: SearchView,
   },
   {
     path: "/review",
