@@ -11,6 +11,7 @@ const myFeedStore = {
 
     state: {
         userInfo: {},
+        libraryNum: 0,
 
     },
     getters: {
@@ -20,6 +21,9 @@ const myFeedStore = {
         GET_USER_INFO(state, payload) {
             state.userInfo = payload;
         },
+        SET_LIBRARY_NUM(state, payload) {
+            state.libraryNum = payload;
+        }
 
     },
     actions: {
