@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDto {
+    private Long userId;
+
     private Long kakaoId;
 
     private String nickname;
