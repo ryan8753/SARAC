@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <v-row @click="moveDetailPage">
+    <!-- 1. 상세 페이지에서 접근 할 시 action X
+          2. 리뷰 작성을 통해 접근 시 책의 isbn과 썸네일을 review쪽에 보내주는 action(state 이용할 지 논의 필요)
+          3. 검색을 통해 진입 시 지금과 같이 상세 페이지로 이동
+    -->
+    <v-row @click="getActionFromType">
       <v-col cols="4">
         <v-img :src="getThumbnail"></v-img>
       </v-col>
@@ -31,6 +35,7 @@ export default {
     title: String,
     thumbnail: String,
     score: Number,
+    type: String,
   },
   computed: {
     getThumbnail() {
@@ -40,6 +45,11 @@ export default {
     },
   },
   methods: {
+    getActionFromType() {
+      // if(this.type === "") {
+      this.moveDetailPage();
+      // }
+    },
     moveDetailPage() {
       this.$router.replace({ path: "/book/detail/" + this.isbn });
     },

@@ -53,7 +53,11 @@ export default {
     ...mapActions(searchStore, ["getBookResults"]),
     ...mapMutations(searchStore, { setTypeTrue: "SET_TEXT_TRUE" }),
     searchBook() {
-      if (this.keyword === undefined || this.keyword.length < 2) {
+      if (
+        this.keyword == null ||
+        this.keyword === undefined ||
+        this.keyword.trim.length < 2
+      ) {
         alert("2글자 이상 입력해주세요.");
         return;
       }
@@ -67,6 +71,8 @@ export default {
       this.keyword = "";
     },
     onDecode(text) {
+      // TODO : isbn으로 백엔드 검색 후 책 결과가 없다면 페이지 이동 x
+
       this.keyword = text;
       this.showCamera = false;
       this.$router.replace({ path: "/book/detail/" + this.keyword });
