@@ -56,8 +56,9 @@ export default {
       if (
         this.keyword == null ||
         this.keyword === undefined ||
-        this.keyword.trim.length < 2
+        this.keyword.trim().length < 2
       ) {
+        console.log(this.keyword.trim());
         alert("2글자 이상 입력해주세요.");
         return;
       }
