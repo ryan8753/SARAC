@@ -36,12 +36,12 @@ export default {
     ...mapActions(reviewStore, ["createCommentApi"]),
 
     async createComment() {
-      console.log(this.inputs.contents);
+      // console.log(this.inputs.contents);
       if (this.parentId != 0) {
         this.inputs.depth = 1;
         this.inputs.parentId = this.parentId;
       }
-      console.log(this.inputs);
+      // console.log(this.inputs);
       await this.createCommentApi(this.inputs);
       this.$emit("commentChanged");
       await this.resetContent();

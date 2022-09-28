@@ -21,14 +21,14 @@
         <!-- 수정 및 삭제 버튼 -->
         <v-col cols="2">
           <!-- {{ child.kakaoId }} -->
-          <!-- <div v-if="kakaoId === child.kakaoId">
-            <v-btn small class="mx-2" @click="modifyComment()">
-              <v-icon dark> mdi-pencil </v-icon>
-            </v-btn>
-            <v-btn small class="mx-2" @click="deleteComment()">
-              <v-icon dark> mdi-delete </v-icon>
-            </v-btn>
-          </div> -->
+          <v-btn
+            v-if="kakaoId === child.kakaoId"
+            small
+            class="mx-2"
+            @click="deleteComment(child.commentId)"
+          >
+            삭제
+          </v-btn>
         </v-col>
       </v-row>
       <!-- 답글 작성 폼 -->
@@ -45,6 +45,8 @@
 
 <script>
 import createComment from "@/components/comment/createComment.vue";
+import { mapActions } from "vuex";
+const reviewStore = "reviewStore";
 export default {
   components: { createComment },
   props: ["childList", "toggle", "parentId", "reviewId"],
@@ -58,10 +60,15 @@ export default {
   },
   watch: {
     toggle: function () {
-      console.log(this.toggle);
+      //   console.log(this.toggle);
     },
   },
   methods: {
+    ...mapActions(reviewStore, ["deleteCommentApi"]),
+    async deleteComment(commentId) {
+      console.log(await this.deleteCommentApi(commentId));
+      this.updateInfo();
+    },
     updateInfo() {
       this.$emit("commentChanged");
     },

@@ -10,7 +10,12 @@
       </p> </v-row
     ><br />
     <!-- 리뷰 수정 버튼(추가) -->
-    <!-- <v-row v-if="review."><v-btn></v-btn></v-row> -->
+    <v-row
+      v-if="
+        review.authorKakaoId === this.$store.state.accountStore.user.kakaoId
+      "
+      ><v-btn>리뷰수정</v-btn></v-row
+    >
     <!-- 댓글 -->
     <v-row>
       <div v-if="review.reviewCommentCount" style="width: 100%">
