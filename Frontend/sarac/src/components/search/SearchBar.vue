@@ -69,6 +69,7 @@ export default {
     onDecode(text) {
       this.keyword = text;
       this.showCamera = false;
+      this.$router.replace({ path: "/book/detail/" + this.keyword });
     },
   },
 };
