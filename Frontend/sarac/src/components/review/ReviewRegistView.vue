@@ -2,17 +2,19 @@
   <div>
     <v-container>
       <v-form @submit.prevent="onSubmit">
-        <v-row align-content-center>
-          <v-col cols="2">
+        <v-row align-content-center class="title">
+          <v-col cols="3">
             <img
               class="reviewImage"
               fas
               fa-search
-              src="https://sarac-a505.s3.ap-northeast-2.amazonaws.com/review/0e3f7785-e374-4013-b268-601cc2b5881a-50.png"
+              :src="user.imagePath"
               alt=""
+              @click="searchBook()"
             />
           </v-col>
-          <v-col cols="10">
+
+          <v-col cols="9">
             <v-text-field
               label="루피님의 리뷰입니다"
               solo
@@ -40,11 +42,14 @@
             ></v-textarea>
           </v-col>
         </v-row>
-        <v-checkbox
-          label="비밀글로 작성하기"
-          color="black"
-          v-model="review.isSecret"
-        ></v-checkbox>
+        <v-row class="checkbox">
+          <v-checkbox
+            align="justify"
+            label="비밀글로 작성하기"
+            color="black"
+            v-model="review.isSecret"
+          ></v-checkbox>
+        </v-row>
 
         <v-row>
           <v-img
@@ -70,21 +75,21 @@
           @change="onImageChange"
           v-model="files"
         />
-        <span  v-for="(item, j) in review.hashtag"
-        :key="j"
+        <span v-for="(item, j) in review.hashtag" :key="j">
+          #{{ item }}
+          <v-btn icon color="red" @click="deleteHashtag(j)">x</v-btn></span
         >
-          
-          #{{ item }} <v-btn icon color="red" @click="deleteHashtag(j)">x</v-btn></span>
-        
-        <v-row>
-          <v-col cols="8"><v-text-field
+
+        <v-row class="hash">
+          <v-col cols="8"
+            ><v-text-field
               v-model="hashtag"
               label="해시태그 입력"
               type="text"
-            ></v-text-field></v-col>
+            ></v-text-field>
+          </v-col>
           <v-col cols="4">
-            
-            <v-btn @click="inputHashtag(hashtag)">Add</v-btn>
+            <v-btn icon @click="inputHashtag(hashtag)" class="add">Add</v-btn>
           </v-col>
         </v-row>
 
@@ -115,7 +120,7 @@ export default {
       uploadimageurl: [], // 업로드한 이미지의 미리보기 기능을 위해 url 저장하는 객체
       hashtag: "",
       review: {
-        writer: "",
+        writer: null,
         isbn: "",
         title: "",
         content: "",
@@ -131,20 +136,34 @@ export default {
     type: { type: String },
   },
   computed: {
-    ...mapState(accountStore,["user"]),
+    ...mapState(accountStore, ["user"]),
   },
   created() {
-    //수정
-    // if (this.type === "modify") {
-
-    // }
-    this.review.title = this.user.nickname + "님의 리뷰입니다.";
-    // this.review.writer = this.user.userId;
+    if (this.type === "modify") {
+      this.reviewId = this.$route.params.reviewId;
+      this.getReview(this.reviewId);
+    } else {
+      this.review.title = this.user.nickname + "님의 리뷰입니다.";
+    }
+    this.review.writer = this.user.userId;
   },
 
   components: {},
   methods: {
-    ...mapActions(reviewStore, ["registReview", "updateReview"]),
+    ...mapActions(reviewStore, [
+      "registReview",
+      "updateReview",
+      "getDetailReview",
+    ]),
+
+    async getReview(reviewId) {
+      this.review = await this.getDetailReview(reviewId);
+    },
+
+    searchBook() {
+      //추후수정
+      this.$router.push({ name: "home" });
+    },
 
     onSubmit(event) {
       event.preventDefault();
@@ -156,15 +175,12 @@ export default {
       if (!err) alert(msg);
       else this.type === "modify" ? this.modify() : this.regist();
     },
-    deleteHashtag(j){
+    deleteHashtag(j) {
       let hashtagIndex = this.review.hashtag[j];
-      let temp = this.review.hashtag.filter(function(data){
-        return data!=hashtagIndex
-      
-      })
-      this.review.hashtag=temp
-  
-      
+      let temp = this.review.hashtag.filter(function (data) {
+        return data != hashtagIndex;
+      });
+      this.review.hashtag = temp;
     },
 
     inputHashtag(hashtag) {
@@ -199,15 +215,37 @@ export default {
       const review = this.review;
       const files = this.files;
       this.registReview({ review, files });
+      // this.$router.push({ name: "home" });
     },
     async modify() {
       await this.updateReview(this.review);
+      this.$router.push({ name: "home" });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.add{
+  align-self: bottom;
+}
+.hash{
+  vertical-align:middle;
+}
+.v-input--selection-controls {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.checkbox {
+  justify-content: right;
+  padding-right: 3vh;
+}
+
+.title {
+  text-align: center;
+  vertical-align: middle;
+}
 .reviewImage {
   width: 50px;
 }
