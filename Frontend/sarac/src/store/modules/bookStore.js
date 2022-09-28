@@ -1,12 +1,63 @@
 // import router from "@/router";
 // import axios from "axios";
 
+import axios from "axios";
+
 const bookStore = {
   namespaced: true,
-  state:{},
+  state:{
+    book: {
+      libraryType:"read",
+    },
+  },
   getters:{},
-  mutations:{},
-  actions:{},
+  mutations:{
+    SET_BOOK_INFO(state, bookInfo) {
+      state.book = bookInfo
+    }
+  },
+  actions:{
+    getBookDetail({commit},bookId){
+      const userId = '보류보류'
+      axios({
+        url: `api/v1/book/detail?isbn=${bookId}&userId=${userId}`,
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res)=>{
+        commit('SET_BOOK_INFO',res.data)
+      }) 
+    },
+    editReadStatus(_, bookId) {
+      const userId = '보류보류'
+      axios({
+        url: `api/v1/book/detail?isbn=${bookId}&userId=${userId}`,
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res)=>{
+        if (res.message === "success") {
+          // commit('SET_BOOK_INFO',res.data)
+        }
+      }); 
+    },
+    deleteReadStatus(_, bookId) {
+      const userId = '보류보류'
+      axios({
+        url: `api/v1/book/detail?isbn=${bookId}&userId=${userId}`,
+        method: "delete",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }).then((res)=>{
+        if (res.message === "success") {
+          // commit('SET_BOOK_INFO',res.data)
+        }
+      }); 
+    },
+  },
 };
 
 export default bookStore;
