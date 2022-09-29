@@ -1,6 +1,5 @@
 <template>
   <v-container class="login">
-    <div class="top"></div>
     <div class="title">사詞 락樂</div>
     <div class="subtitle">글을 즐기다</div>
     <div><img :src="img" alt="로고" /></div>
@@ -36,14 +35,14 @@ div {
   text-align: center;
 }
 .login {
-  box-sizing: border-box;
-  padding: 5%;
+  display: table-cell;
+  vertical-align: middle;
 }
 /* .title {
   font-weight: bold;
   font-size: 30vh;
 } */
 .top {
-  margin-bottom: 30%;
+  box-sizing: border-box;
 }
 </style>
