@@ -46,8 +46,12 @@ public class ReviewComment {
         this.review =review;
         this.user=user;
         this.contents = reviewCommentRequest.getContents();
-        this.depth= reviewCommentRequest.getDepth();;
+        this.depth= reviewCommentRequest.getDepth();
         this.parent=parent;
+    }
+
+    public void deleteComment(){
+        this.contents="deleted";
     }
 
 }
