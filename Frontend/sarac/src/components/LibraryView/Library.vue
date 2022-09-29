@@ -3,9 +3,10 @@
     <div><b>읽고 있는 책</b></div>
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group
-      active-class="success">
+      active-class="success"
+      show-arrows>
         <v-slide-item v-for="lib in library" :key="lib.isbn" link>
-          <v-card class="mx-2" height="15vh" width="10vh" @click="toggle">
+          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
         </v-slide-item>
@@ -18,7 +19,7 @@
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group>
         <v-slide-item v-for="lib in library" :key="lib.isbn" link>
-          <v-card class="mx-2" height="15vh" width="10vh" @click="toggle">
+          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
         </v-slide-item>
@@ -31,7 +32,7 @@
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group>
         <v-slide-item v-for="lib in library" :key="lib.isbn" link>
-          <v-card class="mx-2" height="15vh" width="10vh" @click="toggle">
+          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
         </v-slide-item>
@@ -52,7 +53,11 @@ export default {
     };
   },
   props: ["libraryList", "keyword"],
-  methods: {},
+  methods: {
+    gotoBookInfo(isbn) {
+      console.log(isbn);
+    }
+  },
   created() {
     let person = Object.keys(this.libraryList)[0];
     if (person == "private") this.isOpen = false;

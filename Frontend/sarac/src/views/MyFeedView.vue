@@ -94,10 +94,11 @@ export default {
       currentUser: {
         userId: 0,
       },
+      vm : this,
       drawer: null,
       items: [
         { title: "회원정보수정", icon: "mdi-cog", router: "/mypage" },
-        { title: "내서재", icon: "mdi-bookshelf", router: "/library/me" },
+        { title: "내서재", icon: "mdi-bookshelf", router: "/library" },
         { title: "뱃지확인", icon: "mdi-police-badge", router: "/badge" },
       ],
       clickR: true,
