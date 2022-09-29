@@ -1,14 +1,14 @@
 <template>
   <v-row align="center" justify="center">
-    <v-col cols="2">
+    <v-col cols="3">
       <v-avatar>
         <img :src="this.$store.state.accountStore.user.imagePath" alt="John" />
       </v-avatar>
     </v-col>
-    <v-col cols="10">
+    <v-col cols="9">
       <v-text-field
         v-model="inputs.contents"
-        label="댓글을 입력해 주세요"
+        :label="text"
         @keyup.enter="createComment()"
       ></v-text-field>
     </v-col>
@@ -28,9 +28,16 @@ export default {
         depth: 0,
         parentId: 0,
       },
+      text: "null",
     };
   },
-  created() {},
+  created() {
+    if (this.parentId == 0) {
+      this.text = "댓글을 입력해 주세요";
+    } else {
+      this.text = "답글을 입력해 주세요";
+    }
+  },
 
   methods: {
     ...mapActions(reviewStore, ["createCommentApi"]),

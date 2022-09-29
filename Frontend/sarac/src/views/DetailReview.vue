@@ -4,21 +4,22 @@
     <!-- 리뷰 -->
     <aFeed :review="review"></aFeed><br />
     <!-- hashtag -->
-    <v-row>
+    <v-row style="width: 100%">
       <p v-for="(hashtag, i) in review.reviewHashtagList" :key="i">
         #{{ hashtag }}
       </p> </v-row
     ><br />
     <!-- 리뷰 수정 버튼(추가) -->
     <v-row
+      style="width: 100%"
       v-if="
         review.authorKakaoId === this.$store.state.accountStore.user.kakaoId
       "
-      ><v-btn>리뷰수정</v-btn></v-row
+      ><v-btn icon><v-icon>mdi-pencil</v-icon></v-btn></v-row
     >
     <!-- 댓글 -->
-    <v-row>
-      <div v-if="review.reviewCommentCount" style="width: 100%">
+    <v-row style="width: 100%" justify="center">
+      <div v-if="review.reviewCommentCount">
         댓글 {{ review.reviewCommentCount }} 개 모두 보기
         <comments
           :reviewCommentList="review.reviewCommentList"
@@ -30,6 +31,7 @@
     ><br />
     <!-- 댓글작성폼 -->
     <create-comment
+      style="width: 100%"
       :reviewid="review.reviewId"
       :parentId="0"
       v-on:commentChanged="updateInfo()"
@@ -73,5 +75,10 @@ export default {
 <style scoped>
 .detail-review-container {
   padding: 5%;
+  width: 100%;
+}
+
+.row {
+  margin: 0%;
 }
 </style>
