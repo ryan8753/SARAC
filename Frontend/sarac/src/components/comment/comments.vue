@@ -5,22 +5,20 @@
       <!-- {{ comments }} -->
       <v-row v-if="comments[0].comment.content !== `deleted`">
         <!-- 이미지 -->
-        <v-col cols="2">
+        <v-col cols="3">
           <v-avatar>
             <img :src="comments[0].comment.userImagePath" />
           </v-avatar>
         </v-col>
         <!-- 닉네임 및 코멘트 -->
-        <v-col cols="8">
-          <v-rol>{{ comments[0].comment.userNickname }}</v-rol>
-          <tr>
-            {{
-              comments[0].comment.content
-            }}
-          </tr>
+        <v-col cols="5" align-self="center">
+          <v-row>{{ comments[0].comment.userNickname }}</v-row>
+          <v-row>
+            {{ comments[0].comment.content }}
+          </v-row>
         </v-col>
         <!-- 수정 및 삭제 또는 답글 작성 토글 버튼 -->
-        <v-col cols="2">
+        <v-col cols="4">
           <div>
             <!-- <v-btn small class="mx-2" @click="modifyComment()">
               <v-icon dark> mdi-pencil </v-icon>
@@ -31,35 +29,36 @@
           </div>
           <div>
             <v-btn
-              small
+              x-small
+              icon
               class="mx-2"
               @click="
                 comments[0].toggleRegistSubComment =
                   !comments[0].toggleRegistSubComment
               "
             >
-              답글
+              <v-icon>mdi-subdirectory-arrow-left</v-icon>
             </v-btn>
             <v-btn
               v-if="kakaoId === comments[0].comment.kakaoId"
-              small
+              x-small
               class="mx-2"
+              icon
               @click="deleteComment(comments[0].comment.commentId)"
             >
-              삭제
+              <v-icon dark> mdi-delete </v-icon>
             </v-btn>
           </div>
         </v-col>
       </v-row>
       <v-row v-else>
-        <v-col cols="2"></v-col>
+        <v-col cols="1"></v-col>
         <v-col cols="10">삭제된 댓글입니다.</v-col>
       </v-row>
       <!-- 대댓글 -->
       <!-- {{ comments[0].childList }} -->
       <v-row>
-        <v-col cols="2"></v-col>
-        <v-col cols="10">
+        <v-col>
           <sub-comment
             :childList="comments[0].childList"
             :toggle="comments[0].toggleRegistSubComment"
@@ -134,4 +133,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.row {
+  margin: 0 !important;
+}
+</style>
