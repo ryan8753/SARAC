@@ -1,21 +1,21 @@
 <template>
   <div class="library-container">
     <v-row>
-        <v-icon color="rgba(170, 83, 14, 1)" >mdi-arrow-left-thick</v-icon>
+      <v-icon color="rgba(170, 83, 14, 1)" @click="goBack" type="button">mdi-arrow-left-thick</v-icon>
     </v-row>
     <v-row>
-      <v-col cols="10"><b> {{ libraryName }} 서재 </b></v-col>
+      <v-col cols="10"
+        ><b> {{ libraryName }} 서재 </b></v-col
+      >
       <v-col cols="2">
-        <v-icon
-         color="rgba(170, 83, 14, 1)"
-          @click ="toggleBar()"
+        <v-icon color="rgba(170, 83, 14, 1)" @click="toggleBar()"
           >mdi-magnify</v-icon
         >
       </v-col>
     </v-row>
 
     <!-- 검색바(토글) -->
-    <v-row id="showBar" style="display: none;">
+    <v-row id="showBar" style="display: none">
       <v-text-field
         v-model="keyword"
         solo
@@ -27,7 +27,7 @@
       ></v-text-field>
     </v-row>
     <v-row>
-        <library :libraryList="libraryList" :keyword="keyword"></library>
+      <library :libraryList="libraryList" :keyword="keyword"></library>
     </v-row>
   </div>
 </template>
@@ -55,11 +55,14 @@ export default {
     ...mapActions(myFeedStore, ["getUserInfo"]),
 
     toggleBar() {
-        let e = document.getElementById("showBar");
-        e.style.display = e.style.display != "none" ? "none" : "block";
+      let e = document.getElementById("showBar");
+      e.style.display = e.style.display != "none" ? "none" : "block";
     },
     searchInLibrary() {
-        //검색 구현
+      //검색 구현
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
   computed: {
@@ -68,11 +71,9 @@ export default {
   },
   watch: {},
   created() {
-    let person = Object.keys(this.libraryList)[0]; 
-    if (person == "me")
-        this.libraryName = "내";
-    else
-        this.libraryName = `${this.userInfo.nickname}님의`;
+    let person = Object.keys(this.libraryList)[0];
+    if (person == "me") this.libraryName = "내";
+    else this.libraryName = `${this.userInfo.nickname}님의`;
   },
 };
 </script>

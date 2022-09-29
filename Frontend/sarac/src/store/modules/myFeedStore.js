@@ -49,7 +49,7 @@ const myFeedStore = {
                 params: payload,
             }).then((res) => {
                 commit("GET_LIBRARY", res.data);
-                router.push("/library/" + payload.userId);
+                router.push("/library");
             })
         }
     },

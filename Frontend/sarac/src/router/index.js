@@ -87,7 +87,7 @@ const routes = [
     ]
   },
   {
-    path: "/library/:id",
+    path: "/library",
     name: "library",
     component: LibraryView,
   },
