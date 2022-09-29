@@ -8,6 +8,7 @@ import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
 import SearchView from "@/views/SearchView.vue";
 import MyFeedView from "@/views/MyFeedView.vue";
+import LibraryView from "@/views/LibraryView.vue";
 import BookDetailView from "@/views/BookDetailView.vue";
 // component
 import UserReview from "@/components/MyFeedView/UserReview";
@@ -23,7 +24,7 @@ const routes = [
   },
   {
     path: "/detailReview/:reviewId",
-    name: "detailReview/:reviewId",
+    name: "detailReview",
     component: DetailReview,
     props: true,
   },
@@ -83,14 +84,19 @@ const routes = [
         path: "statistics",
         name: "userstatistics",
         component: UserStatistics,
-      }
-    ]
+      },
+    ],
+  },
+  {
+    path: "/library",
+    name: "library",
+    component: LibraryView,
   },
   {
     path: "/book/detail/:bookId",
     name: "bookDetail",
     component: BookDetailView,
-    children : []
+    children: [],
   },
 ];
 

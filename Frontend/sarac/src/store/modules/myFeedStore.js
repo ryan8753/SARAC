@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "@/router";
 
 const apiUrl = "api/v1/myfeed/";
 const accessToken = localStorage.getItem("accessToken");
@@ -11,6 +12,7 @@ const myFeedStore = {
 
     state: {
         userInfo: {},
+        libraryList: {},
 
     },
     getters: {
@@ -20,6 +22,12 @@ const myFeedStore = {
         GET_USER_INFO(state, payload) {
             state.userInfo = payload;
         },
+        SET_LIBRARY_NUM(state, payload) {
+            state.libraryNum = payload;
+        },
+        GET_LIBRARY(state, payload) {
+            state.libraryList = payload;
+        }
 
     },
     actions: {
@@ -30,10 +38,20 @@ const myFeedStore = {
                 headers,
                 params: payload,
             }).then((res) => {
-                console.log(res.data);
                 commit("GET_USER_INFO", res.data);
             })
         },
+        getLibrary({commit}, payload) {
+            axios({
+                url: `${apiUrl}library`,
+                method: "GET",
+                headers,
+                params: payload,
+            }).then((res) => {
+                commit("GET_LIBRARY", res.data);
+                router.push("/library");
+            })
+        }
     },
 
 };

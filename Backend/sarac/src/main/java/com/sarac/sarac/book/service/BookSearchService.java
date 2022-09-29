@@ -49,9 +49,9 @@ public class BookSearchService {
                 .map(book -> BookSearchResultDto.builder()
                         .isbn(book.getIsbn())
                         .author(book.getAuthor())
-                        .title(book.getBookTitle())
-                        .thumbnail(book.getBookImgUrl())
-                        .score(reviewRepository.existsByBook(book) ?
+                        .bookTitle(book.getBookTitle())
+                        .bookImgUrl(book.getBookImgUrl())
+                        .bookScore(reviewRepository.existsByBook(book) ?
                                 reviewRepository.findAllByBook(book).stream()
                                         .mapToInt(BookScore::getBookScore).average().getAsDouble() : EMPTY)
                         .build())
