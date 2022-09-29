@@ -77,7 +77,7 @@
 <script>
 import UserSearchBar from "@/components/MyFeedView/UserSearchBar.vue";
 import UserInfo from "@/components/MyFeedView/UserInfo.vue";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 const myFeedStore = "myFeedStore";
 const accountStore = "accountStore";
@@ -107,13 +107,11 @@ export default {
   },
   methods: {
     ...mapActions(myFeedStore, ["getUserInfo", "getLibrary"]),
-    ...mapMutations(myFeedStore, ["SET_LIBRARY_NUM"]),
 
     getCurrentUser(currentUser) {
       this.getUserInfo(currentUser);
     },
     goLibrary() {
-      this.SET_LIBRARY_NUM(this.currentUser.userId);
       this.getLibrary(this.currentUser);
     },
     showReview() {

@@ -2,9 +2,7 @@
   <v-container>
     <div><b>읽고 있는 책</b></div>
     <v-sheet width="100%" min-height="15vh">
-      <v-slide-group
-      active-class="success"
-      show-arrows>
+      <v-slide-group>
         <v-slide-item v-for="lib in library" :key="lib.isbn" link>
           <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
             <v-img :src="lib.bookImgUrl" class="fill-height" />
@@ -66,4 +64,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+</style>
