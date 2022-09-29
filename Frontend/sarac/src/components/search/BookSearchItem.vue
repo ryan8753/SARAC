@@ -10,11 +10,11 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="7">
-        <v-row> {{ title }} </v-row>
+        <v-row> {{ bookTitle }} </v-row>
         <v-row> {{ author }} </v-row>
         <v-row>
           <v-rating
-            :value="score"
+            :value="bookScore"
             readonly
             color="rgba(170, 83, 14, 1)"
             background-color="color=rgba(170, 83, 14, 1)"
@@ -32,18 +32,26 @@ export default {
   props: {
     isbn: String,
     author: String,
-    title: String,
-    thumbnail: String,
-    score: Number,
+    bookTitle: String,
+    bookImgUrl: String,
+    bookScore: Number,
     type: String,
   },
   computed: {
     getThumbnail() {
-      return !this.thumbnail
+      return !this.bookImgUrl
         ? "https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png"
-        : this.thumbnail;
+        : this.bookImgUrl;
     },
   },
+  // created() {
+  //   console.log(this.$route.params.fromLocation);
+  //   if (this.$route.params.fromLocation === "search") {
+  //     console.log("from search" + this.$route.params.fromLocation);
+  //   } else {
+  //     this.$router.go(-1);
+  //   }
+  // },
   methods: {
     getActionFromType() {
       // if(this.type === "") {
@@ -51,7 +59,7 @@ export default {
       // }
     },
     moveDetailPage() {
-      this.$router.replace({ path: "/book/detail/" + this.isbn });
+      this.$router.push({ path: "/book/detail/" + this.isbn });
     },
   },
 };

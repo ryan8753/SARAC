@@ -9,8 +9,8 @@ import lombok.Getter;
 @Builder
 public class BookSearchResultDto {
     private String isbn;
-    private String thumbnail;
-    private String title;
+    private String bookImgUrl;
+    private String bookTitle;
     private String author;
-    private double score;
+    private double bookScore;
 }
