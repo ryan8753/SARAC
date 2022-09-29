@@ -4,9 +4,9 @@
       <v-text-field
         v-model="keyword"
         solo
-        label="사용자 닉네임, 코드를 검색하세요"
+        label="친구를 찾아보세요"
         clearable
-        append-icon="fa-search"
+        append-icon="mdi-magnify"
         @click:append="searchUser"
         color="rgba(170, 83, 14, 1)"
       ></v-text-field>
