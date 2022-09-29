@@ -8,6 +8,7 @@ import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
 import SearchView from "@/views/SearchView.vue";
 import MyFeedView from "@/views/MyFeedView.vue";
+import LibraryView from "@/views/LibraryView.vue";
 // component
 import UserReview from "@/components/MyFeedView/UserReview";
 import UserStatistics from "@/components/MyFeedView/UserStatistics";
@@ -84,7 +85,12 @@ const routes = [
         component: UserStatistics,
       }
     ]
-  }
+  },
+  {
+    path: "/library",
+    name: "library",
+    component: LibraryView,
+  },
 ];
 
 const router = new VueRouter({
