@@ -13,6 +13,8 @@ public class ReviewDetailDTO {
 
     private Long reviewId;
 
+    private Long authorKakaoId;
+
     private String isbn;
 
     private String title;

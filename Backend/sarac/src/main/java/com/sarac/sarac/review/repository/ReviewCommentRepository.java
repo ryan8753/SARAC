@@ -14,4 +14,6 @@ public interface ReviewCommentRepository extends JpaRepository<ReviewComment, Lo
     Integer countReviewCommentByReview(Review review);
 
     Optional<List<ReviewComment>> findAllByReview(Review review);
+
+
 }

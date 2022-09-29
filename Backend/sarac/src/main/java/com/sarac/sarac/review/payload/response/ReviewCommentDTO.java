@@ -10,6 +10,9 @@ public class ReviewCommentDTO {
 
     private Long commentId;
     private Long userId;
+    private Long kakaoId;
+
+    private String userNickname;
 
     private String content;
 
