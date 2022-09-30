@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <p>개인리뷰모아보기 feeds</p> -->
-
+    <!-- {{ this.reviewList }} -->
     <div class="wrapper">
       <div
         class="card"
