@@ -1,7 +1,10 @@
 <template>
   <div>
     <search-bar></search-bar>
-    <book-search-list :type="isSearched"></book-search-list>
+    <book-search-list
+      :type="isSearched"
+      :fromWhere="beforeLocation"
+    ></book-search-list>
   </div>
 </template>
 <script>
@@ -17,6 +20,16 @@ export default {
     ...mapState(["searchResults"]),
     ...mapGetters(searchStore, ["isSearched"]),
     ...mapMutations(searchStore, { setTypeFalse: "SET_TEXT_FALSE" }),
+    beforeLocation() {
+      if (this.$route.params.fromLocation === "search") {
+        console.log("review");
+        return "review";
+      } else if (this.$route.params.fromLocation === undefined) {
+        console.log("search");
+        return "search";
+      }
+      return "";
+    },
   },
   mounted() {
     this.setTypeFalse;

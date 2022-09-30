@@ -2,10 +2,7 @@
   <v-form>
     <v-container>
       <v-row>
-        <v-col cols="2">
-          <v-img src="../../../public/icons/logo.png"></v-img>
-        </v-col>
-        <v-col cols="9">
+        <v-col>
           <v-text-field
             hide-details
             v-model="keyword"
@@ -24,7 +21,6 @@
             @keydown.enter.prevent="searchBook"
           ></v-text-field>
         </v-col>
-        <v-col cols="1"> </v-col>
       </v-row>
       <v-row v-if="showCamera">
         <StreamBarcodeReader @decode="onDecode"></StreamBarcodeReader>
@@ -76,7 +72,7 @@ export default {
 
       this.keyword = text;
       this.showCamera = false;
-      this.$router.replace({ path: "/book/detail/" + this.keyword });
+      this.$router.push({ path: "/book/detail/" + this.keyword });
     },
   },
 };
