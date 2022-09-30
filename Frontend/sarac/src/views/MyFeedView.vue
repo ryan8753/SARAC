@@ -130,8 +130,8 @@ export default {
       this.$router.push({ name: "userstatistics" }).catch(()=>{});
     },
     clickNav(title) {
-      if(title === "마이페이지")
-        this.$router.push({ name: "/mypage" }).catch(()=>{});
+      if(title === "회원정보수정")
+        this.$router.push({ name: "mypage" }).catch(()=>{});
       else if(title === "내서재") {
         this.goLibrary(this.user.userId);
       }
