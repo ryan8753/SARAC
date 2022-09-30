@@ -68,9 +68,16 @@ const routes = [
         component: () => import("@/components/review/ReviewRegistView.vue"),
       },
       {
+
+        path: ":fromLocation",
+        name: "reviewSearch",
+        component: () => import("@/views/SearchView.vue"),
+      },
+      {
         path: ":reviewId",
         name: "modifyRegist",
         component: () => import("@/components/review/ReviewRegistView.vue"),
+
       },
     ],
   },

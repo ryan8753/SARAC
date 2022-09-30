@@ -3,9 +3,30 @@ import axios from "axios";
 
 const reviewStore = {
   namespaced: true,
-  state: {},
-  getters: {},
-  mutations: {},
+  state: {
+    book: {
+      isbn: "",
+      bookTitle: "",
+      bookImgUrl: "",
+    },
+  },
+  getters: {
+    book: (state) => {
+      return state.book;
+    },
+  },
+  mutations: {
+    SET_BOOK_DATA(state, book) {
+      state.book.isbn = book.isbn;
+      state.book.bookTitle = book.bookTitle;
+      state.book.bookImgUrl = book.bookImgUrl;
+    },
+    CLEAR_BOOK_DATA(state) {
+      state.book.isbn = "";
+      state.book.bookTitle = "";
+      state.book.bookImgUrl = "";
+    },
+  },
   actions: {
     async getRandomFeeds() {
       const accessToken = localStorage.getItem("accessToken");
@@ -135,6 +156,9 @@ const reviewStore = {
         return res.data;
       });
       return response;
+    },
+    saveBookData({ commit }, book) {
+      commit("SET_BOOK_DATA", book);
     },
   },
 };
