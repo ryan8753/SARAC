@@ -45,7 +45,7 @@
         >
       </v-col>
     </v-row>
-    
+
     <!-- 사용자 정보 (router로 뺄지 고민해보기!) -->
     <v-row @click="goLibrary(userInfo.userId)"
       ><!-- 클릭효과 내기 -->
@@ -95,47 +95,45 @@ export default {
       currentUser: {
         userId: 0,
       },
-      vm : this,
+      vm: this,
       drawer: null,
       items: [
         { title: "회원정보수정", icon: "mdi-cog", router: "/mypage" },
         { title: "내서재", icon: "mdi-bookshelf", router: "/library" },
         // 통계 어떻게 할지 고민좀 해보기
-        { title: "통계", icon: "mdi-bookshelf", router: "/myfeed/statistics" },
+        { title: "통계", icon: "mdi-chart-bar", router: "/myfeed/statistics" },
       ],
       clickR: true,
       clickS: false,
     };
   },
-    computed: {
-      ...mapState(accountStore, ["user"]),
-      ...mapState(myFeedStore, ["userInfo"]),
-    },
-    watch: {
-    },
+  computed: {
+    ...mapState(accountStore, ["user"]),
+    ...mapState(myFeedStore, ["userInfo"]),
+  },
+  watch: {},
   methods: {
     ...mapActions(myFeedStore, ["getUserInfo", "getLibrary"]),
 
     goLibrary(userId) {
-      this.getLibrary({userId: userId});
+      this.getLibrary({ userId: userId });
     },
     showReview() {
       this.clickR = true;
       this.clickS = false;
-      this.$router.push({ name: "userreview" }).catch(()=>{});
+      this.$router.push({ name: "userreview" }).catch(() => {});
     },
     showStatistic() {
       this.clickR = false;
       this.clickS = true;
-      this.$router.push({ name: "userstatistics" }).catch(()=>{});
+      this.$router.push({ name: "userstatistics" }).catch(() => {});
     },
     clickNav(title) {
-      if(title === "회원정보수정")
-        this.$router.push({ name: "mypage" }).catch(()=>{});
-      else if(title === "내서재") {
+      if (title === "회원정보수정")
+        this.$router.push({ name: "mypage" }).catch(() => {});
+      else if (title === "내서재") {
         this.goLibrary(this.user.userId);
-      }
-      else if(title === "통계") {
+      } else if (title === "통계") {
         // userInfo 바꾸고 기존 통계 페이지??? 그냥 새로운 통계페이지?????
         this.showStatistic(this.user.userId);
       }
@@ -143,7 +141,7 @@ export default {
   },
   created() {
     // 라우터 중복 무시
-    this.$router.push({ name: "userreview" }).catch(()=>{});
+    this.$router.push({ name: "userreview" }).catch(() => {});
   },
 };
 </script>

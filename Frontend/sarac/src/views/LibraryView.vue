@@ -1,7 +1,9 @@
 <template>
   <div class="library-container">
     <v-row>
-      <v-icon color="rgba(170, 83, 14, 1)" @click="goBack" type="button">mdi-arrow-left-thick</v-icon>
+      <v-icon color="rgba(170, 83, 14, 1)" @click="goBack" type="button"
+        >mdi-arrow-left-thick</v-icon
+      >
     </v-row>
     <v-row>
       <v-col cols="10"
