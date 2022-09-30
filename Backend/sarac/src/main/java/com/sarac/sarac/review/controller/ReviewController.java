@@ -99,9 +99,10 @@ public class ReviewController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateReview(@RequestPart ReviewRequest review, @RequestPart(value = "files", required = false) List<MultipartFile> files, @PathVariable Long id){
+    @PutMapping ("/update")
+    public ResponseEntity<Map<String, Object>> updateReview(@RequestPart ReviewRequest review, @RequestPart(value = "files", required = false) List<MultipartFile> files,@RequestPart Long id) throws IOException{
         Map<String, Object> resultMap = new HashMap<>();
+
         //         이미지 파일만 업로드 가능
         try {
             if(files!=null) {
