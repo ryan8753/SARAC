@@ -2,6 +2,7 @@ package com.sarac.sarac.review.entity;
 
 import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.user.entitiy.User;
+import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class Review {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "isbn", referencedColumnName = "isbn")
+    @JoinColumn(name = "isbn", referencedColumnName = "isbn", nullable = false)
     private Book book;
 
     @Column(length = 100)

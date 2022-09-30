@@ -1,9 +1,5 @@
 <template>
   <v-container>
-    <!-- 1. 상세 페이지에서 접근 할 시 action X
-          2. 리뷰 작성을 통해 접근 시 책의 isbn과 썸네일을 review쪽에 보내주는 action(state 이용할 지 논의 필요)
-          3. 검색을 통해 진입 시 지금과 같이 상세 페이지로 이동
-    -->
     <v-row @click="getActionFromType">
       <v-col cols="4">
         <v-img :src="getThumbnail"></v-img>
@@ -28,6 +24,9 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+const reviewStore = "reviewStore";
+
 export default {
   props: {
     isbn: String,
@@ -36,27 +35,30 @@ export default {
     bookImgUrl: String,
     bookScore: Number,
     type: String,
+    fromWhere: String,
   },
   computed: {
+    ...mapGetters(reviewStore, ["book"]),
     getThumbnail() {
       return !this.bookImgUrl
         ? "https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png"
         : this.bookImgUrl;
     },
   },
-  // created() {
-  //   console.log(this.$route.params.fromLocation);
-  //   if (this.$route.params.fromLocation === "search") {
-  //     console.log("from search" + this.$route.params.fromLocation);
-  //   } else {
-  //     this.$router.go(-1);
-  //   }
-  // },
   methods: {
+    ...mapActions(reviewStore, ["saveBookData"]),
     getActionFromType() {
-      // if(this.type === "") {
-      this.moveDetailPage();
-      // }
+      if (this.fromWhere === "search") {
+        this.moveDetailPage();
+      } else if (this.fromWhere === "review") {
+        this.saveBookData({
+          isbn: this.isbn,
+          bookTitle: this.bookTitle,
+          bookImgUrl: this.getThumbnail,
+        });
+        console.log(this.book);
+        this.$router.push({ path: "/review/regist" });
+      }
     },
     moveDetailPage() {
       this.$router.push({ path: "/book/detail/" + this.isbn });
