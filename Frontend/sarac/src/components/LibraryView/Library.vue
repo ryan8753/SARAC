@@ -4,7 +4,12 @@
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group>
         <v-slide-item v-for="lib in library" :key="lib.isbn">
-          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
+          <v-card
+            class="mx-2"
+            height="15vh"
+            width="10vh"
+            @click="gotoBookInfo(lib.isbn)"
+          >
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
         </v-slide-item>
@@ -12,31 +17,40 @@
     </v-sheet>
 
     <v-divider></v-divider>
-    
+
     <div><b>완독한 책</b></div>
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group>
         <v-slide-item v-for="lib in library" :key="lib.isbn">
-          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
-            <v-img :src="lib.bookImgUrl" class="fill-height" />
-          </v-card>
-        </v-slide-item>
-      </v-slide-group>
-    </v-sheet>
-    
-    <v-divider></v-divider>
-    
-    <div><b>읽고 싶은 책</b></div>
-    <v-sheet width="100%" min-height="15vh">
-      <v-slide-group>
-        <v-slide-item v-for="lib in library" :key="lib.isbn">
-          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
+          <v-card
+            class="mx-2"
+            height="15vh"
+            width="10vh"
+            @click="gotoBookInfo(lib.isbn)"
+          >
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
 
+    <v-divider></v-divider>
+
+    <div><b>읽고 싶은 책</b></div>
+    <v-sheet width="100%" min-height="15vh">
+      <v-slide-group>
+        <v-slide-item v-for="lib in library" :key="lib.isbn">
+          <v-card
+            class="mx-2"
+            height="15vh"
+            width="10vh"
+            @click="gotoBookInfo(lib.isbn)"
+          >
+            <v-img :src="lib.bookImgUrl" class="fill-height" />
+          </v-card>
+        </v-slide-item>
+      </v-slide-group>
+    </v-sheet>
   </v-container>
 </template>
 
@@ -54,7 +68,7 @@ export default {
   methods: {
     gotoBookInfo(isbn) {
       this.$router.push("/book/detail/" + isbn);
-    }
+    },
   },
   created() {
     let person = Object.keys(this.libraryList)[0];
@@ -64,5 +78,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
