@@ -5,6 +5,7 @@
       v-for="book in searchResults.results"
       :key="book.isbn"
       v-bind="book"
+      :fromWhere="getFromWhere"
     ></book-search-item>
   </v-container>
 </template>
@@ -17,7 +18,8 @@ import BookSearchItem from "./BookSearchItem.vue";
 
 export default {
   props: {
-    type: { type: Boolean },
+    type: Boolean,
+    fromWhere: String,
   },
   components: { BookSearchItem },
   computed: {
@@ -25,6 +27,9 @@ export default {
     ...mapGetters(searchStore, ["searchResults"]),
     typeString() {
       return this.type ? "검색 결과" : "인기 도서";
+    },
+    getFromWhere() {
+      return this.fromWhere;
     },
   },
 };
