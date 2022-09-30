@@ -8,9 +8,9 @@
               class="reviewImage"
               fas
               fa-search
-              src="https://sarac-a505.s3.ap-northeast-2.amazonaws.com/763baecc-7369-4afc-9874-4c874777c2f2-%EB%A3%A8%ED%94%BC.png"
-              alt="책이미지 임시"
-              @click="searchBook()"
+              src="https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png"
+              alt="이미지"
+              @click="getBookFromSearch"
             />
           </v-col>
 
@@ -248,6 +248,9 @@ export default {
       const reviewId = this.reviewId
       this.updateReview({ review, files,reviewId });
       this.$router.push({ name: "home" });
+    },
+    getBookFromSearch() {
+      this.$router.push({ path: "/review/search" });
     },
   },
 };
