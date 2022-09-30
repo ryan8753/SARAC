@@ -8,6 +8,7 @@ import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
 import MypageView from "@/views/MypageView.vue";
 import SearchView from "@/views/SearchView.vue";
 import MyFeedView from "@/views/MyFeedView.vue";
+import LibraryView from "@/views/LibraryView.vue";
 // component
 import UserReview from "@/components/MyFeedView/UserReview";
 import UserStatistics from "@/components/MyFeedView/UserStatistics";
@@ -22,7 +23,7 @@ const routes = [
   },
   {
     path: "/detailReview/:reviewId",
-    name: "detailReview/:reviewId",
+    name: "detailReview",
     component: DetailReview,
     props: true,
   },
@@ -67,9 +68,16 @@ const routes = [
         component: () => import("@/components/review/ReviewRegistView.vue"),
       },
       {
+
         path: ":fromLocation",
         name: "reviewSearch",
         component: () => import("@/views/SearchView.vue"),
+      },
+      {
+        path: ":reviewId",
+        name: "modifyRegist",
+        component: () => import("@/components/review/ReviewRegistView.vue"),
+
       },
     ],
   },
@@ -87,8 +95,13 @@ const routes = [
         path: "statistics",
         name: "userstatistics",
         component: UserStatistics,
-      },
-    ],
+      }
+    ]
+  },
+  {
+    path: "/library",
+    name: "library",
+    component: LibraryView,
   },
 ];
 

@@ -32,4 +32,6 @@ public interface ReviewService {
 
     List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token);
 
+    void deleteComment(Long commentId);
+
 }

@@ -201,43 +201,29 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewDetailDTO showDetailReview(long reviewId) {
 
         Review review = reviewRepository.findById(reviewId).orElseThrow();
-        ReviewDetailDTO reviewDetailDTO = new ReviewDetailDTO();
-        reviewDetailDTO.setReviewId(reviewId);
-        reviewDetailDTO.setBookTitle(review.getBook().getBookTitle());
-        reviewDetailDTO.setBookScore(review.getBookScore());
-        reviewDetailDTO.setIsbn(review.getBook().getIsbn());
-        reviewDetailDTO.setContent(review.getContent());
-        reviewDetailDTO.setTitle(review.getTitle());
-        reviewDetailDTO.setIsSecret(review.getIsSecret());
-
-
-        reviewDetailDTO.setLikeCount(reviewLikeRepository.countReviewLikeByReview(review));
-        reviewDetailDTO.setPhotoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review));
-        reviewDetailDTO.setReviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review));
 
         List<ReviewCommentDTO> reviewCommentDTOList = new ArrayList<>();
         for (ReviewComment reviewComment:reviewCommentRepository.findAllByReview(review).orElseThrow()) {
-            ReviewCommentDTO reviewCommentDTO = new ReviewCommentDTO();
-            reviewCommentDTO.setCommentId(reviewComment.getId());
-            reviewCommentDTO.setUserId(reviewComment.getUser().getId());
-            reviewCommentDTO.setContent(reviewComment.getContents());
-            reviewCommentDTO.setUserImagePath((reviewComment.getUser().getImagePath()));
-            reviewCommentDTO.setDepth(reviewComment.getDepth());
-            if(reviewComment.getParent()==null){
-                reviewCommentDTO.setParentId(0L);
-            }else{
-                reviewCommentDTO.setParentId(reviewComment.getParent().getId());
-            }
-
-
-            reviewCommentDTOList.add(reviewCommentDTO);
+            reviewCommentDTOList.add(
+                    ReviewCommentDTO.createReviewCommentDTO().
+                    reviewComment(reviewComment).
+                    build()
+            );
         }
-        reviewDetailDTO.setReviewCommentList(reviewCommentDTOList);
+
         List<String> HashtagList = new ArrayList<>();
         for(ReviewHashtag reviewHashtag : reviewHashtagRepository.findAllByReviewId(reviewId)){
             HashtagList.add(reviewHashtag.getContent());
         }
-        reviewDetailDTO.setReviewHashtagList(HashtagList);
+
+        ReviewDetailDTO reviewDetailDTO = ReviewDetailDTO.createReviewDetailDTO()
+                .review(review)
+                .likeCount(reviewLikeRepository.countReviewLikeByReview(review))
+                .photoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review))
+                .reviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review))
+                .reviewCommentList(reviewCommentDTOList)
+                .HashtagList(HashtagList)
+                .build();
 
         return reviewDetailDTO;
     }
@@ -256,6 +242,21 @@ public class ReviewServiceImpl implements ReviewService{
 
         return savedReviewComment.getId();
     }
+
+    @Override
+    public void deleteComment(Long commentId){
+        ReviewComment reviewComment= reviewCommentRepository.findById(commentId).orElseThrow();
+        // 댓글인경우 + 답글이 달린경우
+        if(reviewComment.getDepth()==0 && reviewComment.getChildren().size()!=0){
+            //내용을 "deleted"로 변경
+            reviewComment.deleteComment();
+            reviewCommentRepository.save(reviewComment);
+
+        //답글인경우
+        }else{
+            reviewCommentRepository.delete(reviewComment);
+        }
+   }
 
     @Override
     public List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token) {
