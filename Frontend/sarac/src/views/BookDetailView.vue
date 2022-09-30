@@ -1,7 +1,7 @@
 <template>
   <div v-if="book" class="book-detail-container">
     <book-search-item v-bind="book"></book-search-item>
-    <v-btn-toggle dense borderless v-model="book.libraryType">
+    <v-btn-toggle dense borderless v-model="readStatus">
       <v-btn value="wish"> 읽고싶은책 </v-btn>
 
       <v-btn value="reading"> 읽는중 </v-btn>
@@ -17,7 +17,7 @@
     <BookDescription v-show="detailOrReviews == `detail`" v-bind:book="book"
       >책 정보</BookDescription
     >
-    <div v-show="detailOrReviews == `review`">책 리뷰</div>
+    <BookReviews v-show="detailOrReviews == `review`">책 리뷰</BookReviews>
   </div>
   <div v-else>책정보가없습니다 다시 시도해주세요</div>
 </template>
@@ -25,16 +25,26 @@
 <script>
 import BookSearchItem from "@/components/search/BookSearchItem.vue";
 import BookDescription from "@/components/bookDetail/bookDescription.vue";
-import { mapActions, mapState } from "vuex";
+import BookReviews from "@/components/bookDetail/bookReviews.vue";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 const bookStore = "bookStore";
 const accountStore = "accountStore";
 export default {
   name: "bookDetail",
-  components: { BookSearchItem, BookDescription },
+  components: { BookSearchItem, BookDescription, BookReviews },
   computed: {
     ...mapState(accountStore, ["user"]),
     ...mapState(bookStore, ["book"]),
+    ...mapGetters(bookStore, ["bookReadStatus"]),
+    // readStatus: {
+    //   get() {
+    //     return this.bookReadStatus;
+    //   },
+    //   set(newStatus) {
+    //     return newStatus;
+    //   },
+    // },
   },
   methods: {
     ...mapActions(bookStore, [
@@ -42,16 +52,26 @@ export default {
       "editReadStatus",
       "deleteReadStatus",
     ]),
+    onChangeReadStatus(event) {
+      console.log("change");
+      console.log(event.target.value);
+    },
   },
 
   data() {
     return {
       detailOrReviews: "detail",
+      readStatus: "",
     };
   },
-
   created() {
     this.getBookDetail(1234);
+    this.readStatus = this.book.libraryType;
+  },
+  watch: {
+    readStatus: function (newVal, oldVal) {
+      console.log("readstatuschanged", newVal, oldVal);
+    },
   },
 };
 </script>

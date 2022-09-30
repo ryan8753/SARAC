@@ -6,11 +6,14 @@ import axios from "axios";
 const bookStore = {
   namespaced: true,
   state: {
-    book: {
-      libraryType: "read",
+    book: {},
+    reviews: {},
+  },
+  getters: {
+    bookReadStatus: (state) => {
+      return state.book.libraryType;
     },
   },
-  getters: {},
   mutations: {
     SET_BOOK_INFO(state, bookInfo) {
       state.book = bookInfo;
@@ -27,7 +30,6 @@ const bookStore = {
         },
       })
         .then((res) => {
-          console.log(res);
           commit("SET_BOOK_INFO", res.data);
         })
         .catch((err) => {
