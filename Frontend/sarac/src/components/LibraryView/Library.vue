@@ -3,7 +3,7 @@
     <div><b>읽고 있는 책</b></div>
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group>
-        <v-slide-item v-for="lib in library" :key="lib.isbn" link>
+        <v-slide-item v-for="lib in library" :key="lib.isbn">
           <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
@@ -16,7 +16,7 @@
     <div><b>완독한 책</b></div>
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group>
-        <v-slide-item v-for="lib in library" :key="lib.isbn" link>
+        <v-slide-item v-for="lib in library" :key="lib.isbn">
           <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
@@ -29,7 +29,7 @@
     <div><b>읽고 싶은 책</b></div>
     <v-sheet width="100%" min-height="15vh">
       <v-slide-group>
-        <v-slide-item v-for="lib in library" :key="lib.isbn" link>
+        <v-slide-item v-for="lib in library" :key="lib.isbn">
           <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
             <v-img :src="lib.bookImgUrl" class="fill-height" />
           </v-card>
@@ -53,7 +53,7 @@ export default {
   props: ["libraryList", "keyword"],
   methods: {
     gotoBookInfo(isbn) {
-      console.log(isbn);
+      this.$router.push("/book/detail/" + isbn);
     }
   },
   created() {
