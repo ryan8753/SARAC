@@ -66,6 +66,11 @@ const routes = [
         name: "reviewRegist",
         component: () => import("@/components/review/ReviewRegistView.vue"),
       },
+      {
+        path: ":fromLocation",
+        name: "reviewSearch",
+        component: () => import("@/views/SearchView.vue"),
+      },
     ],
   },
   {
@@ -82,9 +87,9 @@ const routes = [
         path: "statistics",
         name: "userstatistics",
         component: UserStatistics,
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({
