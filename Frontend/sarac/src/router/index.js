@@ -67,6 +67,11 @@ const routes = [
         name: "reviewRegist",
         component: () => import("@/components/review/ReviewRegistView.vue"),
       },
+      {
+        path: ":reviewId",
+        name: "modifyRegist",
+        component: () => import("@/components/review/ReviewRegistView.vue"),
+      },
     ],
   },
   {
