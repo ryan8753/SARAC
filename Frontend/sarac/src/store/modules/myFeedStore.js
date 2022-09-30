@@ -13,7 +13,7 @@ const myFeedStore = {
     state: {
         userInfo: {},
         libraryList: {},
-
+        reviewList: [],
     },
     getters: {
 
@@ -24,11 +24,13 @@ const myFeedStore = {
         },
         GET_LIBRARY(state, payload) {
             state.libraryList = payload;
+        },
+        GET_REVIEW_LIST(state, payload) {
+            state.reviewList = payload;
         }
-
     },
     actions: {
-        getUserInfo({commit}, payload) {
+        getSearchUserInfo({commit}, payload) {
             axios({
                 url: `${apiUrl}userinfo`,
                 method: "GET",
@@ -48,6 +50,16 @@ const myFeedStore = {
                 commit("GET_LIBRARY", res.data);
                 router.push("/library");
             })
+        },
+        getReviewList({commit}, payload) {
+            axios({
+                url: `${apiUrl}reviewlist`,
+                method: "GET",
+                headers,
+                params: payload,
+            }).then((res) => {
+                commit("GET_REVIEW_LIST", res.data);           
+            });
         }
     },
 

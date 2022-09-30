@@ -24,7 +24,7 @@
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
 
-    <v-btn value="myfeed" min-width="50px">
+    <v-btn value="myfeed/review" min-width="50px">
       <span>myFeed</span>
 
       <v-icon>mdi-account-circle</v-icon>
@@ -45,9 +45,14 @@ export default {
   },
   watch: {
     value: function (newRoute) {
-      this.$router.replace({ path: `/` + newRoute });
+      // 라우터 중복 오류 무시
+      this.$router.replace({ path: `/` + newRoute }).catch(()=>{});
     },
   },
+  created() {
+    // 새로고침시 footer 상태 유지 (value 값에 현재 url path 설정)
+    this.value = window.location.pathname.substring(1);
+  }
 };
 </script>
 

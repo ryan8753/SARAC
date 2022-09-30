@@ -4,7 +4,7 @@
     <v-navigation-drawer v-model="drawer" absolute temporary width="70%">
       <v-divider></v-divider>
 
-      <v-list-item>
+      <v-list-item v-if="user != null">
         <v-list-item-avatar>
           <v-img :src="user.imagePath"></v-img>
         </v-list-item-avatar>
@@ -20,9 +20,8 @@
         <v-list-item
           v-for="item in items"
           :key="item.title"
-          :to="{ path: item.router }"
           class="router"
-          link
+          @click="clickNav(item.title)"
         >
           <v-list-item-icon>
             <v-icon color="rgba(170, 83, 14, 1)">{{ item.icon }}</v-icon>
@@ -46,7 +45,9 @@
         >
       </v-col>
     </v-row>
-    <v-row @click="goLibrary"
+    
+    <!-- 사용자 정보 (router로 뺄지 고민해보기!) -->
+    <v-row @click="goLibrary(userInfo.userId)"
       ><!-- 클릭효과 내기 -->
       <user-info></user-info>
     </v-row>
@@ -99,45 +100,50 @@ export default {
       items: [
         { title: "회원정보수정", icon: "mdi-cog", router: "/mypage" },
         { title: "내서재", icon: "mdi-bookshelf", router: "/library" },
-        { title: "뱃지확인", icon: "mdi-police-badge", router: "/badge" },
+        // 통계 어떻게 할지 고민좀 해보기
+        { title: "통계", icon: "mdi-bookshelf", router: "/myfeed/statistics" },
       ],
       clickR: true,
       clickS: false,
     };
   },
+    computed: {
+      ...mapState(accountStore, ["user"]),
+      ...mapState(myFeedStore, ["userInfo"]),
+    },
+    watch: {
+    },
   methods: {
     ...mapActions(myFeedStore, ["getUserInfo", "getLibrary"]),
 
-    getCurrentUser(currentUser) {
-      this.getUserInfo(currentUser);
-    },
-    goLibrary() {
-      this.getLibrary(this.currentUser);
+    goLibrary(userId) {
+      this.getLibrary({userId: userId});
     },
     showReview() {
       this.clickR = true;
       this.clickS = false;
-      this.$router.push({ name: "userreview" });
+      this.$router.push({ name: "userreview" }).catch(()=>{});
     },
     showStatistic() {
       this.clickR = false;
       this.clickS = true;
-      this.$router.push({ name: "userstatistics" });
+      this.$router.push({ name: "userstatistics" }).catch(()=>{});
+    },
+    clickNav(title) {
+      if(title === "마이페이지")
+        this.$router.push({ name: "/mypage" }).catch(()=>{});
+      else if(title === "내서재") {
+        this.goLibrary(this.user.userId);
+      }
+      else if(title === "통계") {
+        // userInfo 바꾸고 기존 통계 페이지??? 그냥 새로운 통계페이지?????
+        this.showStatistic(this.user.userId);
+      }
     },
   },
-  computed: {
-    ...mapState(accountStore, ["user"]),
-  },
-  watch: {
-    ...mapState(myFeedStore, ["userInfo"]),
-  },
   created() {
-    if (this.userInfo == null) this.currentUser.userId = this.user.userId;
-    else this.currentUser.userId = this.userInfo.userId;
-
-    this.getCurrentUser(this.currentUser);
-
-    this.$router.push({ name: "userreview" });
+    // 라우터 중복 무시
+    this.$router.push({ name: "userreview" }).catch(()=>{});
   },
 };
 </script>
