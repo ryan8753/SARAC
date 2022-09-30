@@ -74,6 +74,22 @@ const reviewStore = {
       });
       return response;
     },
+
+    async deleteCommentApi(commit, inputs) {
+      console.log(inputs);
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: `api/v1/review/comment/${inputs}`,
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }).then((res) => {
+        // this.randomReviewList = res.data;
+        return res.data;
+      });
+      return response;
+    },
     async registReview(context, { review, files }) {
       context;
       console.log(review);
@@ -104,12 +120,19 @@ const reviewStore = {
       });
       return response;
     },
-    async updateReview(context, { review, files }) {
+    async updateReview(context, { review, files,reviewId}) {
+      console.log("*************");
+      console.log(review)
+      console.log(files);
       context;
       const formData = new FormData();
       formData.append(
         "review",
         new Blob([JSON.stringify(review)], { type: "application/json" })
+      );
+      formData.append(
+        "id",
+        new Blob([JSON.stringify(reviewId)], { type: "application/json" })
       );
 
       for (let i = 0; i < files.length; i++) {
@@ -119,13 +142,14 @@ const reviewStore = {
       const response = await axios({
         url: "api/v1/review/update",
         method: "PUT",
+        
         headers: {
           Authorization: `Bearer ${accessToken}`,
           // 'Content-Type': 'multipart/form-data',
         },
-        data: {
+        data: 
           formData,
-        },
+        
       }).then((res) => {
         console.log(res);
         // this.randomReviewList = res.data;

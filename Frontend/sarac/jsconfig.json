@@ -1,20 +1,14 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "forceConsistentCasingInFileNames": false,
     "module": "esnext",
     "baseUrl": "./",
     "moduleResolution": "node",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ],
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "jsx": "preserve"
   }
 }

@@ -99,9 +99,10 @@ public class ReviewController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateReview(@RequestPart ReviewRequest review, @RequestPart(value = "files", required = false) List<MultipartFile> files, @PathVariable Long id){
+    @PutMapping ("/update")
+    public ResponseEntity<Map<String, Object>> updateReview(@RequestPart ReviewRequest review, @RequestPart(value = "files", required = false) List<MultipartFile> files,@RequestPart Long id) throws IOException{
         Map<String, Object> resultMap = new HashMap<>();
+
         //         이미지 파일만 업로드 가능
         try {
             if(files!=null) {
@@ -176,5 +177,19 @@ public class ReviewController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
+    // 리뷰 댓글 삭제하기
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable Long commentId){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            reviewService.deleteComment(commentId);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
 
 }
