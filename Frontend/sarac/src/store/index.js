@@ -1,17 +1,25 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
+// import router from "@/router";
+import axios from "axios";
 
-Vue.use(Vuex)
+// module 별 Store 불러오기
+import accountStore from "@/store/modules/accountStore";
+import reviewStore from "@/store/modules/reviewStore";
+import searchStore from "@/store/modules/searchStore";
+import myFeedStore from "@/store/modules/myFeedStore";
 
-export default new Vuex.Store({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
   modules: {
-  }
-})
+    accountStore: accountStore,
+    reviewStore: reviewStore,
+    searchStore: searchStore,
+    myFeedStore: myFeedStore,
+  },
+});
+
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+
+export default store;
