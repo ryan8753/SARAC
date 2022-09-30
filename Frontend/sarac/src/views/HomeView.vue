@@ -1,15 +1,42 @@
 <template>
-  <hello-world />
+  <div class="home-container">
+    <!-- {{ randomReviewList }} -->
+    <!-- <p>개인리뷰모아보기 home이요~</p> -->
+    <feeds :reviewList="randomReviewList"></feeds>
+  </div>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
+import { mapActions } from "vuex";
+const reviewStore = "reviewStore";
 
-  export default {
-    name: 'Home',
+import feeds from "../components/homeview/feeds.vue";
+export default {
+  name: "Home",
 
-    components: {
-      HelloWorld,
+  components: { feeds },
+
+  methods: {
+    ...mapActions(reviewStore, ["getRandomFeeds"]),
+
+    async getFeeds() {
+      this.randomReviewList = await this.getRandomFeeds();
     },
-  }
+  },
+  data() {
+    return {
+      randomReviewList: null,
+    };
+  },
+
+  created() {
+    this.getFeeds();
+  },
+};
 </script>
+
+<style scoped>
+.home-container {
+  padding: 5%;
+}
+</style>

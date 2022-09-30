@@ -1,55 +1,81 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <router-view/>
+  <v-app class="container">
+    <v-main class="footerplease">
+      <router-view />
     </v-main>
+    <Footer v-if="footerOn" />
   </v-app>
 </template>
 
 <script>
+// vuex 라이브러리에서 mapActions, mapGetters 함수를 가져옵니다.
+import { mapActions, mapGetters } from "vuex";
+import Footer from "./components/common/Footer.vue";
+// import store from "./store/index.js";
+
+const accountStore = "accountStore";
+function setScreenSize() {
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+}
+setScreenSize();
+window.addEventListener("resize", setScreenSize);
 
 export default {
-  name: 'App',
+  name: "App",
+  components: {
+    Footer: Footer,
+  },
+  data: () => {
+    return {
+      vh: window.innerHeight,
+      footerOn: null,
+    };
+  },
 
-  data: () => ({
-    //
-  }),
+  computed: {
+    ...mapGetters(accountStore, ["isLoggedIn"]),
+  },
+  methods: {
+    ...mapActions(accountStore, ["getUserInfo"]),
+  },
+  created() {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    const payload = {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
+    if (accessToken) {
+      this.getUserInfo(payload);
+      // this.$router.push('/mypage')
+    } else {
+      // this.$router.push('/login')
+    }
+
+    if (window.location.pathname != "/login") {
+      this.footerOn = true;
+    }
+  },
 };
 </script>
+
+<style scoped>
+@media (min-width: 600px) {
+  .container {
+    width: 600px;
+    padding: 0px;
+  }
+}
+.container {
+  background-color: white;
+  height: calc(var(--vh, 1vh) * 100);
+  padding: 0px;
+}
+
+.footerplease {
+  overflow: auto;
+  height: calc(100% - 4rem);
+}
+</style>
+>
