@@ -8,8 +8,8 @@
               class="reviewImage"
               fas
               fa-search
-              :src="user.imagePath"
-              alt=""
+              src="https://sarac-a505.s3.ap-northeast-2.amazonaws.com/763baecc-7369-4afc-9874-4c874777c2f2-%EB%A3%A8%ED%94%BC.png"
+              alt="책이미지 임시"
               @click="searchBook()"
             />
           </v-col>
@@ -120,8 +120,9 @@ export default {
       uploadimageurl: [], // 업로드한 이미지의 미리보기 기능을 위해 url 저장하는 객체
       hashtag: "",
       review: {
+        id:null,
         writer: null,
-        isbn: "",
+        isbn: "1",
         title: "",
         content: "",
         bookScore: 3,
@@ -129,23 +130,38 @@ export default {
         hashtag: [],
       },
       files: [],
+      reviewId: null,
+      type: null,
+      detailReview: {
+        reviewId:null,
+        title: null,
+        content: "",
+        bookScore: null,
+        isSecret: null,
+        reviewHashtagList: [],
+      },
     };
   },
 
-  props: {
-    type: { type: String },
+  watch: {
+    review(newreview) {
+      console.log(newreview);
+    },
   },
   computed: {
     ...mapState(accountStore, ["user"]),
   },
   created() {
-    if (this.type === "modify") {
+    if (this.$route.params.reviewId != null) {
       this.reviewId = this.$route.params.reviewId;
+      console.log(this.$route.params.reviewId);
       this.getReview(this.reviewId);
+      this.type = "modify";
     } else {
       this.review.title = this.user.nickname + "님의 리뷰입니다.";
     }
     this.review.writer = this.user.userId;
+    console.log(this.review.writer);
   },
 
   components: {},
@@ -157,7 +173,15 @@ export default {
     ]),
 
     async getReview(reviewId) {
-      this.review = await this.getDetailReview(reviewId);
+      this.detailReview = await this.getDetailReview(reviewId);
+      this.review.title = this.detailReview.title;
+      this.review.content = this.detailReview.content;
+      this.review.isSecret = this.detailReview.isSecret;
+      this.review.bookScore = this.detailReview.bookScore;
+      this.review.hashtag = this.detailReview.reviewHashtagList;
+      this.review.id = this.detailReview.reviewId;
+
+      console.log(this.review);
     },
 
     searchBook() {
@@ -171,6 +195,7 @@ export default {
       let err = true;
       let msg = "";
       !this.review.content && ((msg = "내용을 입력해주세요"), (err = false));
+      err && !this.review.isbn && ((msg = "책을 검색해주세요"), (err = false));
 
       if (!err) alert(msg);
       else this.type === "modify" ? this.modify() : this.regist();
@@ -215,10 +240,13 @@ export default {
       const review = this.review;
       const files = this.files;
       this.registReview({ review, files });
-      // this.$router.push({ name: "home" });
+      this.$router.push({ name: "home" });
     },
     async modify() {
-      await this.updateReview(this.review);
+      const review = this.review;
+      const files = this.files;
+      const reviewId = this.reviewId
+      this.updateReview({ review, files,reviewId });
       this.$router.push({ name: "home" });
     },
   },
@@ -226,15 +254,15 @@ export default {
 </script>
 
 <style scoped>
-.add{
+.add {
   align-self: bottom;
 }
-.hash{
-  vertical-align:middle;
+.hash {
+  vertical-align: middle;
 }
 .v-input--selection-controls {
-    margin-top: 0px;
-    padding-top: 0px;
+  margin-top: 0px;
+  padding-top: 0px;
 }
 
 .checkbox {
