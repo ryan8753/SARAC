@@ -1,29 +1,126 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+// view
+import HomeView from "../views/HomeView.vue";
+import LoginView from "@/views/LoginView.vue";
+import DetailReview from "@/views/DetailReview.vue";
+import KakaoRedirect from "@/views/KakaoLoginRedirect.vue";
+import MypageView from "@/views/MypageView.vue";
+import SearchView from "@/views/SearchView.vue";
+import MyFeedView from "@/views/MyFeedView.vue";
+import LibraryView from "@/views/LibraryView.vue";
+// component
+import UserReview from "@/components/MyFeedView/UserReview";
+import UserStatistics from "@/components/MyFeedView/UserStatistics";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: "/home",
+    name: "home",
+    component: HomeView,
   },
   {
-    path: '/about',
-    name: 'about',
+    path: "/detailReview/:reviewId",
+    name: "detailReview",
+    component: DetailReview,
+    props: true,
+  },
+  {
+    path: "/about",
+    name: "about",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: LoginView,
+  },
+  {
+    path: "/redirect",
+    name: "kakaoredirect",
+    component: KakaoRedirect,
+  },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: MypageView,
+  },
+  {
+    path: "/search",
+    name: "search",
+    component: SearchView,
+  },
+  {
+    path: "/review",
+    name: "review",
+    component: () => import("@/views/ReviewView.vue"),
+    redirect: "/review/regist",
+    children: [
+      {
+        path: "regist",
+        name: "reviewRegist",
+        component: () => import("@/components/review/ReviewRegistView.vue"),
+      },
+      {
+
+        path: ":fromLocation",
+        name: "reviewSearch",
+        component: () => import("@/views/SearchView.vue"),
+      },
+      {
+        path: ":reviewId",
+        name: "modifyRegist",
+        component: () => import("@/components/review/ReviewRegistView.vue"),
+
+      },
+    ],
+  },
+  {
+    path: "/myfeed",
+    name: "myfeed",
+    component: MyFeedView,
+    children: [
+      {
+        path: "review",
+        name: "userreview",
+        component: UserReview,
+      },
+      {
+        path: "statistics",
+        name: "userstatistics",
+        component: UserStatistics,
+      }
+    ]
+  },
+  {
+    path: "/library",
+    name: "library",
+    component: LibraryView,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+router.beforeEach(function (to, from, next) {
+  const accessToken = localStorage.getItem("accessToken");
+
+  if (to.path === "/redirect" || to.path === "/login") {
+    next();
+  } else if (accessToken) {
+    next();
+  } else {
+    next("/login");
+  }
+});
+
+export default router;
