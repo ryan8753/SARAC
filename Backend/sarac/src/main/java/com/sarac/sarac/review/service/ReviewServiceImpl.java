@@ -201,46 +201,29 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewDetailDTO showDetailReview(long reviewId) {
 
         Review review = reviewRepository.findById(reviewId).orElseThrow();
-        ReviewDetailDTO reviewDetailDTO = new ReviewDetailDTO();
-        reviewDetailDTO.setReviewId(reviewId);
-        reviewDetailDTO.setAuthorKakaoId(review.getUser().getKakaoId());
-        reviewDetailDTO.setBookTitle(review.getBook().getBookTitle());
-        reviewDetailDTO.setBookScore(review.getBookScore());
-        reviewDetailDTO.setIsbn(review.getBook().getIsbn());
-        reviewDetailDTO.setContent(review.getContent());
-        reviewDetailDTO.setTitle(review.getTitle());
-        reviewDetailDTO.setIsSecret(review.getIsSecret());
-
-
-        reviewDetailDTO.setLikeCount(reviewLikeRepository.countReviewLikeByReview(review));
-        reviewDetailDTO.setPhotoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review));
-        reviewDetailDTO.setReviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review));
 
         List<ReviewCommentDTO> reviewCommentDTOList = new ArrayList<>();
         for (ReviewComment reviewComment:reviewCommentRepository.findAllByReview(review).orElseThrow()) {
-            ReviewCommentDTO reviewCommentDTO = new ReviewCommentDTO();
-            reviewCommentDTO.setCommentId(reviewComment.getId());
-            reviewCommentDTO.setUserId(reviewComment.getUser().getId());
-            reviewCommentDTO.setUserNickname(reviewComment.getUser().getNickname());
-            reviewCommentDTO.setKakaoId(reviewComment.getUser().getKakaoId());
-            reviewCommentDTO.setContent(reviewComment.getContents());
-            reviewCommentDTO.setUserImagePath((reviewComment.getUser().getImagePath()));
-            reviewCommentDTO.setDepth(reviewComment.getDepth());
-            if(reviewComment.getParent()==null){
-                reviewCommentDTO.setParentId(0L);
-            }else{
-                reviewCommentDTO.setParentId(reviewComment.getParent().getId());
-            }
-
-
-            reviewCommentDTOList.add(reviewCommentDTO);
+            reviewCommentDTOList.add(
+                    ReviewCommentDTO.createReviewCommentDTO().
+                    reviewComment(reviewComment).
+                    build()
+            );
         }
-        reviewDetailDTO.setReviewCommentList(reviewCommentDTOList);
+
         List<String> HashtagList = new ArrayList<>();
         for(ReviewHashtag reviewHashtag : reviewHashtagRepository.findAllByReviewId(reviewId)){
             HashtagList.add(reviewHashtag.getContent());
         }
-        reviewDetailDTO.setReviewHashtagList(HashtagList);
+
+        ReviewDetailDTO reviewDetailDTO = ReviewDetailDTO.createReviewDetailDTO()
+                .review(review)
+                .likeCount(reviewLikeRepository.countReviewLikeByReview(review))
+                .photoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review))
+                .reviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review))
+                .reviewCommentList(reviewCommentDTOList)
+                .HashtagList(HashtagList)
+                .build();
 
         return reviewDetailDTO;
     }
