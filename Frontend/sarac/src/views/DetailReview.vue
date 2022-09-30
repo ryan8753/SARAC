@@ -15,7 +15,7 @@
       v-if="
         review.authorKakaoId === this.$store.state.accountStore.user.kakaoId
       "
-      ><v-btn icon><v-icon>mdi-pencil</v-icon></v-btn></v-row
+      ><v-btn icon @click="modifyReview"><v-icon>mdi-pencil</v-icon></v-btn></v-row
     >
     <!-- 댓글 -->
     <v-row style="width: 100%" justify="center">
@@ -60,6 +60,13 @@ export default {
     ...mapActions(reviewStore, ["getDetailReview"]),
     async getReview(reviewId) {
       this.review = await this.getDetailReview(reviewId);
+    },
+
+    modifyReview(){
+       this.$router.push({
+        path: `/review/${this.review.reviewId}`,
+        params: { reviewId: this.review.reviewId },
+      });
     },
     updateInfo() {
       this.getReview(this.reviewId);
