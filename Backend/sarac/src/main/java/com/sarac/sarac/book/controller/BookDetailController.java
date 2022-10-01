@@ -3,8 +3,7 @@ package com.sarac.sarac.book.controller;
 import com.sarac.sarac.book.dto.request.BookDetailRequest;
 import com.sarac.sarac.book.dto.response.BookInfoDto;
 import com.sarac.sarac.book.service.BookDetailService;
-import com.sarac.sarac.library.type.LibraryType;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/book/detail")
 public class BookDetailController {
 
-    @Autowired
-    BookDetailService bookDetailService;
+    private final BookDetailService bookDetailService;
 
     @GetMapping
     public ResponseEntity<BookInfoDto> getBookDetail(@RequestParam String isbn, @RequestParam Long userId) {

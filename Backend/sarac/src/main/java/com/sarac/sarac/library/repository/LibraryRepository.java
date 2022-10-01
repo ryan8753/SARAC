@@ -19,7 +19,7 @@ public interface LibraryRepository extends JpaRepository<Library, Long> {
 
     public List<Library> findByUserId(Long userId);
 
-    Library findByUserIdAndBookIsbn(Long userId, String isbn);
+    Optional<Library> findByUserIdAndBookIsbn(Long userId, String isbn);
 
     @Transactional
     void deleteByUserIdAndBookIsbn(Long userId, String isbn);

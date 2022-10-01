@@ -60,10 +60,12 @@ public class ReviewServiceImpl implements ReviewService{
 
 
     @Override
+    @Transactional
     public Long registerReview(ReviewRequest review) {
 
         Review saveReview = new Review();
-        saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+        saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn())
+                .orElseThrow(IllegalArgumentException::new));
         saveReview.setContent(review.getContent());
         saveReview.setTitle(review.getTitle());
         saveReview.setUser(userRepository.findOneById(review.getWriter()));
@@ -103,7 +105,8 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review originReview = reviewRepository.findOneById(reviewId);
         if(review.getIsbn()!=null) {
-            originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+            originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn())
+                    .orElseThrow(IllegalArgumentException::new));
         }
         if(review.getContent()!=null) {
             originReview.setContent(review.getContent());
@@ -216,7 +219,7 @@ public class ReviewServiceImpl implements ReviewService{
             HashtagList.add(reviewHashtag.getContent());
         }
 
-        ReviewDetailDTO reviewDetailDTO = ReviewDetailDTO.createReviewDetailDTO()
+        return ReviewDetailDTO.createReviewDetailDTO()
                 .review(review)
                 .likeCount(reviewLikeRepository.countReviewLikeByReview(review))
                 .photoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review))
@@ -224,8 +227,6 @@ public class ReviewServiceImpl implements ReviewService{
                 .reviewCommentList(reviewCommentDTOList)
                 .HashtagList(HashtagList)
                 .build();
-
-        return reviewDetailDTO;
     }
 
     @Override
