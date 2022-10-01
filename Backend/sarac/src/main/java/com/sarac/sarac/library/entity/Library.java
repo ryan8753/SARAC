@@ -8,11 +8,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-@Builder
-@Setter
 public class Library {
 
     @Id
@@ -30,4 +27,14 @@ public class Library {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "isbn", referencedColumnName = "isbn")
     private Book book;
+
+    @Builder
+    public Library(Book book, User user) {
+        this.book = book;
+        this.user = user;
+    }
+
+    public void insertLibraryType(LibraryType libraryType) {
+        this.libraryType = libraryType;
+    }
 }
