@@ -33,15 +33,22 @@ export default {
     ...mapState(accountStore, ["user"]),
   },
   created() {
-    this.getInfo()  
+    if (this.$route.params.userId == null) {
+    this.getMyInfo()  
+    }else{
+      this.getOtherInfo()
+    }
   },
 
   methods: {
-    ...mapActions(statisticsStore, ["getStatistics"
+    ...mapActions(statisticsStore, ["getMyStatistics","getOtherStatistics"
     ]),
 
-  async getInfo() {
-      this.statistics = await this.getStatistics(this.user.userId);
+  async getMyInfo() {
+      this.statistics = await this.getMyStatistics();
+    },
+    async getOtherInfo() {
+      this.statistics = await this.getOtherStatistics(this.user.userId);
     },
   },
 
