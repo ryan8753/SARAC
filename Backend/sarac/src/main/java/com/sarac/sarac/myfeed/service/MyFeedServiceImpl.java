@@ -89,9 +89,21 @@ public class MyFeedServiceImpl implements MyFeedService {
         addUsersToUserList(userList, searchNickname);
 
         // 회원 태그(코드)기반 검색 결과 (keyword가 숫자면 수행)
-        if(keyWord != null && keyWord.matches("[0-9]+")) {
-            List<User> searchUserCode = userRepository.findByIdContaining(Long.parseLong(keyWord));
-            addUsersToUserList(userList, searchUserCode);
+        if(keyWord != null && keyWord.matches("[0-9]+") && keyWord.length() == 4) {
+            int startIdx = -1;
+            for(int i = 0; i < keyWord.length(); i++) {
+                if(keyWord.charAt(i) != '0') {
+                    startIdx = i;
+                    break;
+                }
+            }
+
+            Optional<User> searchUserCode = userRepository.findById(Long.parseLong(keyWord.substring(startIdx)));
+            searchUserCode.ifPresent(user -> {
+                List<User> searchCode = new ArrayList<>();
+                searchCode.add(user);
+                addUsersToUserList(userList, searchCode);
+            });
         }
 
         return userList;
@@ -131,18 +143,31 @@ public class MyFeedServiceImpl implements MyFeedService {
 
     // 리뷰목록 가져오기
     @Override
-    public List<MyFeedReviewListRes> getReviewList(String token, Long userId) {
+    public Map<String, List<MyFeedReviewListRes>> getReviewList(String token, Long userId) {
+        Map<String, List<MyFeedReviewListRes>> resultMap = new HashMap<>();
+
         // userId가 현재 user의 id값과 같으면 (자기 자신의 리뷰를 보고싶은 경우)
         if( userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken(token).get("id")).getId() == userId ) {
             List<Review> userReviewList = reviewRepository.findAllByUserId(userId);
 
-            return addReviewsToReviewList(userReviewList);
+            resultMap.put(ME, addReviewsToReviewList(userReviewList));
+
+            return resultMap;
         }
 
         // (타인의 리뷰를 보고싶은 경우 - 리뷰별 공개 여부 확인 필요)
-        List<Review> othersReviewList = reviewRepository.findAllByUserIdAndIsSecret(userId, false);
+        Optional<User> userTmp = userRepository.findById(userId);
+        userTmp.ifPresent(user -> {
+            if( user.getIsReviewOpen()) {
+                List<Review> othersReviewList = reviewRepository.findAllByUserIdAndIsSecret(userId, false);
+                resultMap.put(OPEN, addReviewsToReviewList(othersReviewList));
+            }
+            else {
+                resultMap.put(PRIVATE, new ArrayList<>());
+            }
+        });
 
-        return addReviewsToReviewList(othersReviewList);
+        return resultMap;
     }
 
     // 유저 해시태그 객체 목록에서 해시태그컨텐츠들만 가져옴
@@ -154,6 +179,10 @@ public class MyFeedServiceImpl implements MyFeedService {
     public void addUsersToUserList(List<MyFeedUserRes> userListArr, List<User> searchedUsers) {
         for(User user : searchedUsers) {
             List<String> hashtagList = convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId()));
+
+            int len = hashtagList.size();
+            for(int i = 0; i < 3-len; i++)
+                hashtagList.add(" ");
 
             userListArr.add(
                     MyFeedUserRes.builder()

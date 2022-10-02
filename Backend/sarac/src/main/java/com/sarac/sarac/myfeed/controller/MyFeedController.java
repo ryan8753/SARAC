@@ -48,8 +48,8 @@ public class MyFeedController {
 
     // 리뷰
     @GetMapping("/reviewlist")
-    public ResponseEntity<List<MyFeedReviewListRes>> getReviewList(@RequestHeader Map<String,Object> token, Long userId) {
-        List<MyFeedReviewListRes> reviewList = myFeedService.getReviewList((String) token.get("authorization"), userId);
+    public ResponseEntity<Map<String, List<MyFeedReviewListRes>>> getReviewList(@RequestHeader Map<String,Object> token, Long userId) {
+        Map<String, List<MyFeedReviewListRes>> reviewList = myFeedService.getReviewList((String) token.get("authorization"), userId);
 
         return ResponseEntity.status(200).body(reviewList);
     }
