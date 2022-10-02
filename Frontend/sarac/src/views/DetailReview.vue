@@ -64,7 +64,7 @@ export default {
 
     modifyReview(){
        this.$router.push({
-        path: `/review/${this.review.reviewId}`,
+        path: `/review/regist/${this.review.reviewId}`,
         params: { reviewId: this.review.reviewId },
       });
     },
