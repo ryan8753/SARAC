@@ -51,6 +51,7 @@ export default {
       "getBookDetail",
       "editReadStatus",
       "deleteReadStatus",
+      "getReviewList",
     ]),
     onChangeReadStatus(event) {
       console.log("change");
@@ -65,12 +66,21 @@ export default {
     };
   },
   created() {
-    this.getBookDetail(1234);
+    // const bookId = this.$route.params.bookId;
+    // const userId = this.user;
+    this.getBookDetail({ bookId: 1234, userId: 2430262127 });
+    this.getReviewList(1234);
     this.readStatus = this.book.libraryType;
   },
   watch: {
     readStatus: function (newVal, oldVal) {
-      console.log("readstatuschanged", newVal, oldVal);
+      console.log(newVal, oldVal);
+      if (newVal === undefined && oldVal != null) {
+        console.log("올", oldVal);
+        this.deleteReadStatus(1234);
+      } else {
+        this.editReadStatus({ bookId: 1234, newStatus: newVal });
+      }
     },
   },
 };

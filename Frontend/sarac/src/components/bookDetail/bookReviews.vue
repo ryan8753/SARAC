@@ -1,6 +1,16 @@
 <template>
-  <div>책리뷰</div>
+  <div>
+    <div>책리뷰</div>
+    <!-- <div v-for="review in reviewLvist"> -->
+    <div></div>
+  </div>
 </template>
 <script>
-export default {};
+import { mapState } from "vuex";
+const bookStore = "bookStore";
+export default {
+  computed: {
+    ...mapState(bookStore, ["reviewList"]),
+  },
+};
 </script>
