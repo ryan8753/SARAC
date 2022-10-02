@@ -16,5 +16,5 @@ public interface MyFeedService {
 
     Map<String, List<MyFeedLibraryRes>> getLibraryList(String token, Long userId);
 
-    List<MyFeedReviewListRes> getReviewList(String token, Long userId);
+    Map<String, List<MyFeedReviewListRes>> getReviewList(String token, Long userId);
 }
