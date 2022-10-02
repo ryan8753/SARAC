@@ -1,6 +1,5 @@
 package com.sarac.sarac.review.service;
 
-import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.global.util.FileUpload;
 import com.sarac.sarac.library.entity.Library;
@@ -15,8 +14,6 @@ import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
-import com.sarac.sarac.review.util.AladinUtil;
-import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
@@ -55,9 +52,6 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewCommentRepository reviewCommentRepository;
     private final JwtUtil jwtUtil;
-
-    private final AladinUtil aladinUtil;
-
 
     @Override
     @Transactional

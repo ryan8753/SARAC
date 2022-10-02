@@ -1,5 +1,8 @@
 package com.sarac.sarac.book.entity;
 
+import com.sarac.sarac.book.util.dto.AladinAuthorDto;
+import com.sarac.sarac.book.util.dto.AladinDto;
+import com.sarac.sarac.book.util.dto.AladinItemDto;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.review.entity.Review;
 import lombok.AccessLevel;
@@ -43,10 +46,10 @@ public class Book {
     @ColumnDefault("0")
     private int page;
 
-    @Column(length = 20)
+    @Column(length = 100)
     private String genre;
 
-    @Column(length = 20, nullable = true)
+    @Column(length = 100, nullable = true)
     private String vol;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -55,4 +58,29 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Library> libraries = new HashSet<>();
 
+    public void updateDetail(AladinItemDto aladinItemDto) {
+        if(isContentEmpty(this.bookImgUrl))
+            this.bookImgUrl = aladinItemDto.getCover();
+
+        if(isContentEmpty(this.publisher))
+            this.publisher = aladinItemDto.getPublisher();
+
+        if(isContentEmpty(this.description))
+            this.description = aladinItemDto.getDescription();
+
+        if(this.price == 0)
+            this.price = aladinItemDto.getPriceStandard();
+
+        this.genre = aladinItemDto.getCategoryName();
+        this.page = aladinItemDto.getBookinfo().getItemPage();
+
+        for(AladinAuthorDto aladinAuthorDto : aladinItemDto.getBookinfo().getAuthors()) {
+            if(AuthorType.AUTHOR.name().equalsIgnoreCase(aladinAuthorDto.getAuthorType()))
+                this.author = aladinAuthorDto.getName();
+        }
+    }
+
+    private boolean isContentEmpty(String content) {
+        return (content == null) || (content.trim().length() == 0);
+    }
 }

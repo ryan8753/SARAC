@@ -4,6 +4,9 @@ import com.sarac.sarac.book.dto.request.BookDetailRequest;
 import com.sarac.sarac.book.dto.response.BookInfoDto;
 import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.book.repository.BookRepository;
+import com.sarac.sarac.book.util.AladinUtil;
+import com.sarac.sarac.book.util.dto.AladinDto;
+import com.sarac.sarac.book.util.dto.AladinResponse;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.review.entity.BookScore;
@@ -22,6 +25,8 @@ public class BookDetailServiceImpl implements BookDetailService {
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
 
+    private final AladinUtil aladinUtil;
+
     @Override
     public BookInfoDto showBookInfo(long userId, String isbn) {
 
@@ -30,6 +35,8 @@ public class BookDetailServiceImpl implements BookDetailService {
 
         Library library = libraryRepository.findByUserIdAndBookIsbn(userId, isbn)
                 .orElseGet(Library::new);
+
+        checkBookDetailSave(isbn, book);
 
         return BookInfoDto.builder()
                 .bookTitle(book.getBookTitle())
@@ -67,5 +74,22 @@ public class BookDetailServiceImpl implements BookDetailService {
     @Override
     public void deleteLibraryType(long userId, String isbn) {
         libraryRepository.deleteByUserIdAndBookIsbn(userId, isbn);
+    }
+
+    private void checkBookDetailSave(String isbn, Book book) {
+        AladinResponse aladinResponse = aladinUtil.getBookDetailData(isbn);
+
+        if(canBookSaveDetail(aladinResponse, book))
+            saveDetailBookData((AladinDto) aladinResponse, book);
+    }
+
+    @Transactional
+    private void saveDetailBookData(AladinDto aladinDto, Book book) {
+        book.updateDetail(aladinDto.getItem().get(0));
+        bookRepository.save(book);
+    }
+
+    private boolean canBookSaveDetail(AladinResponse aladinResponse, Book book) {
+        return (aladinResponse instanceof AladinDto) && (book.getGenre() == null || book.getGenre().trim().length() == 0);
     }
 }
