@@ -48,7 +48,6 @@ export default {
     ...mapActions(myFeedStore, ["getSearchUserList"]),
 
     searchUser() {
-      // 여기 띄어쓰기 로직 다시 생각해보기
       if(this.keyword != null && this.keyword.trim().length != 0) {
         this.getSearchUserList( { keyWord: this.keyword.trim() } );
         this.keyword = "";
