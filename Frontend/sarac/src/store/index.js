@@ -8,6 +8,7 @@ import accountStore from "@/store/modules/accountStore";
 import reviewStore from "@/store/modules/reviewStore";
 import searchStore from "@/store/modules/searchStore";
 import myFeedStore from "@/store/modules/myFeedStore";
+import statisticsStore from "@/store/modules/statisticsStore";
 import bookStore from "@/store/modules/bookStore";
 
 Vue.use(Vuex);
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
     searchStore: searchStore,
     myFeedStore: myFeedStore,
     bookStore: bookStore,
+    statisticsStore: statisticsStore,
   },
 });
 
