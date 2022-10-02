@@ -14,7 +14,10 @@
       <v-btn value="review"> 리뷰 </v-btn>
     </v-btn-toggle>
     <hr />
-    <BookDescription v-show="detailOrReviews == `detail`" v-bind:book="book"
+    <BookDescription
+      v-show="detailOrReviews == `detail`"
+      v-bind:book="book"
+      class="descript-review"
       >책 정보</BookDescription
     >
     <BookReviews v-show="detailOrReviews == `review`">책 리뷰</BookReviews>
@@ -77,7 +80,7 @@ export default {
       console.log(newVal, oldVal);
       if (newVal === undefined && oldVal != null) {
         console.log("올", oldVal);
-        this.deleteReadStatus(1234);
+        // this.deleteReadStatus(1234);
       } else {
         this.editReadStatus({ bookId: 1234, newStatus: newVal });
       }
@@ -103,6 +106,9 @@ hr {
   background-color: rgba(243, 237, 237, 1);
   /* background-color: blue; */
   height: 1px;
+  width: 100%;
+}
+.descript-review {
   width: 100%;
 }
 </style>
