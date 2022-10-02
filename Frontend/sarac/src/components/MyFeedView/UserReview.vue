@@ -1,7 +1,11 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col v-for="review in reviewList" :key="review.reviewId" class="px-0">
+    <v-row v-if="!isOpen" justify="center" class="pa-4">
+      비공개 입니다.
+    </v-row>
+
+    <v-row v-else>
+      <v-col v-for="review in reviews" :key="review.reviewId" class="px-0">
         <v-card
           class="mx-0"
           max-width="10vh"
@@ -9,7 +13,8 @@
           flat
         >
           <v-img :src="review.photoUrlList[0]" height="15vh">
-            <v-icon>mdi-lock</v-icon>
+            <!-- 비밀글일경우, 자물쇠 아이콘 -->
+            <v-icon v-if="review.isSecret">mdi-lock</v-icon>
           </v-img>
           <v-card-subtitle id="title">
             {{ review.title }}
@@ -34,7 +39,10 @@ export default {
   name: "UserReview",
 
   data() {
-    return {};
+    return {
+      isOpen: true,
+      reviews: [],
+    };
   },
   computed: {
     ...mapState(myFeedStore, ["userInfo", "reviewList"]),
@@ -43,6 +51,11 @@ export default {
     userInfo: function () {
       this.getReviewList({ userId: this.userInfo.userId });
     },
+    reviewList: function () {
+    let person = Object.keys(this.reviewList)[0];
+    if (person == "private") this.isOpen = false;
+    else this.reviews = this.reviewList[person];
+    }
   },
   methods: {
     ...mapActions(myFeedStore, ["getReviewList"]),
@@ -52,7 +65,7 @@ export default {
     },
   },
   created() {
-    this.getReviewList({ userId: this.userInfo.userId });
+      this.getReviewList({ userId: this.userInfo.userId });
   },
 };
 </script>

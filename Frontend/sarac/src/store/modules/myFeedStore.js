@@ -12,6 +12,7 @@ const myFeedStore = {
 
     state: {
         userInfo: {},
+        userList: [],
         libraryList: {},
         reviewList: [],
     },
@@ -22,12 +23,25 @@ const myFeedStore = {
         GET_USER_INFO(state, payload) {
             state.userInfo = payload;
         },
+        GET_USER_LIST(state, payload) {
+            // 회원 코드 만들어주는 로직
+            for(let i = 0; i < payload.length; i++) {
+                let userCode = "";
+                for(let j = 0; j < 4 - payload[i].userId.toString().length; j++) {
+                    userCode += "0";   
+                }
+                userCode += payload[i].userId;
+                payload[i].userId = userCode;
+            }
+            
+            state.userList = payload;
+        },
         GET_LIBRARY(state, payload) {
             state.libraryList = payload;
         },
         GET_REVIEW_LIST(state, payload) {
             state.reviewList = payload;
-        }
+        },
     },
     actions: {
         getSearchUserInfo({commit}, payload) {
@@ -38,6 +52,16 @@ const myFeedStore = {
                 params: payload,
             }).then((res) => {
                 commit("GET_USER_INFO", res.data);
+            })
+        },
+        getSearchUserList({commit}, payload) {
+            axios({
+                url: `${apiUrl}userlist`,
+                method: "GET",
+                headers,
+                params: payload,
+            }).then((res) => {
+                commit("GET_USER_LIST", res.data);
             })
         },
         getLibrary({commit}, payload) {
@@ -60,7 +84,7 @@ const myFeedStore = {
             }).then((res) => {
                 commit("GET_REVIEW_LIST", res.data);           
             });
-        }
+        },
     },
 
 };

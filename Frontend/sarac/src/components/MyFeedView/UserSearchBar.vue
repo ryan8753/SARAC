@@ -6,25 +6,61 @@
         solo
         label="친구를 찾아보세요"
         clearable
+        color="rgba(170, 83, 14, 1)"
+        :prepend-inner-icon="backIcon"
+        @click:prepend-inner="goBack"
         append-icon="mdi-magnify"
         @click:append="searchUser"
-        color="rgba(170, 83, 14, 1)"
+        @keydown.enter.prevent="searchUser"
+        @focus="onUserSearch()"
+        id="bar"
       ></v-text-field>
     </v-row>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
+const myFeedStore = "myFeedStore";
+
 export default {
   name: "UserSearchBar",
   data() {
     return {
       keyword: "",
+      backIcon: "",
     };
   },
+  computed: {
+  },
+  watch: {
+    $route() {
+      let tmp = window.location.pathname.split("/");
+      if (tmp[tmp.length - 1] != "search") {
+        this.keyword = "";
+        this.backIcon = "";
+        document.getElementById("bar").blur();
+      }
+    },
+  },
   methods: {
+    ...mapActions(myFeedStore, ["getSearchUserList"]),
+
     searchUser() {
-      console.log("aaa");
+      // 여기 띄어쓰기 로직 다시 생각해보기
+      if(this.keyword != null && this.keyword.trim().length != 0) {
+        this.getSearchUserList( { keyWord: this.keyword.trim() } );
+        this.keyword = "";
+        document.getElementById("bar").blur();
+      }
+    },
+    onUserSearch() {
+      this.$router.push({ name: "usersearch" }).catch(() => {});
+      this.backIcon = "mdi-arrow-left-thick";
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
 };
