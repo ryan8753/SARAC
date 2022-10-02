@@ -34,7 +34,22 @@ const statisticsStore = {
               return res.data;
             });
             return response;
+      },
+      getMyHashtag(context) {
+        context;
+        const accessToken = localStorage.getItem("accessToken");
+        axios({
+          url: `api/v1/statistics/hashtag`,
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           },
+        }).then((res) => {
+          console.log(res.data);
+          return res.data
+        });
+       
+      },
       
     }
 };
