@@ -74,7 +74,7 @@ const routes = [
         component: () => import("@/views/SearchView.vue"),
       },
       {
-        path: ":reviewId",
+        path: "regist/:reviewId",
         name: "modifyRegist",
         component: () => import("@/components/review/ReviewRegistView.vue"),
 
