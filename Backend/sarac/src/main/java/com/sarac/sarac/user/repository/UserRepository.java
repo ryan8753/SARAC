@@ -19,7 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void deleteUserByKakaoId(Long KakaoId);
 
     List<User> findByNicknameContaining(String nickname);
-    List<User> findByIdContaining(Long id);
-
 
 }
