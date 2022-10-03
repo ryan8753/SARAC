@@ -5,7 +5,7 @@
 
     <v-card class="mx-2">
       <!-- 책이름 -->
-      <v-row class="ml-auto" align="justify">
+      <v-row class="ml-auto" align="center">
         <v-col>"{{ review.bookTitle }}" 에 대한</v-col>
         <v-col align="right" class="mr-auto"
           ><v-btn x-small text @click="clickReview()" v-if="isHome"
@@ -26,7 +26,7 @@
         ></v-rating> </v-row
       ><br />
       <!-- 사진 -->
-      <v-row align="right" justify="center">
+      <v-row align="end" justify="center">
         <v-carousel height="auto" style="width: 80%">
           <v-carousel-item
             v-for="(url, i) in photoUrl"
@@ -39,7 +39,7 @@
         </v-carousel> </v-row
       ><br />
       <!-- 좋아요수 -->
-      <v-row align="right" justify="end" class="mr-auto">
+      <v-row align="end" justify="end" class="mr-auto">
         <v-icon color="orange">mdi-heart</v-icon> {{ review.likeCount }} </v-row
       ><br />
       <!-- 내용 일부? -->
