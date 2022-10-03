@@ -22,5 +22,7 @@ public interface ReviewHashtagRepository extends JpaRepository<ReviewHashtag, Lo
     @Query(value = "select rh.content as text, count(rh.content) as value from review_hashtag as rh join review as r on r.id=rh.review_id where r.writer=:userId group by rh.content",nativeQuery = true)
     List<ReviewHashtagDTO> findHashtagCnt(@Param("userId") Long userId);
 
+    @Query(value ="select review_hashtag.content from review_hashtag  join review on review.id=review_hashtag.review_id where review.writer=:userId group by review_hashtag.content order by count(review_hashtag.content) desc limit 3",nativeQuery = true)
+    List<String> findUsertag(@Param("userId") Long userId);
 
 }
