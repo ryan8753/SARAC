@@ -248,7 +248,6 @@ export default {
       const review = this.review;
       const files = this.files;
       this.registReview({ review, files });
-      this.$router.push({ name: "home" });
     },
     async modify() {
       const review = this.review;
