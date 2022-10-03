@@ -4,7 +4,7 @@
     <v-navigation-drawer v-model="drawer" absolute temporary width="70%">
       <v-divider></v-divider>
 
-      <v-list-item>
+      <v-list-item v-if="user != null" @click="goMyInfo()">
         <v-list-item-avatar>
           <v-img :src="user.imagePath"></v-img>
         </v-list-item-avatar>
@@ -20,9 +20,8 @@
         <v-list-item
           v-for="item in items"
           :key="item.title"
-          :to="{ path: item.router }"
           class="router"
-          link
+          @click="clickNav(item.title)"
         >
           <v-list-item-icon>
             <v-icon color="rgba(170, 83, 14, 1)">{{ item.icon }}</v-icon>
@@ -35,7 +34,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <!-- view에 랜더링할 컴포넌트들 -->
+    <!-- 상단 검색바, 네비게이션 버튼 랜더링 -->
     <v-row>
       <v-col cols="10" align="center">
         <user-search-bar></user-search-bar>
@@ -46,38 +45,15 @@
         >
       </v-col>
     </v-row>
-    <v-row @click="goLibrary"
-      ><!-- 클릭효과 내기 -->
-      <user-info></user-info>
-    </v-row>
-    <v-row>
-      <v-col align="center"
-        ><v-btn
-          small
-          :color="clickR ? 'rgba(170, 83, 14, 1)' : '#F3EDED'"
-          :class="clickR ? 'white--text' : 'black--text'"
-          @click="showReview"
-          >리뷰</v-btn
-        ></v-col
-      >
-      <v-col align="center"
-        ><v-btn
-          small
-          :color="clickS ? 'rgba(170, 83, 14, 1)' : '#F3EDED'"
-          :class="clickS ? 'white--text' : 'black--text'"
-          @click="showStatistic"
-          >통계</v-btn
-        ></v-col
-      >
-    </v-row>
+
+    <!-- 사용자 정보 or 사용자 검색 목록 -->
     <router-view />
   </div>
 </template>
 
 <script>
 import UserSearchBar from "@/components/MyFeedView/UserSearchBar.vue";
-import UserInfo from "@/components/MyFeedView/UserInfo.vue";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 const myFeedStore = "myFeedStore";
 const accountStore = "accountStore";
@@ -87,59 +63,50 @@ export default {
 
   components: {
     UserSearchBar,
-    UserInfo,
   },
   data() {
     return {
-      currentUser: {
-        userId: 0,
-      },
-      vm : this,
       drawer: null,
       items: [
         { title: "회원정보수정", icon: "mdi-cog", router: "/mypage" },
         { title: "내서재", icon: "mdi-bookshelf", router: "/library" },
-        { title: "뱃지확인", icon: "mdi-police-badge", router: "/badge" },
+        // 통계 어떻게 할지 고민좀 해보기
+        { title: "통계", icon: "mdi-chart-bar", router: "/myfeed/statistics" },
       ],
-      clickR: true,
-      clickS: false,
     };
-  },
-  methods: {
-    ...mapActions(myFeedStore, ["getUserInfo", "getLibrary"]),
-    ...mapMutations(myFeedStore, ["SET_LIBRARY_NUM"]),
-
-    getCurrentUser(currentUser) {
-      this.getUserInfo(currentUser);
-    },
-    goLibrary() {
-      this.SET_LIBRARY_NUM(this.currentUser.userId);
-      this.getLibrary(this.currentUser);
-    },
-    showReview() {
-      this.clickR = true;
-      this.clickS = false;
-      this.$router.push({ name: "userreview" });
-    },
-    showStatistic() {
-      this.clickR = false;
-      this.clickS = true;
-      this.$router.push({ name: "userstatistics" });
-    },
   },
   computed: {
     ...mapState(accountStore, ["user"]),
-  },
-  watch: {
     ...mapState(myFeedStore, ["userInfo"]),
   },
+  watch: {},
+  methods: {
+    ...mapActions(myFeedStore, ["getLibrary", "getSearchUserInfo"]),
+
+    goLibrary(userId) {
+      this.getLibrary({ userId: userId });
+    },
+    // 통계 관련 함수..... 바꿔야됨
+    showStatistic() {
+      this.$router.push({ name: "userstatistics" }).catch(() => {});
+    },
+    clickNav(title) {
+      if (title === "회원정보수정")
+        this.$router.push({ name: "mypage" }).catch(() => {});
+      else if (title === "내서재") {
+        this.goLibrary(this.user.userId);
+      } else if (title === "통계") {
+        // userInfo 바꾸고 기존 통계 페이지??? 그냥 새로운 통계페이지?????
+        this.showStatistic(this.user.userId);
+      }
+    },
+    goMyInfo() {
+      this.getSearchUserInfo({userId: this.user.userId});
+      this.drawer = false;
+      this.$router.push({name: "myfeed"}).catch(() => {});
+    }
+  },
   created() {
-    if (this.userInfo == null) this.currentUser.userId = this.user.userId;
-    else this.currentUser.userId = this.userInfo.userId;
-
-    this.getCurrentUser(this.currentUser);
-
-    this.$router.push({ name: "userreview" });
   },
 };
 </script>

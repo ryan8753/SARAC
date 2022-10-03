@@ -11,8 +11,10 @@ import MyFeedView from "@/views/MyFeedView.vue";
 import LibraryView from "@/views/LibraryView.vue";
 import BookDetailView from "@/views/BookDetailView.vue";
 // component
-import UserReview from "@/components/MyFeedView/UserReview";
-import UserStatistics from "@/components/MyFeedView/UserStatistics";
+import UserActivity from "@/components/MyFeedView/UserActivity.vue";
+import UserSearchResult from "@/components/MyFeedView/UserSearchResult.vue";
+import UserReview from "@/components/MyFeedView/UserReview.vue";
+import UserStatistics from "@/components/MyFeedView/UserStatistics.vue";
 
 Vue.use(VueRouter);
 
@@ -69,7 +71,6 @@ const routes = [
         component: () => import("@/components/review/ReviewRegistView.vue"),
       },
       {
-
         path: ":fromLocation",
         name: "reviewSearch",
         component: () => import("@/views/SearchView.vue"),
@@ -78,7 +79,6 @@ const routes = [
         path: "regist/:reviewId",
         name: "modifyRegist",
         component: () => import("@/components/review/ReviewRegistView.vue"),
-
       },
     ],
   },
@@ -86,16 +86,29 @@ const routes = [
     path: "/myfeed",
     name: "myfeed",
     component: MyFeedView,
+    redirect: "/myfeed/activity/review",
     children: [
       {
-        path: "review",
-        name: "userreview",
-        component: UserReview,
+        path: "activity",
+        name: "useractivity",
+        component: UserActivity,
+        children: [
+          {
+            path: "review",
+            name: "userreview",
+            component: UserReview,
+          },
+          {
+            path: "statistics",
+            name: "userstatistics",
+            component: UserStatistics,
+          },
+        ],
       },
       {
-        path: "statistics",
-        name: "userstatistics",
-        component: UserStatistics,
+        path: "search",
+        name: "usersearch",
+        component: UserSearchResult,
       },
     ],
   },
