@@ -87,7 +87,9 @@ export default {
       this.getLibrary({ userId: userId });
     },
     // 통계 관련 함수..... 바꿔야됨
-    showStatistic() {
+    showStatistic(userId) {
+      this.getSearchUserInfo({ userId: userId });
+      this.drawer = false;
       this.$router.push({ name: "userstatistics" }).catch(() => {});
     },
     clickNav(title) {
@@ -97,17 +99,17 @@ export default {
         this.goLibrary(this.user.userId);
       } else if (title === "통계") {
         // userInfo 바꾸고 기존 통계 페이지??? 그냥 새로운 통계페이지?????
+
         this.showStatistic(this.user.userId);
       }
     },
     goMyInfo() {
-      this.getSearchUserInfo({userId: this.user.userId});
+      this.getSearchUserInfo({ userId: this.user.userId });
       this.drawer = false;
-      this.$router.push({name: "myfeed"}).catch(() => {});
-    }
+      this.$router.push({ name: "myfeed" }).catch(() => {});
+    },
   },
-  created() {
-  },
+  created() {},
 };
 </script>
 
