@@ -46,6 +46,11 @@ public class StatisticsController {
         return ResponseEntity.ok().body(statisticsService.getHashtags(userId));
     }
 
+    @GetMapping("/hashtag/{userId}")
+    public ResponseEntity<?> getOtherHashTags(@PathVariable Long userId){
+        return ResponseEntity.ok().body(statisticsService.getHashtags(userId));
+    }
+
 
 
 }
