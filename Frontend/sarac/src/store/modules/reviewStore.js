@@ -1,4 +1,4 @@
-// import router from "@/router";
+import router from "@/router";
 import axios from "axios";
 
 const reviewStore = {
@@ -115,14 +115,16 @@ const reviewStore = {
         data: formData,
       }).then((res) => {
         console.log(res);
+        console.log("작성완료");
+        router.push({ name: "home" });
         // this.randomReviewList = res.data;
         return res.data;
       });
       return response;
     },
-    async updateReview(context, { review, files,reviewId}) {
+    async updateReview(context, { review, files, reviewId }) {
       console.log("*************");
-      console.log(review)
+      console.log(review);
       console.log(files);
       context;
       const formData = new FormData();
@@ -142,14 +144,12 @@ const reviewStore = {
       const response = await axios({
         url: "api/v1/review/update",
         method: "PUT",
-        
+
         headers: {
           Authorization: `Bearer ${accessToken}`,
           // 'Content-Type': 'multipart/form-data',
         },
-        data: 
-          formData,
-        
+        data: formData,
       }).then((res) => {
         console.log(res);
         // this.randomReviewList = res.data;
