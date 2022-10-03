@@ -1,7 +1,9 @@
 <template>
   <div class="library-container">
     <v-row>
-      <v-icon color="rgba(170, 83, 14, 1)" @click="goBack" type="button">mdi-arrow-left-thick</v-icon>
+      <v-icon color="rgba(170, 83, 14, 1)" @click="goBack" type="button"
+        >mdi-arrow-left-thick</v-icon
+      >
     </v-row>
     <v-row>
       <v-col cols="10"
@@ -21,13 +23,15 @@
         solo
         label="서재 내 검색"
         clearable
-        append-icon="mdi-arrow-right-circle-outline"
-        @click:append="searchInLibrary"
         color="rgba(170, 83, 14, 1)"
       ></v-text-field>
     </v-row>
-    <v-row>
-      <library :libraryList="libraryList" :keyword="keyword"></library>
+
+    <v-row v-if="isSearchBarOn">
+      <search-library :keyword="keyword"></search-library>
+    </v-row>
+    <v-row v-else>
+      <library></library>
     </v-row>
   </div>
 </template>
@@ -35,6 +39,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import Library from "@/components/LibraryView/Library.vue";
+import SearchLibrary from "@/components/LibraryView/SearchLibrary.vue";
 
 const myFeedStore = "myFeedStore";
 const accountStore = "accountStore";
@@ -44,37 +49,43 @@ export default {
 
   components: {
     Library,
+    SearchLibrary,
   },
   data() {
     return {
       libraryName: "",
       keyword: "",
+      isSearchBarOn: false,
+      isOpen: true,
     };
   },
+    computed: {
+      ...mapState(accountStore, ["user"]),
+      ...mapState(myFeedStore, ["userInfo", "libraryList"]),
+    },
+    watch: {
+    },
   methods: {
     ...mapActions(myFeedStore, ["getUserInfo"]),
 
     toggleBar() {
-      let e = document.getElementById("showBar");
-      e.style.display = e.style.display != "none" ? "none" : "block";
-    },
-    searchInLibrary() {
-      //검색 구현
+      if(this.isOpen) {
+        let e = document.getElementById("showBar");
+        e.style.display = e.style.display != "none" ? "none" : "block";
+        this.isSearchBarOn = this.isSearchBarOn != false ? false : true;
+      }
     },
     goBack() {
       this.$router.go(-1);
     },
   },
-  computed: {
-    ...mapState(accountStore, ["user"]),
-    ...mapState(myFeedStore, ["userInfo", "libraryList"]),
-  },
-  watch: {},
-  created() {
-    let person = Object.keys(this.libraryList)[0];
-    if (person == "me") this.libraryName = "내";
-    else this.libraryName = `${this.userInfo.nickname}님의`;
-  },
+      created() {
+        let person = Object.keys(this.libraryList)[0];
+        if (person == "me") this.libraryName = "내";
+        else this.libraryName = `${this.userInfo.nickname}님의`;
+
+        if (person == "private") this.isOpen = false;
+      },
 };
 </script>
 
