@@ -18,6 +18,7 @@ import com.sarac.sarac.user.entitiy.UserHashtag;
 import com.sarac.sarac.user.repository.UserHashtagRepository;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,57 +26,39 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service("myFeedService")
+@RequiredArgsConstructor
 public class MyFeedServiceImpl implements MyFeedService {
 
     private static final String ME = "me";
     private static final String OPEN = "open";
     private static final String PRIVATE = "private";
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserHashtagRepository userHashtagRepository;
+    private final UserHashtagRepository userHashtagRepository;
 
-    @Autowired
-    private LibraryRepository libraryRepository;
+    private final LibraryRepository libraryRepository;
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+    private final ReviewPhotoRepository reviewPhotoRepository;
 
-    @Autowired
-    private ReviewPhotoRepository reviewPhotoRepository;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     // 유저 상세 정보
     @Override
     public MyFeedUserInfoRes getInfoByUserInfo(Long userId) {
-        MyFeedUserInfoRes userInfo = new MyFeedUserInfoRes();
+        User user = userRepository.findById(userId).orElseThrow();
 
-        Optional<User> userTmp = userRepository.findById(userId);
-        userTmp.ifPresent(user -> {
-            userInfo.setUserId(user.getId());
-            userInfo.setImagePath(user.getImagePath());
-            userInfo.setNickname(user.getNickname());
-
-            List<String> hashtagList = convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId()));
-            userInfo.setUserHashtag(hashtagList);
-
-            Long wish = libraryRepository.countByUserIdAndLibraryType(userId, LibraryType.WISH);
-            Long reading = libraryRepository.countByUserIdAndLibraryType(userId, LibraryType.READING);
-            Long read = libraryRepository.countByUserIdAndLibraryType(userId, LibraryType.READ);
-
-            userInfo.setWish(wish);
-            userInfo.setReading(reading);
-            userInfo.setRead(read);
-        });
-
-        return userInfo;
+        return MyFeedUserInfoRes.builder()
+                .userId(user.getId())
+                .imagePath(user.getImagePath())
+                .nickname(user.getNickname())
+                .userHashtag(convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId())))
+                .wish(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.WISH))
+                .reading(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.READING))
+                .read(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.READ))
+                .build();
     }
 
     // 유저 검색
