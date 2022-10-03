@@ -8,12 +8,17 @@
     <br />
     내가 준 평균 평점 : {{ statistics.totalScore }} 점
     <br />
-    소음 측정 횟수 :
+    소음 측정 횟수 : {{ statistics.totalNoise }} 번
     <br />
     <br />
     <br />
     많이 쓴 해쉬태그
-    <cloud :data="words" :fontSizeMapper="fontSizeMapper" />
+    <cloud
+      :data="words"
+      :fontSizeMapper="fontSizeMapper"
+      width="300"
+      height="300"
+    />
   </v-container>
 </template>
 
@@ -28,9 +33,9 @@ export default {
 
   data() {
     return {
-      statistics: { totalScore: null, totalPrice: null },
-      words: null,
-      fontSizeMapper: (word) => Math.log2(word.value) * 5,
+      statistics: { totalScore: null, totalPrice: null, totalNoise: null },
+      words: [],
+      fontSizeMapper: (word) => Math.log2(word.value) * 10,
     };
   },
 
@@ -59,15 +64,20 @@ export default {
       this.statistics = await this.getMyStatistics();
     },
     async getOtherInfo() {
-      this.statistics = await this.getOtherStatistics(this.user.userId);
+      this.statistics = this.getOtherStatistics(this.user.userId);
     },
-    getMyHashtagInfo() {
+    async getMyHashtagInfo() {
       // this.words = JSON.parse(this.getMyHashtag());
-      console.log(this.getMyHashtag());
-      // console.log(this.words);
+      this.words = await this.getMyHashtag();
+      console.log(this.words);
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+.wordCloud {
+  width: 30px;
+  height: 30px;
+}
+</style>
