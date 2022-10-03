@@ -25,7 +25,6 @@ spring:
 #        default_batch_fetch_size: 100
 
 #oauth2
-
   security:
     oauth2:
       client:
@@ -52,10 +51,12 @@ spring:
 #카카오 어드민키
 kakao:
   admin : 4834af6c4c44729312c5b43d38dd3516
+  redirect : https://sarac.tk
 
 #jwt
 jwt:
   secret: zoqxlsthwjdWkdWkdaos
+
 
 #s3
 cloud:
@@ -80,3 +81,5 @@ logging:
 #알라딘
 aladin:
   ttbkey: ttbdanijde711853001
+
+
