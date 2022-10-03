@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="3">
         <v-row justify="center">
-          <v-avatar>
+          <v-avatar size="9vh">
             <v-img :src="userInfo.imagePath" alt="profile"></v-img>
           </v-avatar>
         </v-row>
