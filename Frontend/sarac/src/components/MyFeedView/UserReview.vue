@@ -46,6 +46,7 @@ export default {
   },
   computed: {
     ...mapState(myFeedStore, ["userInfo", "reviewList"]),
+
   },
   watch: {
     userInfo: function () {
