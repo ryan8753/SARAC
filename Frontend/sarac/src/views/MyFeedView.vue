@@ -4,7 +4,7 @@
     <v-navigation-drawer v-model="drawer" absolute temporary width="70%">
       <v-divider></v-divider>
 
-      <v-list-item v-if="user != null">
+      <v-list-item v-if="user != null" @click="goMyInfo()">
         <v-list-item-avatar>
           <v-img :src="user.imagePath"></v-img>
         </v-list-item-avatar>
@@ -100,6 +100,11 @@ export default {
         this.showStatistic(this.user.userId);
       }
     },
+    goMyInfo() {
+      this.getSearchUserInfo({userId: this.user.userId});
+      this.drawer = false;
+      this.$router.push({name: "myfeed"});
+    }
   },
   created() {
   },
