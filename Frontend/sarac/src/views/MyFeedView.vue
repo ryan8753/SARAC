@@ -103,7 +103,7 @@ export default {
     goMyInfo() {
       this.getSearchUserInfo({userId: this.user.userId});
       this.drawer = false;
-      this.$router.push({name: "myfeed"});
+      this.$router.push({name: "myfeed"}).catch(() => {});
     }
   },
   created() {
