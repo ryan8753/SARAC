@@ -23,9 +23,6 @@
         solo
         label="서재 내 검색"
         clearable
-        append-icon="mdi-arrow-right-circle-outline"
-        @click:append="searchInLibrary(keyword)"
-        @input="searchInLibrary(keyword)"
         color="rgba(170, 83, 14, 1)"
       ></v-text-field>
     </v-row>
@@ -77,9 +74,6 @@ export default {
         e.style.display = e.style.display != "none" ? "none" : "block";
         this.isSearchBarOn = this.isSearchBarOn != false ? false : true;
       }
-    },
-    searchInLibrary(keyword) {
-      keyword
     },
     goBack() {
       this.$router.go(-1);
