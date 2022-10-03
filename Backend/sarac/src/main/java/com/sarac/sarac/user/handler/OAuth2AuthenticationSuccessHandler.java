@@ -4,7 +4,9 @@ package com.sarac.sarac.user.handler;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -16,13 +18,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    @Autowired
-    JwtUtil jwtUtil;
 
-    @Autowired
-    UserRepository userRepository;
+    @Value("${kakao.redirect}")
+    private String redirect;
+
+    private final JwtUtil jwtUtil;
+
+    private final UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -59,7 +64,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String makeRedirectUrl(String accessToken, String refreshToken) {
-        return UriComponentsBuilder.fromUriString("https://test.sarac.tk/redirect?accessToken="+accessToken+"&refreshToken="+refreshToken)
+        return UriComponentsBuilder.fromUriString(redirect+"/redirect?accessToken="+accessToken+"&refreshToken="+refreshToken)
                 .build().toUriString();
     }
 }

@@ -30,7 +30,7 @@ const accountStore = {
     },
   },
   actions: {
-    async getUserInfo({ commit }, { accessToken, refreshToken }) {
+    async getUserInfo({ dispatch, commit }, { accessToken, refreshToken }) {
       try {
         const response = await axios({
           method: "get",
@@ -41,6 +41,10 @@ const accountStore = {
           },
         });
         commit("SET_USER_INFO", response.data);
+
+        // myFeedStore에서 필요한 내용 얻어오는 로직
+        dispatch("myFeedStore/getSearchUserInfo", { userId: response.data.userId }, { root: true });
+        
         return response.data;
       } catch (err) {
         console.log("에러에러");
