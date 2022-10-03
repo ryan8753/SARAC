@@ -12,8 +12,9 @@ const myFeedStore = {
 
     state: {
         userInfo: {},
+        userList: [],
         libraryList: {},
-
+        reviewList: [],
     },
     getters: {
 
@@ -22,16 +23,28 @@ const myFeedStore = {
         GET_USER_INFO(state, payload) {
             state.userInfo = payload;
         },
-        SET_LIBRARY_NUM(state, payload) {
-            state.libraryNum = payload;
+        GET_USER_LIST(state, payload) {
+            // 회원 코드 만들어주는 로직
+            for(let i = 0; i < payload.length; i++) {
+                let userCode = "";
+                for(let j = 0; j < 4 - payload[i].userId.toString().length; j++) {
+                    userCode += "0";   
+                }
+                userCode += payload[i].userId;
+                payload[i].userId = userCode;
+            }
+            
+            state.userList = payload;
         },
         GET_LIBRARY(state, payload) {
             state.libraryList = payload;
-        }
-
+        },
+        GET_REVIEW_LIST(state, payload) {
+            state.reviewList = payload;
+        },
     },
     actions: {
-        getUserInfo({commit}, payload) {
+        getSearchUserInfo({commit}, payload) {
             axios({
                 url: `${apiUrl}userinfo`,
                 method: "GET",
@@ -39,6 +52,16 @@ const myFeedStore = {
                 params: payload,
             }).then((res) => {
                 commit("GET_USER_INFO", res.data);
+            })
+        },
+        getSearchUserList({commit}, payload) {
+            axios({
+                url: `${apiUrl}userlist`,
+                method: "GET",
+                headers,
+                params: payload,
+            }).then((res) => {
+                commit("GET_USER_LIST", res.data);
             })
         },
         getLibrary({commit}, payload) {
@@ -51,7 +74,17 @@ const myFeedStore = {
                 commit("GET_LIBRARY", res.data);
                 router.push("/library");
             })
-        }
+        },
+        getReviewList({commit}, payload) {
+            axios({
+                url: `${apiUrl}reviewlist`,
+                method: "GET",
+                headers,
+                params: payload,
+            }).then((res) => {
+                commit("GET_REVIEW_LIST", res.data);           
+            });
+        },
     },
 
 };
