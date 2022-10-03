@@ -9,7 +9,10 @@ import axios from "axios";
 const bookStore = {
   namespaced: true,
   state: {
-    book: {},
+    book: {
+      libraryType: null,
+    },
+    reviewList: [],
   },
   getters: {
     bookReadStatus: (state) => {
@@ -28,9 +31,9 @@ const bookStore = {
     },
   },
   actions: {
-    getBookDetail({ commit }, { bookId, userId }) {
+    getBookDetail({ commit }, bookId) {
       axios({
-        url: `api/v1/book/detail?isbn=${bookId}&userId=${userId}`,
+        url: `api/v1/book/detail/${bookId}`,
         method: "get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -43,34 +46,34 @@ const bookStore = {
           console.log(err);
         });
     },
-    editReadStatus({ commit, rootState }, { bookId, newStatus }) {
-      const userId = rootState.accountStore.user.userId;
+    editReadStatus({ commit }, { bookId, newStatus }) {
       axios({
-        url: `api/v1/book/detail?isbn=${bookId}&userId=${userId}`,
+        url: "api/v1/book/detail",
         method: "post",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         data: {
+          isbn: `${bookId}`,
+          userId: 1,
           libraryType: newStatus,
         },
       }).then((res) => {
-        if (res.message === "success") {
-          commit("EDIT_READ_STATUS", res.data);
+        if (res.data.message === "success") {
+          commit("EDIT_READ_STATUS", newStatus);
         }
       });
     },
-    deleteReadStatus(_, bookId) {
-      const userId = "보류";
+    deleteReadStatus({ commit }, bookId) {
       axios({
-        url: `api/v1/book/detail?isbn=${bookId}&userId=${userId}`,
+        url: `api/v1/book/detail/?isbn=${bookId}`,
         method: "delete",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }).then((res) => {
-        if (res.message === "success") {
-          // commit('SET_BOOK_INFO',res.data)
+        if (res.data.message === "success") {
+          commit("EDIT_READ_STATUS", "");
         }
       });
     },
@@ -82,9 +85,9 @@ const bookStore = {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }).then((res) => {
-        console.log(res);
         if (res.status === 200) {
           commit("SET_REVIEW_LIST", res.data);
+          return res.data;
         }
       });
     },
