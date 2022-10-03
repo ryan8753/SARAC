@@ -33,6 +33,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Boolean existsByBook(Book book);
 
+    Boolean existsByUserId(Long userId);
+
+
     @Transactional
     void deleteReviewById(Long id);
 

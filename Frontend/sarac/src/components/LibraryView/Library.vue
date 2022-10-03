@@ -1,48 +1,72 @@
 <template>
   <v-container>
-    <div><b>읽고 있는 책</b></div>
-    <v-sheet width="100%" min-height="15vh">
-      <v-slide-group
-      active-class="success"
-      show-arrows>
-        <v-slide-item v-for="lib in library" :key="lib.isbn" link>
-          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
-            <v-img :src="lib.bookImgUrl" class="fill-height" />
-          </v-card>
-        </v-slide-item>
-      </v-slide-group>
-    </v-sheet>
+    <v-container v-if="!isOpen" justify="center" class="pa-4">
+      비공개 입니다.
+    </v-container>
+    <div v-else>
+      <div><b>읽고 있는 책</b></div>
+      <v-sheet width="100%" min-height="15vh">
+        <v-slide-group>
+          <v-slide-item v-for="lib in library" :key="lib.isbn">
+            <v-card
+              v-show="lib.libraryType == 'WISH'"
+              class="mx-2"
+              height="15vh"
+              width="10vh"
+              @click="gotoBookInfo(lib.isbn)"
+            >
+              <v-img :src="lib.bookImgUrl" class="fill-height" />
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+      </v-sheet>
 
-    <v-divider></v-divider>
-    
-    <div><b>완독한 책</b></div>
-    <v-sheet width="100%" min-height="15vh">
-      <v-slide-group>
-        <v-slide-item v-for="lib in library" :key="lib.isbn" link>
-          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
-            <v-img :src="lib.bookImgUrl" class="fill-height" />
-          </v-card>
-        </v-slide-item>
-      </v-slide-group>
-    </v-sheet>
-    
-    <v-divider></v-divider>
-    
-    <div><b>읽고 싶은 책</b></div>
-    <v-sheet width="100%" min-height="15vh">
-      <v-slide-group>
-        <v-slide-item v-for="lib in library" :key="lib.isbn" link>
-          <v-card class="mx-2" height="15vh" width="10vh" @click="gotoBookInfo(lib.isbn)">
-            <v-img :src="lib.bookImgUrl" class="fill-height" />
-          </v-card>
-        </v-slide-item>
-      </v-slide-group>
-    </v-sheet>
+      <v-divider></v-divider>
 
+      <div><b>완독한 책</b></div>
+      <v-sheet width="100%" min-height="15vh">
+        <v-slide-group>
+          <v-slide-item v-for="lib in library" :key="lib.isbn">
+            <v-card
+              v-show="lib.libraryType == 'READ'"
+              class="mx-2"
+              height="15vh"
+              width="10vh"
+              @click="gotoBookInfo(lib.isbn)"
+            >
+              <v-img :src="lib.bookImgUrl" class="fill-height" />
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+      </v-sheet>
+
+      <v-divider></v-divider>
+
+      <div><b>읽고 싶은 책</b></div>
+      <v-sheet width="100%" min-height="15vh">
+        <v-slide-group>
+          <v-slide-item v-for="lib in library" :key="lib.isbn">
+            <v-card
+              v-show="lib.libraryType == 'READING'"
+              class="mx-2"
+              height="15vh"
+              width="10vh"
+              @click="gotoBookInfo(lib.isbn)"
+            >
+              <v-img :src="lib.bookImgUrl" class="fill-height" />
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+      </v-sheet>
+    </div>
   </v-container>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
+const myFeedStore = "myFeedStore";
+
 export default {
   name: "Library",
 
@@ -52,11 +76,13 @@ export default {
       library: [],
     };
   },
-  props: ["libraryList", "keyword"],
+  computed: {
+    ...mapState(myFeedStore, ["libraryList"]),
+  },
   methods: {
     gotoBookInfo(isbn) {
-      console.log(isbn);
-    }
+      this.$router.push("/book/detail/" + isbn);
+    },
   },
   created() {
     let person = Object.keys(this.libraryList)[0];
@@ -66,4 +92,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

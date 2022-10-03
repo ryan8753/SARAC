@@ -8,8 +8,8 @@
               class="reviewImage"
               fas
               fa-search
-              src="https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png"
-              alt="이미지"
+              :src="img"
+              alt="이미지검색"
               @click="getBookFromSearch"
             />
           </v-col>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 const reviewStore = "reviewStore";
 const accountStore = "accountStore";
 
@@ -117,14 +117,15 @@ export default {
 
   data() {
     return {
+      img: "https://sarac-a505.s3.ap-northeast-2.amazonaws.com/search.png",
       uploadimageurl: [], // 업로드한 이미지의 미리보기 기능을 위해 url 저장하는 객체
       hashtag: "",
       review: {
-        id:null,
+        id: null,
         writer: null,
-        isbn: "1",
-        title: "",
-        content: "",
+        isbn: null,
+        title: null,
+        content: null,
         bookScore: 3,
         isSecret: false,
         hashtag: [],
@@ -133,7 +134,7 @@ export default {
       reviewId: null,
       type: null,
       detailReview: {
-        reviewId:null,
+        reviewId: null,
         title: null,
         content: "",
         bookScore: null,
@@ -150,8 +151,11 @@ export default {
   },
   computed: {
     ...mapState(accountStore, ["user"]),
+    ...mapState(reviewStore, ["book"]),
+    ...mapMutations(reviewStore, ["CLEAR_BOOK_DATA"]),
   },
   created() {
+    console.log(this.img);
     if (this.$route.params.reviewId != null) {
       this.reviewId = this.$route.params.reviewId;
       console.log(this.$route.params.reviewId);
@@ -160,8 +164,17 @@ export default {
     } else {
       this.review.title = this.user.nickname + "님의 리뷰입니다.";
     }
+
+    if (this.book.isbn != "") {
+      console.log("비어있음");
+      console.log(this.book);
+      this.review.isbn = this.book.isbn;
+      this.img = this.book.bookImgUrl;
+      this.CLEAR_BOOK_DATA;
+    }
     this.review.writer = this.user.userId;
     console.log(this.review.writer);
+    console.log(this.img);
   },
 
   components: {},
@@ -182,11 +195,6 @@ export default {
       this.review.id = this.detailReview.reviewId;
 
       console.log(this.review);
-    },
-
-    searchBook() {
-      //추후수정
-      this.$router.push({ name: "home" });
     },
 
     onSubmit(event) {
@@ -245,8 +253,8 @@ export default {
     async modify() {
       const review = this.review;
       const files = this.files;
-      const reviewId = this.reviewId
-      this.updateReview({ review, files,reviewId });
+      const reviewId = this.reviewId;
+      this.updateReview({ review, files, reviewId });
       this.$router.push({ name: "home" });
     },
     getBookFromSearch() {

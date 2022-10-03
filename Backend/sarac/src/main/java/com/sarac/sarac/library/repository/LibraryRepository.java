@@ -21,6 +21,10 @@ public interface LibraryRepository extends JpaRepository<Library, Long> {
 
     Optional<Library> findByUserIdAndBookIsbn(Long userId, String isbn);
 
+    Boolean existsByUserIdAndLibraryType(Long userId,LibraryType libraryType);
+
+    List<Library> findAllByUserIdAndLibraryType(Long userId,LibraryType libraryType);
+
     @Transactional
     void deleteByUserIdAndBookIsbn(Long userId, String isbn);
 }
