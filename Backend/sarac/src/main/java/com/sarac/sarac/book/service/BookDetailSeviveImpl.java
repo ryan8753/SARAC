@@ -1,6 +1,6 @@
 package com.sarac.sarac.book.service;
 
-import com.sarac.sarac.book.dto.request.BookDetailRequest;
+import com.sarac.sarac.book.entity.dto.response.request.BookDetailRequest;
 import com.sarac.sarac.book.dto.response.BookInfoDto;
 import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.book.repository.BookRepository;
@@ -12,8 +12,6 @@ import com.sarac.sarac.review.repository.ReviewRepository;
 import com.sarac.sarac.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import static com.sarac.sarac.library.type.LibraryType.WISH;
 
 @Service
 public class BookDetailSeviveImpl implements BookDetailService{
