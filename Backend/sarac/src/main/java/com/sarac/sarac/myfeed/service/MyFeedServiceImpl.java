@@ -1,7 +1,6 @@
 package com.sarac.sarac.myfeed.service;
 
 import com.sarac.sarac.book.entity.Book;
-import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.library.type.LibraryType;
@@ -19,7 +18,6 @@ import com.sarac.sarac.user.repository.UserHashtagRepository;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
