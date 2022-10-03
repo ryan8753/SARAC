@@ -75,8 +75,10 @@ public class Book {
         this.page = aladinItemDto.getBookinfo().getItemPage();
 
         for(AladinAuthorDto aladinAuthorDto : aladinItemDto.getBookinfo().getAuthors()) {
-            if(AuthorType.AUTHOR.name().equalsIgnoreCase(aladinAuthorDto.getAuthorType()))
+            if(AuthorType.AUTHOR.name().equalsIgnoreCase(aladinAuthorDto.getAuthorType())) {
                 this.author = aladinAuthorDto.getName();
+                break;
+            }
         }
     }
 

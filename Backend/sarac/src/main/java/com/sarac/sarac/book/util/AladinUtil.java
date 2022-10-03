@@ -26,7 +26,7 @@ public class AladinUtil {
 
     private final String IO_ERROR = "IO EXCEPTION OCCURRED";
 
-    private final String ERROR_MSG = "error";
+    private final String ERROR_CODE = "errorCode";
 
     @SneakyThrows(JsonProcessingException.class)
     public AladinResponse getBookDetailData(String isbn) {
@@ -34,7 +34,10 @@ public class AladinUtil {
 
         String jsonResult = getBookJsonString(isbn);
 
-        if(jsonResult.contains(ERROR_MSG))
+        if(IO_ERROR.equals(jsonResult))
+            return new AladinErrorDto();
+
+        if(jsonResult.contains(ERROR_CODE))
             return objectMapper.readValue(jsonResult, AladinErrorDto.class);
 
         return objectMapper.readValue(jsonResult, AladinDto.class);
