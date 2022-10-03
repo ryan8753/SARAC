@@ -42,6 +42,8 @@ public class SecurityConfig {
         })
                 .and().csrf().disable().headers().frameOptions().disable()
                 .and().authorizeRequests()
+                // swagger resources 접근 허용
+                .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/api/v1/**").hasAuthority("USER").anyRequest().authenticated()
                 .and().logout().logoutSuccessUrl("/")
