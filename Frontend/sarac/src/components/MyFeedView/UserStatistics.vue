@@ -27,6 +27,7 @@ import Cloud from "vue-d3-cloud";
 import { mapActions, mapState } from "vuex";
 const statisticsStore = "statisticsStore";
 const accountStore = "accountStore";
+const myFeedStore = "myFeedStore";
 
 export default {
   name: "UserStatistics",
@@ -41,34 +42,53 @@ export default {
 
   computed: {
     ...mapState(accountStore, ["user"]),
+    ...mapState(myFeedStore, ["userInfo"]),
   },
   components: {
     Cloud,
   },
   created() {
-    if (this.$route.params.userId == null) {
+    if (this.userInfo.userId == this.user.userId) {
       this.getMyInfo();
       this.getMyHashtagInfo();
     } else {
       this.getOtherInfo();
+      this.getOtherHashtagInfo();
     }
+  },
+  watch: {
+    userInfo() {
+      if (this.userInfo.userId == this.user.userId) {
+        this.getMyInfo();
+        this.getMyHashtagInfo();
+      } else {
+        this.getOtherInfo();
+        this.getOtherHashtagInfo();
+      }
+    },
   },
   methods: {
     ...mapActions(statisticsStore, [
       "getMyStatistics",
       "getOtherStatistics",
       "getMyHashtag",
+      "getOtherHashtag",
     ]),
 
     async getMyInfo() {
       this.statistics = await this.getMyStatistics();
     },
     async getOtherInfo() {
-      this.statistics = this.getOtherStatistics(this.user.userId);
+      this.statistics = await this.getOtherStatistics(this.user.userId);
     },
     async getMyHashtagInfo() {
       // this.words = JSON.parse(this.getMyHashtag());
       this.words = await this.getMyHashtag();
+      console.log(this.words);
+    },
+    async getOtherHashtagInfo() {
+      // this.words = JSON.parse(this.getMyHashtag());
+      this.words = await this.getOtherHashtag(this.userInfo.userId);
       console.log(this.words);
     },
   },
