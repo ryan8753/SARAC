@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <v-container>
     <v-container v-if="!isOpen" justify="center" class="pa-4">
       비공개 입니다.
     </v-container>
-    <v-container v-else>
+    <div v-else>
       <div><b>읽고 있는 책</b></div>
       <v-sheet width="100%" min-height="15vh">
         <v-slide-group>
@@ -58,8 +58,8 @@
           </v-slide-item>
         </v-slide-group>
       </v-sheet>
-    </v-container>
-  </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -77,8 +77,8 @@ export default {
     };
   },
   computed: {
-      ...mapState(myFeedStore, ["libraryList"]),
-    },
+    ...mapState(myFeedStore, ["libraryList"]),
+  },
   methods: {
     gotoBookInfo(isbn) {
       this.$router.push("/book/detail/" + isbn);
