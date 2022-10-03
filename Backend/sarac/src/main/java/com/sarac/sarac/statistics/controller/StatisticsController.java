@@ -40,6 +40,17 @@ public class StatisticsController {
         return ResponseEntity.ok().body(statisticsService.getStatistics(userId));
     }
 
+    @GetMapping("/hashtag")
+    public ResponseEntity<?> getMyHashTags(@RequestHeader Map<String,Object> token){
+        Long userId = userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id")).getId();
+        return ResponseEntity.ok().body(statisticsService.getHashtags(userId));
+    }
+
+    @GetMapping("/hashtag/{userId}")
+    public ResponseEntity<?> getOtherHashTags(@PathVariable Long userId){
+        return ResponseEntity.ok().body(statisticsService.getHashtags(userId));
+    }
+
 
 
 }
