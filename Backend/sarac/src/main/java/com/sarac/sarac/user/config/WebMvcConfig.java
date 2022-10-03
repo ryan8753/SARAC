@@ -27,6 +27,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return source;
     }
 
-
+    //[swagger ui 관련]
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/swagger-ui/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/");
+    }
 
 }
