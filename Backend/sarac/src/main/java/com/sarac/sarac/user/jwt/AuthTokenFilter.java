@@ -50,4 +50,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+    // swagger url 제외
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request)
+            throws ServletException {
+        String path = request.getRequestURI();
+        return (path.contains("/swagger-ui")
+                || path.contains("/v2/api-docs")
+                || path.contains("/swagger-resources")
+                || path.contains("/webjars"));
+    }
 }
