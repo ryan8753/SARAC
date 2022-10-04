@@ -4,15 +4,17 @@
     <br />
     <br />
     <br />
-    내 서재의 총 가격 : {{ statistics.totalPrice }} 원
+    <b>내가 읽은 총 페이지 수 :</b> {{ statistics.totalPage }} 쪽
     <br />
-    내가 준 평균 평점 : {{ statistics.totalScore }} 점
+    <b>내 서재의 총 가격 :</b> {{ statistics.totalPrice }} 원
     <br />
-    소음 측정 횟수 : {{ statistics.totalNoise }} 번
+    <b>내가 준 평균 평점 : </b>{{ statistics.totalScore }} 점
+    <br />
+    <b> 소음 측정 횟수 :</b> {{ statistics.totalNoise }} 번
     <br />
     <br />
     <br />
-    많이 쓴 해쉬태그
+    <b> 많이 쓴 해쉬태그 </b>
     <cloud
       :data="words"
       :fontSizeMapper="fontSizeMapper"
