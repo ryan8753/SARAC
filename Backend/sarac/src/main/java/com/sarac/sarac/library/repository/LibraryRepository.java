@@ -19,7 +19,7 @@ public interface LibraryRepository extends JpaRepository<Library, Long> {
 
     public List<Library> findByUserId(Long userId);
 
-    Library findByUserIdAndBookIsbn(Long userId, String isbn);
+    Optional<Library> findByUserIdAndBookIsbn(Long userId, String isbn);
 
     Boolean existsByUserIdAndLibraryType(Long userId,LibraryType libraryType);
 

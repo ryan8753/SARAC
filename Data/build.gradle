@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group 'com.sarac'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.hadoop:hadoop-common:3.3.2'
+    implementation 'org.apache.hadoop:hadoop-mapreduce-client-core:3.3.2'
+}

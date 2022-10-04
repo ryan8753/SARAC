@@ -8,21 +8,23 @@
         class="ma-0 pa-0"
         @click="goUserInfo(user.userId)"
       >
-      <!-- <v-divider></v-divider> -->
+        <!-- <v-divider></v-divider> -->
         <v-list-item-avatar>
-          <v-img :src="user.imagePath">
-
-          </v-img>
+          <v-img :src="user.imagePath"> </v-img>
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title v-text="`${user.nickname}#${user.userId}`"></v-list-item-title>
-
-          <v-list-item-subtitle v-text="`#${user.userHashtag[0]} #${user.userHashtag[1]} #${user.userHashtag[2]}`"></v-list-item-subtitle>
+          <v-list-item-title
+            v-text="`${user.nickname}#${user.userId}`"
+          ></v-list-item-title>
+          <v-list-item-subtitle>
+            <span v-for="(tag, index) in user.userHashtag" :key="index"
+              >#{{ tag }}
+            </span>
+          </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    
   </div>
 </template>
 
@@ -32,33 +34,28 @@ import { mapState, mapMutations, mapActions } from "vuex";
 const myFeedStore = "myFeedStore";
 
 export default {
-    name: "UserSearchResult",
+  name: "UserSearchResult",
 
-    data() {
-        return {
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(myFeedStore, ["userList"]),
+  },
+  methods: {
+    ...mapMutations(myFeedStore, ["GET_USER_LIST"]),
+    ...mapActions(myFeedStore, ["getSearchUserInfo"]),
 
-        }
+    goUserInfo(userId) {
+      this.getSearchUserInfo({ userId: userId });
+      this.$router.push("/myfeed");
     },
-    computed: {
-      ...mapState(myFeedStore, ["userList"]),
-    },
-    methods: {
-      ...mapMutations(myFeedStore, ["GET_USER_LIST"]),
-      ...mapActions(myFeedStore, (["getSearchUserInfo"])),
-      
-      goUserInfo(userId) {
-        this.getSearchUserInfo({userId: userId});
-        this.$router.push("/myfeed");
-      }
-        
-    },
-    destroyed() {
-        // store에 userList 초기화 로직
-        this.GET_USER_LIST([]);
-    }
-}
+  },
+  destroyed() {
+    // store에 userList 초기화 로직
+    this.GET_USER_LIST([]);
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
