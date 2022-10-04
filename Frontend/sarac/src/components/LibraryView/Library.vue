@@ -120,7 +120,6 @@ export default {
         this.checkList = [];
     },
     deleteLibrary() {
-      console.log(this.checkList);
       this.deleteLibraryList(this.checkList);
       this.toggle();
     },
