@@ -75,7 +75,7 @@ export default {
 
 .footerplease {
   overflow: auto;
-  height: calc(100% - 4rem);
+  height: calc(100% - 10vh);
 }
 </style>
 >

@@ -1,7 +1,15 @@
 <template>
   <div>
     <!-- <h1 class="text-center">책리뷰</h1> -->
-    <div class="d-flex justify-end">
+      
+    <div v-if="!reviewList.length" class="d-flex flex-column justify-center abc">
+      <v-btn @click="routeToRegist" depressed plain color="black" x-large>
+        <v-icon x-large>mdi-pencil</v-icon>
+      </v-btn>
+        <br>
+        <h1 @click="routeToRegist">첫 리뷰를 작성해주세요</h1>
+    </div>
+    <div v-else class="d-flex justify-end">
       <v-btn @click="routeToRegist" depressed plain color="black">
         <v-icon size="auto">mdi-pencil</v-icon>
       </v-btn>
@@ -99,9 +107,14 @@ export default {
 h1 {
   font-size: 3vh;
   font-weight: bold;
+  margin :0px;
+  text-align: center;
 }
 .col-card {
   display: flex;
   justify-content: center;
+}
+.abc {
+  height: 300px;
 }
 </style>
