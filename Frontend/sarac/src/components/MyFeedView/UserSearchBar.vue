@@ -6,7 +6,7 @@
         solo
         label="친구를 찾아보세요"
         clearable
-        color="rgba(170, 83, 14, 1)"
+        color="#E3984B"
         :prepend-inner-icon="backIcon"
         @click:prepend-inner="goBack"
         append-icon="mdi-magnify"
@@ -32,8 +32,7 @@ export default {
       backIcon: "",
     };
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     $route() {
       let tmp = window.location.pathname.split("/");
@@ -48,8 +47,8 @@ export default {
     ...mapActions(myFeedStore, ["getSearchUserList"]),
 
     searchUser() {
-      if(this.keyword != null && this.keyword.trim().length != 0) {
-        this.getSearchUserList( { keyWord: this.keyword.trim() } );
+      if (this.keyword != null && this.keyword.trim().length != 0) {
+        this.getSearchUserList({ keyWord: this.keyword.trim() });
         this.keyword = "";
         document.getElementById("bar").blur();
       }
