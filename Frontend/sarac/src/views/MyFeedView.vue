@@ -24,7 +24,7 @@
           @click="clickNav(item.title)"
         >
           <v-list-item-icon>
-            <v-icon color="rgba(170, 83, 14, 1)">{{ item.icon }}</v-icon>
+            <v-icon color="#E3984B">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -40,7 +40,7 @@
         <user-search-bar></user-search-bar>
       </v-col>
       <v-col cols="2" align="center">
-        <v-icon color="rgba(170, 83, 14, 1)" @click.stop="drawer = !drawer"
+        <v-icon color="#E3984B" @click.stop="drawer = !drawer"
           >mdi-reorder-horizontal</v-icon
         >
       </v-col>
