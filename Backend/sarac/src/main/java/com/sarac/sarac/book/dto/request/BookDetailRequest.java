@@ -1,4 +1,4 @@
-package com.sarac.sarac.book.entity.dto.response.request;
+package com.sarac.sarac.book.dto.request;
 
 import com.sarac.sarac.library.type.LibraryType;
 import lombok.Getter;
