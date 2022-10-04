@@ -220,7 +220,7 @@ export default {
       if (!hashtag) {
         return;
       }
-      this.review.hashtag.push(hashtag);
+      this.review.hashtag.push(hashtag.replaceAll(" ", ""));
       console.log(this.review.hashtag);
       this.hashtag = "";
       console.log(this.hashtag);
@@ -248,7 +248,6 @@ export default {
       const review = this.review;
       const files = this.files;
       this.registReview({ review, files });
-      this.$router.push({ name: "home" });
     },
     async modify() {
       const review = this.review;
