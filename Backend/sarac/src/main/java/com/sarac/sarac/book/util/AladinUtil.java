@@ -1,6 +1,5 @@
 package com.sarac.sarac.book.util;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,8 +37,6 @@ public class AladinUtil {
                 .build();
 
         String jsonResult = getBookJsonString(isbn);
-
-        log.info(jsonResult);
 
         if(IO_ERROR.equals(jsonResult))
             return new AladinErrorDto();
