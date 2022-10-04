@@ -15,7 +15,7 @@
           v-for="review in reviewList"
           :key="review.reviewId"
           v-model="reviewList"
-          class="px-0"
+          class="px-0 col-card"
         >
           <v-card
             class="mx-0"
@@ -96,5 +96,9 @@ export default {
 h1 {
   font-size: 3vh;
   font-weight: bold;
+}
+.col-card {
+  display: flex;
+  justify-content: center;
 }
 </style>
