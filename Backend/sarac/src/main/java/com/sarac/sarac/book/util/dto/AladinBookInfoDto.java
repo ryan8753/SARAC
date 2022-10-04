@@ -9,5 +9,6 @@ import java.util.List;
 @Getter
 public class AladinBookInfoDto {
     private int itemPage;
+    private String toc;
     private List<AladinAuthorDto> authors;
 }
