@@ -1,9 +1,16 @@
 <template>
   <v-container>
-    워드클라우드
-    <br />
-    <br />
-    <br />
+    <v-row>
+      <cloud
+      :data="words"
+      :fontSizeMapper="fontSizeMapper"
+      width="200"
+      height="200"
+    />
+    </v-row>
+    <v-row>
+      
+    </v-row>
     <b>내가 읽은 총 페이지 수 :</b> {{ statistics.totalPage }} 쪽
     <br />
     <b>내 서재의 총 가격 :</b> {{ statistics.totalPrice }} 원
@@ -15,12 +22,7 @@
     <br />
     <br />
     <b> 많이 쓴 해쉬태그 </b>
-    <cloud
-      :data="words"
-      :fontSizeMapper="fontSizeMapper"
-      width="200"
-      height="200"
-    />
+    
   </v-container>
 </template>
 

@@ -10,7 +10,7 @@
       <v-col align="center"
         ><v-btn
           small
-          :color="clickR ? 'rgba(170, 83, 14, 1)' : '#F3EDED'"
+          :color="clickR ? '#E3984B' : '#F3EDED'"
           :class="clickR ? 'white--text' : 'black--text'"
           @click="showReview"
           >리뷰</v-btn
@@ -19,7 +19,7 @@
       <v-col align="center"
         ><v-btn
           small
-          :color="clickS ? 'rgba(170, 83, 14, 1)' : '#F3EDED'"
+          :color="clickS ? '#E3984B' : '#F3EDED'"
           :class="clickS ? 'white--text' : 'black--text'"
           @click="showStatistic"
           >통계</v-btn
@@ -58,12 +58,11 @@ export default {
       if (tmp[tmp.length - 1] == "review") {
         this.clickR = true;
         this.clickS = false;
-      }
-      else if(tmp[tmp.length - 1] == "statistics") {
+      } else if (tmp[tmp.length - 1] == "statistics") {
         this.clickR = false;
         this.clickS = true;
       }
-    }
+    },
   },
   methods: {
     ...mapActions(myFeedStore, ["getLibrary"]),
