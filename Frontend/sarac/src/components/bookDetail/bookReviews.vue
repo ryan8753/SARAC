@@ -56,6 +56,9 @@ export default {
       this.$router.push("/review/regist");
       this.saveBookData(this.book);
     },
+    gotoDetailReview(reviewId) {
+      this.$router.push("/detailReview/" + reviewId);
+    },
   },
   // async created() {
   //   const reviewList = await this.getReviewList(1234);
