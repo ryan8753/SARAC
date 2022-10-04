@@ -50,6 +50,9 @@ public class BookDetailServiceImpl implements BookDetailService {
                 .description(book.getDescription())
                 .vol(book.getVol())
                 .libraryType(library.getLibraryType())
+                .genre(book.getGenre())
+                .toc(book.getToc())
+                .page(book.getPage())
                 .build();
     }
 
