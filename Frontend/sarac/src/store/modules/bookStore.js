@@ -46,7 +46,7 @@ const bookStore = {
           console.log(err);
         });
     },
-    editReadStatus({ commit }, { bookId, newStatus }) {
+    editReadStatus({ commit }, { bookId, newStatus, userId }) {
       axios({
         url: "api/v1/book/detail",
         method: "post",
@@ -55,7 +55,7 @@ const bookStore = {
         },
         data: {
           isbn: `${bookId}`,
-          userId: 1,
+          userId: userId,
           libraryType: newStatus,
         },
       }).then((res) => {
