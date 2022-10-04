@@ -1,24 +1,31 @@
 <template>
-<div>
-<div>검색 결과</div>
-<br/>
-  <v-container fluid>
-    <v-row v-if="searchList != null">
-      <v-col v-for="book in searchList" :key="book.isbn" class="px-0 col-card" cols="4">
-        <v-card
-          class="mx-0"
-          height="15vh"
-          width="10vh"
-          @click="gotoBookInfo(book.isbn)"
-          flat
+  <v-container>
+    <div>검색 결과</div>
+    <br />
+    <v-container fluid>
+      <v-row v-if="searchList != null">
+        <v-col
+          v-for="book in searchList"
+          :key="book.isbn"
+          class="px-0 col-card"
+          cols="4"
         >
-          <v-img :src="book.bookImgUrl" class="fill-height"> </v-img>
-        </v-card>
-      </v-col>
-      <v-spacer></v-spacer>
-    </v-row>
+          <v-spacer></v-spacer>
+          <v-card
+            class="mx-0"
+            height="15vh"
+            width="10vh"
+            @click="gotoBookInfo(book.isbn)"
+            flat
+          >
+            <v-img :src="book.bookImgUrl" class="fill-width fill-height">
+            </v-img>
+          </v-card>
+          <v-spacer></v-spacer>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-container>
-</div>
 </template>
 
 <script>
