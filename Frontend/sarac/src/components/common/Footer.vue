@@ -1,36 +1,37 @@
 <template>
   <v-bottom-navigation
     v-model="value"
-    color="rgba(170, 83, 14, 1)"
-    background-color="rgb(245,245,245)"
-    height="4rem"
+    color="rgba(227,152,75)"
+    background-color="white"
+    height="10vh"
     shift
+    grow
   >
-    <v-btn value="home" min-width="50px">
+    <v-btn value="home" min-width="50px" plain>
       <span>home</span>
 
       <v-icon size="auto">mdi-home</v-icon>
     </v-btn>
 
-    <v-btn value="search" min-width="50px">
+    <v-btn value="search" min-width="50px"  plain>
       <span>Search</span>
 
       <v-icon>mdi-book-search</v-icon>
     </v-btn>
 
-    <v-btn value="review" min-width="50px">
+    <v-btn value="review" min-width="50px"  plain>
       <span>Write</span>
 
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
 
-    <v-btn value="myfeed" min-width="50px">
+    <v-btn value="myfeed" min-width="50px"  plain>
       <span>myFeed</span>
 
       <v-icon>mdi-account-circle</v-icon>
     </v-btn>
 
-    <v-btn value="nearby" min-width="50px">
+    <v-btn value="nearby" min-width="50px"  plain>
       <span>Nearby</span>
 
       <v-icon size="auto">mdi-map-marker</v-icon>
@@ -51,7 +52,11 @@ export default {
   },
   created() {
     // 새로고침시 footer 상태 유지 (value 값에 현재 url path 설정)
-    this.value = window.location.pathname.split("/")[1];
+    const a = window.location.pathname.split("/")[1];
+    const b = ["home","search","review","myfeed","nearby"]
+    if(b.includes(a)){
+      this.value = window.location.pathname.split("/")[1];
+    }
   },
 };
 </script>
@@ -65,5 +70,6 @@ export default {
 }
 button {
   align-self: center;
+  height: 90% !important;
 }
 </style>

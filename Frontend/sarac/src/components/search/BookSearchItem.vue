@@ -6,8 +6,8 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="7">
-        <v-row> {{ bookTitle }} </v-row>
-        <v-row> {{ author }} </v-row>
+        <v-row><h1> {{ bookTitle }} </h1></v-row>
+        <v-row><h2> {{ author }} </h2></v-row>
         <v-row>
           <v-rating
             :value="bookScore"
@@ -16,6 +16,7 @@
             background-color="color=rgba(170, 83, 14, 1)"
             dense
             half-increments
+            size="2vh"
           ></v-rating>
         </v-row>
       </v-col>
@@ -66,3 +67,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+h1 {
+  font-size: 3vh;
+  font-weight: bold;
+}
+h2 {
+  font-size: 2vh;
+  font-weight: bold; 
+}
+</style>
