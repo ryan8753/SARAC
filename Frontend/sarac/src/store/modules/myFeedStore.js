@@ -72,7 +72,7 @@ const myFeedStore = {
                 params: payload,
             }).then((res) => {
                 commit("GET_LIBRARY", res.data);
-                router.push("/library");
+                router.push("/library").catch(() => {});
             })
         },
         getReviewList({commit}, payload) {
@@ -94,6 +94,17 @@ const myFeedStore = {
                 });
             }
             context.dispatch("getReviewList", {userId: context.state.userInfo.userId})
+        },
+        async deleteLibraryList(context, payload) {
+            for(let id of payload) {
+               await axios({
+                    url: `api/v1/book/detail`,
+                    method: "DELETE",
+                    headers,
+                    params: {isbn: id},
+                });
+            }
+            context.dispatch("getLibrary", {userId: context.rootState.accountStore.user.userId})
         },
     },
 
