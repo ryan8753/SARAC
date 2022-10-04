@@ -27,8 +27,8 @@ public class BookDetailController {
 
     private final BookDetailService bookDetailService;
 
-    @GetMapping
-    public ResponseEntity<BookInfoDto> getBookDetail(@RequestParam String isbn, @RequestHeader Map<String,Object> token) {
+    @GetMapping("/{isbn}")
+    public ResponseEntity<BookInfoDto> getBookDetail(@PathVariable String isbn, @RequestHeader Map<String,Object> token) {
 
         Long userId = userRepository.findOneByKakaoId((Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id")).getId();
         System.out.println(isbn+userId);
