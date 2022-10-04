@@ -1,5 +1,5 @@
 <template>
-  <div v-if="book" class="book-detail-container">
+  <div v-if="book.isbn" class="book-detail-container">
     <book-search-item v-bind="book"></book-search-item>
     <v-btn-toggle
       dense
@@ -33,6 +33,7 @@
             ? 'rgba(227,152,75,1)'
             : 'rgba(243,237,237,1)'
         "
+        width="30%"
       >
         읽는중
       </v-btn>
@@ -67,6 +68,7 @@
             ? 'rgba(227,152,75,1)'
             : 'rgba(243,237,237,1)'
         "
+        width="50%"
       >
         상세정보
       </v-btn>
@@ -80,6 +82,7 @@
             ? 'rgba(227,152,75,1)'
             : 'rgba(243,237,237,1)'
         "
+        width="50%"
       >
         리뷰
       </v-btn>
@@ -132,12 +135,13 @@ export default {
       "getReviewList",
     ]),
     onChangeReadStatus(event) {
+      const userId = this.user.userId
       const newStatus = event;
       const bookId = this.$route.params.bookId;
       if (event === undefined) {
         this.deleteReadStatus(bookId);
       } else {
-        this.editReadStatus({ bookId, newStatus });
+        this.editReadStatus({ bookId, newStatus,userId });
       }
     },
   },

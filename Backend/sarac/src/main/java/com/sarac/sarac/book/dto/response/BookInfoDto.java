@@ -5,7 +5,6 @@ import lombok.*;
 
 @Builder
 @Getter
-@Setter
 public class BookInfoDto {
 
     private String bookTitle;
@@ -28,6 +27,9 @@ public class BookInfoDto {
 
     private String vol;
 
+    private String genre;
 
+    private String toc;
 
+    private int page;
 }
