@@ -65,7 +65,8 @@ export default {
   //   }
   // },
   created() {
-    this.getReviewList(1234);
+    const bookId = this.$route.params.bookId;
+    this.getReviewList(bookId);
   },
 };
 </script>
