@@ -220,7 +220,7 @@ export default {
       if (!hashtag) {
         return;
       }
-      this.review.hashtag.push(hashtag);
+      this.review.hashtag.push(hashtag.replaceAll(" ", ""));
       console.log(this.review.hashtag);
       this.hashtag = "";
       console.log(this.hashtag);
