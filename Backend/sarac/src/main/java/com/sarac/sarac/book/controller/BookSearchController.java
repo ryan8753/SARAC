@@ -3,7 +3,6 @@ package com.sarac.sarac.book.controller;
 import com.sarac.sarac.book.dto.response.BookSearchResultListDto;
 import com.sarac.sarac.book.service.BookSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

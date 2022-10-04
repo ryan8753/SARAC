@@ -15,7 +15,9 @@
       v-if="
         review.authorKakaoId === this.$store.state.accountStore.user.kakaoId
       "
-      ><v-btn icon @click="modifyReview"><v-icon>mdi-pencil</v-icon></v-btn></v-row
+      ><v-btn icon @click="modifyReview"
+        ><v-icon>mdi-pencil</v-icon></v-btn
+      ></v-row
     >
     <!-- 댓글 -->
     <v-row style="width: 100%" justify="center">
@@ -57,13 +59,19 @@ export default {
     };
   },
   methods: {
-    ...mapActions(reviewStore, ["getDetailReview"]),
+    ...mapActions(reviewStore, ["getDetailReview", "saveBookData"]),
     async getReview(reviewId) {
       this.review = await this.getDetailReview(reviewId);
     },
 
-    modifyReview(){
-       this.$router.push({
+    modifyReview() {
+      const Book = {
+        isbn: this.review.isbn,
+        bookTitle: this.review.bookTitle,
+        bookImgUrl: this.review.photoUrl,
+      };
+      this.saveBookData(Book);
+      this.$router.push({
         path: `/review/regist/${this.review.reviewId}`,
         params: { reviewId: this.review.reviewId },
       });
