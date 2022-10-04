@@ -1,7 +1,6 @@
 package com.sarac.sarac.myfeed.service;
 
 import com.sarac.sarac.book.entity.Book;
-import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.library.type.LibraryType;
@@ -11,6 +10,7 @@ import com.sarac.sarac.myfeed.dto.response.MyFeedUserRes;
 import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfoRes;
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.repository.ReviewHashtagRepository;
 import com.sarac.sarac.review.repository.ReviewPhotoRepository;
 import com.sarac.sarac.review.repository.ReviewRepository;
 import com.sarac.sarac.user.entitiy.User;
@@ -19,7 +19,6 @@ import com.sarac.sarac.user.repository.UserHashtagRepository;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -43,6 +42,8 @@ public class MyFeedServiceImpl implements MyFeedService {
 
     private final ReviewPhotoRepository reviewPhotoRepository;
 
+    private final ReviewHashtagRepository reviewHashtagRepository;
+
     private final JwtUtil jwtUtil;
 
     // 유저 상세 정보
@@ -54,7 +55,7 @@ public class MyFeedServiceImpl implements MyFeedService {
                 .userId(user.getId())
                 .imagePath(user.getImagePath())
                 .nickname(user.getNickname())
-                .userHashtag(convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId())))
+                .userHashtag(reviewHashtagRepository.findUsertag(user.getId()))
                 .wish(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.WISH))
                 .reading(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.READING))
                 .read(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.READ))
@@ -161,18 +162,12 @@ public class MyFeedServiceImpl implements MyFeedService {
     // 검색어로 찾은 유저들에 대해 필요한 내용들을 리스트에 담아줌
     public void addUsersToUserList(List<MyFeedUserRes> userListArr, List<User> searchedUsers) {
         for(User user : searchedUsers) {
-            List<String> hashtagList = convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId()));
-
-            int len = hashtagList.size();
-            for(int i = 0; i < 3-len; i++)
-                hashtagList.add(" ");
-
             userListArr.add(
                     MyFeedUserRes.builder()
                             .userId(user.getId())
                             .imagePath(user.getImagePath())
                             .nickname(user.getNickname())
-                            .userHashtag(hashtagList)
+                            .userHashtag(reviewHashtagRepository.findUsertag(user.getId()))
                             .build());
         }
     }
