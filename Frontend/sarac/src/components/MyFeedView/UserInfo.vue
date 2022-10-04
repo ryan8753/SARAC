@@ -53,7 +53,7 @@ export default {
 
 <style scoped>
 * {
-  font-size: 1vh;
+  font-size: 2vh;
   text-align: center;
 }
 </style>

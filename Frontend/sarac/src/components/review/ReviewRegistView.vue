@@ -1,110 +1,106 @@
 <template>
-  <div>
-    <v-container>
-      <v-form @submit.prevent="onSubmit">
-        <v-row align-content-center class="title">
-          <v-col cols="3">
-            <img
-              class="reviewImage"
-              fas
-              fa-search
-              :src="img"
-              alt="이미지검색"
-              @click="getBookFromSearch"
-            />
-          </v-col>
-
-          <v-col cols="9">
-            <v-text-field
-              label="루피님의 리뷰입니다"
-              solo
-              v-model="review.title"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row justify="center">
-          <v-rating
-            v-model="review.bookScore"
-            background-color="orange lighten-3"
-            color="orange"
-            size="25"
-            id="rating"
-          ></v-rating>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-textarea
-              solo
-              name="content"
-              label="내용을 입력하세요"
-              v-model="review.content"
-              id="content"
-            ></v-textarea>
-          </v-col>
-        </v-row>
-        <v-row class="checkbox">
-          <v-checkbox
-            align="justify"
-            label="비밀글로 작성하기"
-            color="black"
-            v-model="review.isSecret"
-          ></v-checkbox>
-        </v-row>
-
-        <v-row>
-          <v-img
-            v-for="(item, i) in uploadimageurl"
-            :key="i"
-            :src="item.url"
-            contain
-            height="50px"
-            width="50px"
-            style="solid black; margin-left: 10px"
+  <v-container>
+    <v-form @submit.prevent="onSubmit">
+      <v-row class="title ma-0 pa-0">
+        <v-col cols="3" class="pa-0" align-self="center">
+          <img
+            class="reviewImage"
+            :src="img"
+            alt="이미지검색"
+            @click="getBookFromSearch"
           />
-        </v-row>
-        <br />
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-col cols="9" class="pa-0" align-self="center">
+          <v-text-field
+            label="루피님의 리뷰입니다"
+            solo
+            v-model="review.title"
+            hide-details
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row justify="center" class="ma-0 pa-0">
+        <v-rating
+          class="ma-0 pa-0"
+          v-model="review.bookScore"
+          background-color="#E3984B"
+          color="#E3984B"
+          size="4vh"
+          id="rating"
+        ></v-rating>
+      </v-row>
+      <v-row>
+        <v-col class="py-0">
+          <v-textarea
+            solo
+            no-resize
+            background-color="#F3EDED"
+            label="내용을 입력하세요"
+            v-model="review.content"
+            flat
+          ></v-textarea>
+        </v-col>
+      </v-row>
+      <v-row justify="end" class="ma-0">
+        <v-checkbox
+          class="checkbox"
+          label="비밀글로 작성하기"
+          color="#E3984B"
+          v-model="review.isSecret"
+          hide-details
+        ></v-checkbox>
+      </v-row>
 
+      <v-row class="ma-0">
+        <v-img
+          v-for="(item, i) in uploadimageurl"
+          :key="i"
+          :src="item.url"
+          contain
+          height="50px"
+          width="50px"
+          style="solid black; margin-left: 10px"
+        />
+      </v-row>
+      <v-row class="ma-0 pe-10">
         <v-file-input
-          class="input"
-          type="file"
           label=" 사진 업로드"
           accept="image/png, image/jpeg, image/bmp"
           multiple
           prepend-icon="mdi-camera"
-          style="width: 150px"
           @change="onImageChange"
           v-model="files"
         />
-        <span v-for="(item, j) in review.hashtag" :key="j">
+      </v-row>
+        
+      <v-row class="ma-0">
+        <v-col cols="9" class="pa-0"
+          ><v-text-field
+            prepend-icon="mdi-pound"
+            v-model="hashtag"
+            label="해시태그 입력"
+            type="text"
+            @keyup.space="inputHashtag(hashtag)"
+          ></v-text-field>
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-col cols="2" class="pa-0" align-self="center">
+          <v-btn small elevation="none" color="white" @click="inputHashtag(hashtag)" class="orange--text">Add</v-btn>
+        </v-col>
+      </v-row>
+      <span v-for="(item, j) in review.hashtag" :key="j">
           #{{ item }}
-          <v-btn icon color="red" @click="deleteHashtag(j)">x</v-btn></span
-        >
-
-        <v-row class="hash">
-          <v-col cols="8"
-            ><v-text-field
-              v-model="hashtag"
-              label="해시태그 입력"
-              type="text"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="4">
-            <v-btn icon @click="inputHashtag(hashtag)" class="add">Add</v-btn>
-          </v-col>
-        </v-row>
-
-        <!--  -->
-        <v-row>
-          <v-col>
-            <v-btn type="submit" v-if="this.type === 'modify'">
-              리뷰 수정
-            </v-btn>
-            <v-btn type="submit" v-else> 리뷰 작성 </v-btn>
-          </v-col>
-        </v-row>
-      </v-form>
-    </v-container>
-  </div>
+          <v-btn x-small icon color="red" @click="deleteHashtag(j)">x</v-btn></span
+        >     
+      <v-row class="ma-5">
+        <v-col>
+          <v-btn align color="#E3984B" class="white--text" type="submit" v-if="this.type === 'modify'"> 리뷰 수정 </v-btn>
+          <v-btn width="100%" color="#E3984B" class="white--text" type="submit" v-else> 리뷰 작성 </v-btn>
+        </v-col>
+      </v-row>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -146,7 +142,7 @@ export default {
 
   watch: {
     review(newreview) {
-      console.log(newreview);
+      newreview;
     },
   },
   computed: {
@@ -155,10 +151,8 @@ export default {
     ...mapMutations(reviewStore, ["CLEAR_BOOK_DATA"]),
   },
   created() {
-    console.log(this.img);
     if (this.$route.params.reviewId != null) {
       this.reviewId = this.$route.params.reviewId;
-      console.log(this.$route.params.reviewId);
       this.getReview(this.reviewId);
       this.type = "modify";
     } else {
@@ -166,15 +160,11 @@ export default {
     }
 
     if (this.book.isbn != "") {
-      console.log("비어있음");
-      console.log(this.book);
       this.review.isbn = this.book.isbn;
       this.img = this.book.bookImgUrl;
       this.CLEAR_BOOK_DATA;
     }
     this.review.writer = this.user.userId;
-    console.log(this.review.writer);
-    console.log(this.img);
   },
 
   components: {},
@@ -193,8 +183,6 @@ export default {
       this.review.bookScore = this.detailReview.bookScore;
       this.review.hashtag = this.detailReview.reviewHashtagList;
       this.review.id = this.detailReview.reviewId;
-
-      console.log(this.review);
     },
 
     onSubmit(event) {
@@ -221,9 +209,7 @@ export default {
         return;
       }
       this.review.hashtag.push(hashtag.replaceAll(" ", ""));
-      console.log(this.review.hashtag);
       this.hashtag = "";
-      console.log(this.hashtag);
     },
 
     onImageChange(file) {
@@ -264,22 +250,6 @@ export default {
 </script>
 
 <style scoped>
-.add {
-  align-self: bottom;
-}
-.hash {
-  vertical-align: middle;
-}
-.v-input--selection-controls {
-  margin-top: 0px;
-  padding-top: 0px;
-}
-
-.checkbox {
-  justify-content: right;
-  padding-right: 3vh;
-}
-
 .title {
   text-align: center;
   vertical-align: middle;
