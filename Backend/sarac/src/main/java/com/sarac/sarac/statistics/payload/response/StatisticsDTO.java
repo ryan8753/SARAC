@@ -9,6 +9,8 @@ public class StatisticsDTO {
 
     private int totalPrice;
 
+    private int totalPage;
+
     private Double totalScore;
 
     private Integer totalNoise;
