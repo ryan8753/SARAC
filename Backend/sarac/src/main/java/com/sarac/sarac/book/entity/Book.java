@@ -40,6 +40,9 @@ public class Book {
     @Column(length = 2000)
     private String description;
 
+    @Column(length = 1000)
+    private String toc;
+
     @ColumnDefault("0")
     private int price;
 
@@ -73,13 +76,17 @@ public class Book {
 
         this.genre = aladinItemDto.getCategoryName();
         this.page = aladinItemDto.getBookinfo().getItemPage();
+        this.toc = aladinItemDto.getBookinfo().getToc()
+                .replaceAll("\n", "").replaceAll("<BR>", "<br>");
+
+        StringBuilder sb = new StringBuilder();
 
         for(AladinAuthorDto aladinAuthorDto : aladinItemDto.getBookinfo().getAuthors()) {
             if(AuthorType.AUTHOR.name().equalsIgnoreCase(aladinAuthorDto.getAuthorType())) {
-                this.author = aladinAuthorDto.getName();
-                break;
+                sb.append(aladinAuthorDto.getName()).append(", ");
             }
         }
+        this.author = sb.substring(0, sb.length() - 2).toString();
     }
 
     private boolean isContentEmpty(String content) {
