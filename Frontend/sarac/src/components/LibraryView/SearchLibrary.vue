@@ -1,11 +1,12 @@
 <template>
 <div>
 <div>검색 결과</div>
+<br/>
   <v-container fluid>
     <v-row v-if="searchList != null">
-      <v-col v-for="book in searchList" :key="book.isbn" class="px-0">
+      <v-col v-for="book in searchList" :key="book.isbn" class="px-0 col-card" cols="4">
         <v-card
-          class="mx-2"
+          class="mx-0"
           height="15vh"
           width="10vh"
           @click="gotoBookInfo(book.isbn)"
@@ -66,4 +67,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.col-card {
+  display: flex;
+  justify-content: center;
+}
+</style>
