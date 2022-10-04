@@ -85,6 +85,16 @@ const myFeedStore = {
                 commit("GET_REVIEW_LIST", res.data);           
             });
         },
+        async deleteReviewList(context, payload) {
+            for(let id of payload) {
+               await axios({
+                    url: `api/v1/review/${id}`,
+                    method: "DELETE",
+                    headers,
+                });
+            }
+            context.dispatch("getReviewList", {userId: context.state.userInfo.userId})
+        },
     },
 
 };

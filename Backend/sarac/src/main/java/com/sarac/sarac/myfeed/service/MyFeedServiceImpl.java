@@ -10,6 +10,7 @@ import com.sarac.sarac.myfeed.dto.response.MyFeedUserRes;
 import com.sarac.sarac.myfeed.dto.response.MyFeedUserInfoRes;
 import com.sarac.sarac.review.entity.Review;
 import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.repository.ReviewHashtagRepository;
 import com.sarac.sarac.review.repository.ReviewPhotoRepository;
 import com.sarac.sarac.review.repository.ReviewRepository;
 import com.sarac.sarac.user.entitiy.User;
@@ -41,6 +42,8 @@ public class MyFeedServiceImpl implements MyFeedService {
 
     private final ReviewPhotoRepository reviewPhotoRepository;
 
+    private final ReviewHashtagRepository reviewHashtagRepository;
+
     private final JwtUtil jwtUtil;
 
     // 유저 상세 정보
@@ -52,7 +55,7 @@ public class MyFeedServiceImpl implements MyFeedService {
                 .userId(user.getId())
                 .imagePath(user.getImagePath())
                 .nickname(user.getNickname())
-                .userHashtag(convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId())))
+                .userHashtag(reviewHashtagRepository.findUsertag(user.getId()))
                 .wish(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.WISH))
                 .reading(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.READING))
                 .read(libraryRepository.countByUserIdAndLibraryType(user.getId(), LibraryType.READ))
@@ -159,18 +162,12 @@ public class MyFeedServiceImpl implements MyFeedService {
     // 검색어로 찾은 유저들에 대해 필요한 내용들을 리스트에 담아줌
     public void addUsersToUserList(List<MyFeedUserRes> userListArr, List<User> searchedUsers) {
         for(User user : searchedUsers) {
-            List<String> hashtagList = convertUserHashtagListToTagList(userHashtagRepository.findByUserId(user.getId()));
-
-            int len = hashtagList.size();
-            for(int i = 0; i < 3-len; i++)
-                hashtagList.add(" ");
-
             userListArr.add(
                     MyFeedUserRes.builder()
                             .userId(user.getId())
                             .imagePath(user.getImagePath())
                             .nickname(user.getNickname())
-                            .userHashtag(hashtagList)
+                            .userHashtag(reviewHashtagRepository.findUsertag(user.getId()))
                             .build());
         }
     }
