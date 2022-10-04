@@ -151,9 +151,9 @@ export default {
     };
   },
   created() {
-    // const bookId = this.$route.params.bookId;
+    const bookId = this.$route.params.bookId;
     // const userId = this.user;
-    this.getBookDetail(1234);
+    this.getBookDetail(bookId);
     // this.getReviewList(1234);
     // this.readStatus = this.book.libraryType;
   },
