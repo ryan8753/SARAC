@@ -13,9 +13,13 @@
             style="solid black; margin-left: 10px"
           />
           <p align="center">
-            &nbsp; {{ item.genre.replace("일반", "").replaceAll(" ", "") }}({{
-              item.cnt
-            }})
+            &nbsp;
+            {{
+              item.genre
+                .split(">")
+                [item.genre.split(">").length - 1].replace("일반", "")
+                .replaceAll(" ", "")
+            }}({{ item.cnt }})
           </p>
         </span>
       </v-row>
