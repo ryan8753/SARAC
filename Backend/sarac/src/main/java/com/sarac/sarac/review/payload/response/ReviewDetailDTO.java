@@ -19,7 +19,11 @@ public class ReviewDetailDTO {
 
     private String isbn;
 
+    private boolean isLike;
+
     private String title;
+
+    private String bookImgUrl;
 
     private String bookTitle;
 
@@ -40,9 +44,11 @@ public class ReviewDetailDTO {
     private List<String> reviewHashtagList;
 
     @Builder(builderMethodName = "createReviewDetailDTO")
-    ReviewDetailDTO(Review review, Integer likeCount, List<String>  photoUrl, Integer reviewCommentCount, List<ReviewCommentDTO> reviewCommentList,List<String> HashtagList){
+    ReviewDetailDTO(Review review, boolean isLike, Integer likeCount, List<String>  photoUrl, Integer reviewCommentCount, List<ReviewCommentDTO> reviewCommentList,List<String> HashtagList){
         this.reviewId =review.getId();
+        this.isLike=isLike;
         this.authorKakaoId=review.getUser().getKakaoId();
+        this.bookImgUrl=review.getBook().getBookImgUrl();
         this.bookTitle=review.getBook().getBookTitle();
         this.bookScore=review.getBookScore();
         this.content=review.getContent();

@@ -2,15 +2,16 @@
   <div class="detail-review-container">
     <!-- {{ review }} -->
     <!-- 리뷰 -->
-    <aFeed :review="review"></aFeed><br />
+    <aFeed :review="review" :hashtagList="review.reviewHashtagList"></aFeed
+    ><br />
     <!-- hashtag -->
-    <v-row style="width: 100%">
+    <!-- <v-row style="width: 100%">
       <p v-for="(hashtag, i) in review.reviewHashtagList" :key="i">
         #{{ hashtag }}
       </p> </v-row
-    ><br />
+    ><br /> -->
     <!-- 리뷰 수정 버튼(추가) -->
-    <v-row
+    <!-- <v-row
       style="width: 100%"
       v-if="
         review.authorKakaoId === this.$store.state.accountStore.user.kakaoId
@@ -18,7 +19,7 @@
       ><v-btn icon @click="modifyReview"
         ><v-icon>mdi-pencil</v-icon></v-btn
       ></v-row
-    >
+    > -->
     <!-- 댓글 -->
     <v-row style="width: 100%" justify="center">
       <div v-if="review.reviewCommentCount">

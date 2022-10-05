@@ -17,7 +17,11 @@ public class RandomReviewDTO {
 
     private String isbn;
 
+    private String bookImgUrl;
+
     private String title;
+
+    private boolean isLike;
 
     private String bookTitle;
 
@@ -30,10 +34,12 @@ public class RandomReviewDTO {
     private List<String> photoUrl;
 
     @Builder(builderMethodName = "createRandomReview")
-    RandomReviewDTO(Review review, Integer likeCount, List<String> reviewPhotos){
+    RandomReviewDTO(Review review, Integer likeCount, List<String> reviewPhotos, boolean isLike){
         this.reviewId =review.getId();
         this.isbn=review.getBook().getIsbn();
+        this.bookImgUrl=review.getBook().getBookImgUrl();
         this.title=review.getTitle();
+        this.isLike=isLike;
         this.bookTitle = review.getBook().getBookTitle();
         this.content=review.getContent();
         this.bookScore=review.getBookScore();
