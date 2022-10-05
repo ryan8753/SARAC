@@ -160,6 +160,21 @@ const reviewStore = {
     saveBookData({ commit }, book) {
       commit("SET_BOOK_DATA", book);
     },
+
+    async toggleReviewLike(commit, reviewId) {
+      // console.log(reviewId);
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios({
+        url: `api/v1/review/like/${reviewId}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }).then((res) => {
+        return res.data;
+      });
+      return response;
+    },
   },
 };
 
