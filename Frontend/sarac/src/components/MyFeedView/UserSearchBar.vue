@@ -37,7 +37,6 @@ export default {
     $route() {
       let tmp = window.location.pathname.split("/");
       if (tmp[tmp.length - 1] != "search") {
-        this.keyword = "";
         this.backIcon = "";
         document.getElementById("bar").blur();
       }
