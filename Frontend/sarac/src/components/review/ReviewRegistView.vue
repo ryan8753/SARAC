@@ -13,10 +13,12 @@
         <v-spacer></v-spacer>
         <v-col cols="9" class="pa-0" align-self="center">
           <v-text-field
-            label="루피님의 리뷰입니다"
+            :label="tmp"
             solo
             v-model="review.title"
             hide-details
+            color="#E3984B"
+            clearable
           ></v-text-field>
         </v-col>
       </v-row>
@@ -84,8 +86,8 @@
             @keyup.space="inputHashtag(hashtag)"
           ></v-text-field>
         </v-col>
-        <v-spacer></v-spacer>
-        <v-col cols="2" class="pa-0" align-self="center">
+        
+        <v-col cols="3" class="pa-0" align-self="center">
           <v-btn small elevation="none" color="white" @click="inputHashtag(hashtag)" class="orange--text">Add</v-btn>
         </v-col>
       </v-row>
@@ -137,6 +139,7 @@ export default {
         isSecret: null,
         reviewHashtagList: [],
       },
+      tmp: null,
     };
   },
 
@@ -151,12 +154,13 @@ export default {
     ...mapMutations(reviewStore, ["CLEAR_BOOK_DATA"]),
   },
   created() {
+    
     if (this.$route.params.reviewId != null) {
       this.reviewId = this.$route.params.reviewId;
       this.getReview(this.reviewId);
       this.type = "modify";
     } else {
-      this.review.title = this.user.nickname + "님의 리뷰입니다.";
+      this.tmp = this.user.nickname + "님의 리뷰입니다.";
     }
 
     if (this.book.isbn != "") {

@@ -9,14 +9,13 @@
             append-icon="mdi-magnify"
             append-outer-icon="mdi-camera"
             filled
-            clear-icon="mdi-close-circle"
             clearable
             type="text"
             placeholder="검색어 입력"
             @click:append="searchBook"
             @click:append-outer="getPicture"
             @click:clear="clearKeyword"
-            color="rgba(170, 83, 14, 1)"
+            color="#E3984B"
             dense
             @keydown.enter.prevent="searchBook"
           ></v-text-field>
