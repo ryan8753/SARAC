@@ -48,8 +48,10 @@ const accountStore = {
         return response.data;
       } catch (err) {
         console.log("에러에러");
-        console.log(accessToken);
-        console.log(refreshToken);
+        refreshToken;
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        router.push("/login")
       }
     },
 
