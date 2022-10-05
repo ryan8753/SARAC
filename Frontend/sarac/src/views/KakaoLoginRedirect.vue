@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 const accountStore = "accountStore";
 
 export default {
@@ -22,6 +22,9 @@ export default {
   methods: {
     ...mapActions(accountStore, ["getUserInfo"]),
   },
+  computed: {
+    ...mapState(accountStore, ["user"]),
+  },
 
   created() {
     const href = window.location.href;
@@ -36,8 +39,12 @@ export default {
       refreshToken: refreshToken,
     };
 
-    this.getUserInfo(payload);
-    this.$router.push('/mypage')
+    
+    if (this.getUserInfo(payload)) {
+      this.$router.push('/home')
+    } else {
+      this.$router.push('/login')
+    }
   },
 };
 </script>
