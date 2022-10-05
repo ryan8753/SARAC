@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ review }}
+    <!-- {{ review }} -->
     <br />
 
     <v-card
@@ -122,8 +122,11 @@ export default {
   methods: {
     ...mapActions(reviewStore, ["toggleReviewLike", "saveBookData"]),
     async toggleLike() {
-      console.log("togglelike");
-      await this.toggleReviewLike(this.review.reviewId);
+      if (window.location.pathname.split("/")[1] === "detailReview") {
+        // console.log("togglelike");
+        await this.toggleReviewLike(this.review.reviewId);
+        this.$emit("toggleLike");
+      }
     },
 
     modifyReview() {
