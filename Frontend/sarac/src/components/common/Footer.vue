@@ -51,7 +51,10 @@ export default {
   watch: {
     value: function (newRoute) {
       // 라우터 중복 오류 무시
-      this.$router.replace({ path: `/` + newRoute }).catch(() => {});
+      const c = ["home","search","review","myfeed","nearby"]
+      if (c .includes(newRoute)){
+        this.$router.replace({ path: `/` + newRoute }).catch(() => {});
+      }
     },
   },
   created() {
