@@ -40,7 +40,7 @@ public class Book {
     @Column(length = 2000)
     private String description;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String toc;
 
     @ColumnDefault("0")
@@ -74,6 +74,7 @@ public class Book {
         if(this.price == 0)
             this.price = aladinItemDto.getPriceStandard();
 
+        this.bookTitle = aladinItemDto.getTitle();
         this.genre = aladinItemDto.getCategoryName();
         this.page = aladinItemDto.getBookinfo().getItemPage();
         this.toc = aladinItemDto.getBookinfo().getToc()
