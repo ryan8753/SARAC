@@ -4,7 +4,7 @@
     <!-- {{ this.reviewList }} -->
     <div class="wrapper">
       <div
-        class="card"
+        
         v-for="(review, index) in reviewList"
         :key="index + 'c'"
       >
