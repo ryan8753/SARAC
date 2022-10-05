@@ -6,6 +6,7 @@ import lombok.Getter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 public class AladinItemDto {
+    private String title;
     private String description;
     private String isbn13;
     private int priceStandard;
