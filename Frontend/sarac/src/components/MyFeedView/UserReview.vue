@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container v-if="isOpen" fluid>
+    <v-container v-if="isOpen && reviews.length != 0" fluid>
       <v-row justify="end" class="mt-1">
         <v-btn text x-small @click="deleteReview" v-if="value == '선택해제'"
           >삭제</v-btn
@@ -45,6 +45,13 @@
         <v-spacer></v-spacer>
       </v-row>
     </v-container>
+    <div v-else-if="person == 'me' && reviews.length == 0" class="d-flex flex-column justify-center abc">
+      <v-btn @click="routeToRegist" depressed plain color="black" x-large>
+        <v-icon x-large>mdi-pencil</v-icon>
+      </v-btn>
+        <br>
+        <h1 @click="routeToRegist">첫 리뷰를 작성해주세요</h1>
+    </div>
     <v-row v-else justify="center" class="pa-4"> 비공개 입니다. </v-row>
   </div>
 </template>
@@ -95,6 +102,9 @@ export default {
       this.deleteReviewList(this.checkList);
       this.toggle();
     },
+    routeToRegist() {
+      this.$router.push("/review/regist");
+    },
   },
   created() {
     this.getReviewList({ userId: this.userInfo.userId });
@@ -126,5 +136,14 @@ export default {
 .col-card {
   display: flex;
   justify-content: center;
+}
+.abc {
+  height: 300px;
+}
+h1 {
+  font-size: 3vh;
+  font-weight: bold;
+  margin :0px;
+  text-align: center;
 }
 </style>
