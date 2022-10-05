@@ -34,4 +34,6 @@ public interface ReviewService {
 
     void deleteComment(Long commentId);
 
+    void toggleReviewLike(Map<String, Object> token, Long reivewId);
+
 }
