@@ -1,21 +1,49 @@
 <template>
   <v-container>
+    <!-- <v-list-item
+        class="ma-0 pa-0"
+        @click="getActionFromType"
+      >
+        
+          <v-img :src="getThumbnail" width="3vh"> </v-img>
+        
+
+        <v-list-item-content>
+          <v-list-item-title
+            v-text="bookTitle"
+          ></v-list-item-title>
+          <v-list-item-subtitle v-text="author"> 
+          </v-list-item-subtitle>
+          <v-rating
+            :value="bookScore"
+            readonly
+            color="#E3984B"
+            background-color="#E3984B"
+            dense
+            half-increments
+            size="2vh"
+          ></v-rating>
+        </v-list-item-content>
+      </v-list-item> -->
+
+
     <v-row @click="getActionFromType">
       <v-col cols="4">
         <v-img :src="getThumbnail"></v-img>
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="7">
-        <v-row> {{ bookTitle }} </v-row>
-        <v-row> {{ author }} </v-row>
+        <v-row><h1> {{ bookTitle }} </h1></v-row>
+        <v-row><h2> {{ author }} </h2></v-row>
         <v-row>
           <v-rating
             :value="bookScore"
             readonly
-            color="rgba(170, 83, 14, 1)"
-            background-color="color=rgba(170, 83, 14, 1)"
+            color="#E3984B"
+            background-color="#E3984B"
             dense
             half-increments
+            size="2vh"
           ></v-rating>
         </v-row>
       </v-col>
@@ -66,3 +94,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+h1 {
+  font-size: 3vh;
+  font-weight: bold;
+}
+h2 {
+  font-size: 2vh;
+  font-weight: bold; 
+}
+</style>

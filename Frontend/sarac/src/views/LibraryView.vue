@@ -1,7 +1,7 @@
 <template>
   <div class="library-container">
     <v-row>
-      <v-icon color="rgba(170, 83, 14, 1)" @click="goBack" type="button"
+      <v-icon color="#E3984B" @click="goBack" type="button"
         >mdi-arrow-left-thick</v-icon
       >
     </v-row>
@@ -10,9 +10,7 @@
         ><b> {{ libraryName }} 서재 </b></v-col
       >
       <v-col cols="2">
-        <v-icon color="rgba(170, 83, 14, 1)" @click="toggleBar()"
-          >mdi-magnify</v-icon
-        >
+        <v-icon color="#E3984B" @click="toggleBar()">mdi-magnify</v-icon>
       </v-col>
     </v-row>
 
@@ -23,7 +21,7 @@
         solo
         label="서재 내 검색"
         clearable
-        color="rgba(170, 83, 14, 1)"
+        color="#E3984B"
       ></v-text-field>
     </v-row>
 
@@ -59,17 +57,16 @@ export default {
       isOpen: true,
     };
   },
-    computed: {
-      ...mapState(accountStore, ["user"]),
-      ...mapState(myFeedStore, ["userInfo", "libraryList"]),
-    },
-    watch: {
-    },
+  computed: {
+    ...mapState(accountStore, ["user"]),
+    ...mapState(myFeedStore, ["userInfo", "libraryList"]),
+  },
+  watch: {},
   methods: {
     ...mapActions(myFeedStore, ["getUserInfo"]),
 
     toggleBar() {
-      if(this.isOpen) {
+      if (this.isOpen) {
         let e = document.getElementById("showBar");
         e.style.display = e.style.display != "none" ? "none" : "block";
         this.isSearchBarOn = this.isSearchBarOn != false ? false : true;
@@ -79,13 +76,13 @@ export default {
       this.$router.go(-1);
     },
   },
-      created() {
-        let person = Object.keys(this.libraryList)[0];
-        if (person == "me") this.libraryName = "내";
-        else this.libraryName = `${this.userInfo.nickname}님의`;
+  created() {
+    let person = Object.keys(this.libraryList)[0];
+    if (person == "me") this.libraryName = "내";
+    else this.libraryName = `${this.userInfo.nickname}님의`;
 
-        if (person == "private") this.isOpen = false;
-      },
+    if (person == "private") this.isOpen = false;
+  },
 };
 </script>
 
