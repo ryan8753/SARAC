@@ -26,7 +26,9 @@ export default {
   props: ["book"],
   mounted() {
     const toc = document.querySelector("#toc")
-    toc.innerHTML=this.book.toc   
+    
+    if(this.book.toc)
+      toc.innerHTML=this.book.toc;
   }
 };
 </script>
