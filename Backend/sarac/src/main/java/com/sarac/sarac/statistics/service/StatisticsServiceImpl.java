@@ -42,6 +42,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 //                        .map(Library::getBook)
 
         StatisticsDTO statisticsDTO = StatisticsDTO.builder()
+                .topGenre(bookRepository.findTopGenre(userId))
                 .totalPage(libraryRepository.existsByUserIdAndLibraryType(userId,READ) ?
                         libraryRepository.findAllByUserIdAndLibraryType(userId,READ).stream()
                                 .map(Library::getBook).mapToInt(Book::getPage).sum() : EMPTY)
