@@ -130,10 +130,10 @@ public class ReviewController {
 
     // 리뷰 상세보기
     @GetMapping("/detail/{id}")
-    public ResponseEntity<ReviewDetailDTO> showDetailReview(@PathVariable Long id) {
+    public ResponseEntity<ReviewDetailDTO> showDetailReview(@PathVariable Long id, @RequestHeader Map<String, Object> token) {
         ReviewDetailDTO reviewDetailDTO = null;
         try {
-            reviewDetailDTO = reviewService.showDetailReview(id);
+            reviewDetailDTO = reviewService.showDetailReview(id, token);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,6 +187,21 @@ public class ReviewController {
             e.printStackTrace();
             resultMap.put("message", e.getMessage());
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/like/{reviewId}")
+    public ResponseEntity<Map<String, Object>> toggleReviewLike(@PathVariable("reviewId") Long reviewId, @RequestHeader Map<String, Object> token){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            reviewService.toggleReviewLike(token, reviewId);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
         }
         resultMap.put("message", "success");
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
