@@ -26,12 +26,14 @@ public interface ReviewService {
 
     void uploadReviewFile(List<MultipartFile> files, Long id) throws IOException;
 
-    ReviewDetailDTO showDetailReview(long id);
+    ReviewDetailDTO showDetailReview(long id, Map<String, Object> token);
 
     Long registComment(ReviewCommentRequest reviewComment, Map<String, Object> token);
 
     List<RandomReviewDTO> showRandomFeeds(Map<String, Object> token);
 
     void deleteComment(Long commentId);
+
+    void toggleReviewLike(Map<String, Object> token, Long reivewId);
 
 }
