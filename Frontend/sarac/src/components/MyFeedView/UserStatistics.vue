@@ -4,20 +4,33 @@
     <p />
     <div>
       <v-row justify="center" v-if="statistics.topGenre.length > 0">
-        <span align="center" v-for="(item, j) in statistics.topGenre" :key="j">
+        <v-col
+          cols="4"
+          class="d-flex align-center flex-column"
+          v-for="(item, j) in statistics.topGenre"
+          :key="j"
+        >
           <v-img
+            justify="center"
+            align="center"
             :src="rank[j]"
             contain
             height="35px"
             width="35px"
             style="solid black; margin-left: 10px"
           />
-          <p align="center">
-            &nbsp; {{ item.genre.replace("일반", "").replaceAll(" ", "") }}({{
-              item.cnt
-            }})
+
+          <p class="p" align="center">
+            &nbsp;
+            {{
+              item.genre
+                .split(">")
+                [item.genre.split(">").length - 1].replace("일반", "")
+                .replaceAll(" ", "")
+            }}
           </p>
-        </span>
+          ({{ item.cnt }})
+        </v-col>
       </v-row>
 
       <v-row justify="center" v-else
@@ -161,5 +174,9 @@ h1 {
   margin: 0px;
   text-align: center;
   color: #e3984b;
+}
+.p {
+  font-size: 1vh;
+  margin-bottom: 0px;
 }
 </style>
