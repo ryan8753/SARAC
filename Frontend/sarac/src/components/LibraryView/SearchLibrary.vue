@@ -18,7 +18,7 @@
             @click="gotoBookInfo(book.isbn)"
             flat
           >
-            <v-img :src="book.bookImgUrl" class="fill-width fill-height">
+            <v-img :src="!book.bookImgUrl ? defaultImgUrl : book.bookImgUrl" class="fill-width fill-height">
             </v-img>
           </v-card>
           <v-spacer></v-spacer>
@@ -40,6 +40,7 @@ export default {
     return {
       library: [],
       searchList: [],
+      defaultImgUrl: "https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png",
     };
   },
   props: ["keyword"],
