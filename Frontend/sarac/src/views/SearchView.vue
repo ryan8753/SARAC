@@ -5,6 +5,14 @@
       :type="isSearched"
       :fromWhere="beforeLocation"
     ></book-search-list>
+    <!-- 여기서부터 -->
+    <b-pagination
+    :total-rows="50"
+    :per-page="5"
+    pills
+    page-class="customPage"
+  >
+  </b-pagination>
   </div>
 </template>
 <script>
@@ -15,6 +23,11 @@ import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 const searchStore = "searchStore";
 
 export default {
+  data() {
+    return {
+      page: null,
+    }
+  },
   components: { SearchBar, BookSearchList },
   computed: {
     ...mapState(["searchResults"]),
@@ -40,3 +53,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.customPage.page-item.active .page-link {
+  background-color: red;
+  border-color: red;
+}
+</style>
