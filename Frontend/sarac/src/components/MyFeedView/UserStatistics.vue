@@ -1,38 +1,67 @@
 <template>
   <v-container>
-      <cloud
-      :data="words"
-      :fontSizeMapper="fontSizeMapper"
-      width="200"
-      height="200"
-    />
+    <div>많이 본 장르</div>
+    <p />
+    <div>
+      <v-row justify="center" v-if="statistics.topGenre.length > 0">
+        <span align="center" v-for="(item, j) in statistics.topGenre" :key="j">
+          <v-img
+            :src="rank[j]"
+            contain
+            height="35px"
+            width="35px"
+            style="solid black; margin-left: 10px"
+          />
+          <p align="center">
+            &nbsp; {{ item.genre.replace("일반", "").replaceAll(" ", "") }}({{
+              item.cnt
+            }})
+          </p>
+        </span>
+      </v-row>
+
+      <v-row justify="center" v-else
+        ><br />
+        <br />
+        <h1>완독한 책이 없습니다!</h1>
+      </v-row>
+    </div>
+
+    <br />
+
     <v-row>
       <v-simple-table class="pa-0 ma-0 table" dense>
-      <tbody>
-        <tr>
-          <td><b>내가 읽은 총 페이지 수</b></td>
-          <td>{{ statistics.totalPage }} 쪽</td>
-        </tr>
-        <tr>
-          <td><b>내 서재의 총 가격</b></td>
-          <td>{{ statistics.totalPrice }} 원</td>
-        </tr>
-        <tr>
-          <td><b>내가 준 평균 평점</b></td>
-          <td>{{ statistics.totalScore }} 점</td>
-        </tr>
-        <tr>
-          <td><b>소음 측정 횟수</b></td>
-          <td>{{ statistics.totalNoise }} 번</td>
-        </tr>
-        <tr>
-          <td/>
-          <td/>
-        </tr>
-      </tbody>
-    
-  </v-simple-table>
+        <tbody>
+          <tr>
+            <td><b>읽은 총 페이지 수</b></td>
+            <td>{{ statistics.totalPage }} 쪽</td>
+          </tr>
+          <tr>
+            <td><b>서재의 총 가격</b></td>
+            <td>{{ statistics.totalPrice }} 원</td>
+          </tr>
+          <tr>
+            <td><b>리뷰의 평균 평점</b></td>
+            <td>{{ statistics.totalScore }} 점</td>
+          </tr>
+          <tr>
+            <td><b>소음 측정 횟수</b></td>
+            <td>{{ statistics.totalNoise }} 번</td>
+          </tr>
+          <tr>
+            <td />
+            <td />
+          </tr>
+        </tbody>
+      </v-simple-table>
     </v-row>
+    많이 쓴 해시태그
+    <cloud
+      :data="words"
+      :fontSizeMapper="fontSizeMapper"
+      width="250"
+      height="145"
+    />
   </v-container>
 </template>
 
@@ -48,13 +77,21 @@ export default {
 
   data() {
     return {
+      rank: [
+        require("@/assets/img/1.png"),
+        require("@/assets/img/2.png"),
+        require("@/assets/img/3.png"),
+      ],
       statistics: {},
       words: [],
-      fontSizeMapper: (word) => Math.log2(word.value) * 10,
+      fontSizeMapper: (word) => Math.log2(word.value) * 7,
     };
   },
 
   computed: {
+    getrank(j) {
+      return this.rank[j];
+    },
     ...mapState(accountStore, ["user"]),
     ...mapState(myFeedStore, ["userInfo"]),
   },
@@ -91,6 +128,7 @@ export default {
 
     async getMyInfo() {
       this.statistics = await this.getMyStatistics();
+      console.log(this.statistics);
     },
     async getOtherInfo() {
       this.statistics = await this.getOtherStatistics(this.userInfo.userId);
@@ -112,8 +150,16 @@ export default {
   width: 30px;
   height: 30px;
 }
-td, tr {
+td,
+tr {
   font-size: 2vh !important;
   vertical-align: middle !important;
+}
+h1 {
+  font-size: 3vh !important;
+  font-weight: bold;
+  margin: 0px;
+  text-align: center;
+  color: #e3984b;
 }
 </style>
