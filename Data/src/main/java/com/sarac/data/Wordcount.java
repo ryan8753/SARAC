@@ -27,7 +27,7 @@ public class Wordcount {
             StringTokenizer itr;
 
             while(lineItr.hasMoreTokens()) {
-                String line = lineItr.nextToken().replaceAll("[^\uAC00-\uD7A30-9a-zA-Z]", " ");
+                String line = lineItr.nextToken().replaceAll("[^ㄱ-ㅣ가-힣]", " ");
 
                 if(line.trim().length() == 0)
                     continue;
