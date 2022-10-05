@@ -162,7 +162,7 @@ const reviewStore = {
     },
 
     async toggleReviewLike(commit, reviewId) {
-      console.log(reviewId);
+      // console.log(reviewId);
       const accessToken = localStorage.getItem("accessToken");
       const response = await axios({
         url: `api/v1/review/like/${reviewId}`,

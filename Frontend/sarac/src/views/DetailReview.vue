@@ -2,7 +2,11 @@
   <div class="detail-review-container">
     <!-- {{ review }} -->
     <!-- 리뷰 -->
-    <aFeed :review="review" :hashtagList="review.reviewHashtagList"></aFeed
+    <aFeed
+      :review="review"
+      :hashtagList="review.reviewHashtagList"
+      v-on:toggleLike="updateInfo()"
+    ></aFeed
     ><br />
     <!-- hashtag -->
     <!-- <v-row style="width: 100%">
