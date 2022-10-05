@@ -1,7 +1,9 @@
 package com.sarac.sarac.book.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.sarac.sarac.book.util.dto.AladinDto;
 import com.sarac.sarac.book.util.dto.AladinErrorDto;
 import com.sarac.sarac.book.util.dto.AladinResponse;
@@ -30,7 +32,9 @@ public class AladinUtil {
 
     @SneakyThrows(JsonProcessingException.class)
     public AladinResponse getBookDetailData(String isbn) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonMapper.builder()
+                .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER)
+                .build();
 
         String jsonResult = getBookJsonString(isbn);
 
