@@ -7,10 +7,13 @@ import com.sarac.sarac.book.repository.BookSearchRepository;
 import com.sarac.sarac.review.entity.BookScore;
 import com.sarac.sarac.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -28,11 +31,14 @@ public class BookSearchService {
     private final int MAX_BEST_BOOK_COUNT = 30;
 
     public BookSearchResultListDto getSearchResult(String keyword, Pageable pageable) {
-        List<Book> bookList
-                = bookSearchRepository.findByIsbnOrAuthorContainsOrBookTitleContains(keyword, keyword, keyword, pageable);
+        Page<Book> bookListWithPage = bookSearchRepository.findByIsbnOrAuthorContainsOrBookTitleContains(keyword, keyword, keyword, pageable);
+
 
         return BookSearchResultListDto.builder()
-                .results(calcBookScores(bookList))
+                .results(calcBookScores(bookListWithPage.getContent()))
+                .totalPages(bookListWithPage.getTotalPages())
+                .currentPage(bookListWithPage.getNumber())
+                .bestBook(false)
                 .build();
     }
 
@@ -42,6 +48,7 @@ public class BookSearchService {
 
         return BookSearchResultListDto.builder()
                 .results(calcBookScores(bookList.subList(START_BOOK_INDEX, cutListCount(bookList))))
+                .bestBook(true)
                 .build();
     }
 
