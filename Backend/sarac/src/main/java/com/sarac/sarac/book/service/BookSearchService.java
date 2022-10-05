@@ -7,6 +7,7 @@ import com.sarac.sarac.book.repository.BookSearchRepository;
 import com.sarac.sarac.review.entity.BookScore;
 import com.sarac.sarac.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public class BookSearchService {
 
     private final int MAX_BEST_BOOK_COUNT = 30;
 
-    public BookSearchResultListDto getSearchResult(String keyword) {
+    public BookSearchResultListDto getSearchResult(String keyword, Pageable pageable) {
         List<Book> bookList
-                = bookSearchRepository.findByIsbnOrAuthorContainsOrBookTitleContains(keyword, keyword, keyword);
+                = bookSearchRepository.findByIsbnOrAuthorContainsOrBookTitleContains(keyword, keyword, keyword, pageable);
 
         return BookSearchResultListDto.builder()
                 .results(calcBookScores(bookList))
