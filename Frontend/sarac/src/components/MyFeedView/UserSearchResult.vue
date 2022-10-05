@@ -8,7 +8,6 @@
         class="ma-0 pa-0"
         @click="goUserInfo(user.userId)"
       >
-        <!-- <v-divider></v-divider> -->
         <v-list-item-avatar>
           <v-img :src="user.imagePath"> </v-img>
         </v-list-item-avatar>
