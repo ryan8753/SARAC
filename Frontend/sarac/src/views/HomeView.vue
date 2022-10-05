@@ -2,7 +2,7 @@
   <div class="home-container">
     <!-- {{ randomReviewList }} -->
     <!-- <p>개인리뷰모아보기 home이요~</p> -->
-    <feeds :reviewList="randomReviewList"></feeds>
+    <feeds :reviewList="randomReviewList" v-on:toggleLike="getFeeds()"></feeds>
   </div>
 </template>
 
