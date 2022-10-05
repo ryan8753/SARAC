@@ -192,8 +192,10 @@ public class ReviewServiceImpl implements ReviewService{
 
 
     @Override
-    public ReviewDetailDTO showDetailReview(long reviewId) {
+    public ReviewDetailDTO showDetailReview(long reviewId, Map<String, Object> token) {
 
+        User user = userRepository.findOneByKakaoId(
+                (Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
         Review review = reviewRepository.findById(reviewId).orElseThrow();
 
         List<ReviewCommentDTO> reviewCommentDTOList = new ArrayList<>();
@@ -215,6 +217,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .likeCount(reviewLikeRepository.countReviewLikeByReview(review))
                 .photoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review))
                 .reviewCommentCount(reviewCommentRepository.countReviewCommentByReview(review))
+                .isLike(reviewLikeRepository.existsByUserAndReview(user,review))
                 .reviewCommentList(reviewCommentDTOList)
                 .HashtagList(HashtagList)
                 .build();
@@ -260,7 +263,7 @@ public class ReviewServiceImpl implements ReviewService{
         List<RandomReviewDTO> list = new ArrayList<>();
         List<RandomReviewDTO> wishlist = getWishReviewList(user);
         list.addAll(wishlist);
-        List<RandomReviewDTO> hotlist = getHotReviewList(30-wishlist.size());
+        List<RandomReviewDTO> hotlist = getHotReviewList(30-wishlist.size(), user);
         list.addAll(hotlist);
 
         // TODO: 2022-09-22 정렬방법에 의해 리뷰 순서가 섞임 
@@ -278,6 +281,7 @@ public class ReviewServiceImpl implements ReviewService{
                         review(review).
                         likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
                         reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
+                        isLike(reviewLikeRepository.existsByUserAndReview(user, review)).
                         build());
                 if(wishlist.size()>=20) return wishlist;
             }
@@ -285,7 +289,7 @@ public class ReviewServiceImpl implements ReviewService{
         return wishlist;
     }
 
-    public List<RandomReviewDTO> getHotReviewList(int size){
+    public List<RandomReviewDTO> getHotReviewList(int size, User user){
         List<RandomReviewDTO> hotList = new ArrayList<>();
         // TODO: 2022-09-22 리뷰별 갯수 제한
         List<Review> reviewList = reviewRepository.findByBook_IsbnIn(reviewRepository.findHotBooks());
@@ -296,6 +300,7 @@ public class ReviewServiceImpl implements ReviewService{
                     review(review).
                     likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
                     reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
+                    isLike(reviewLikeRepository.existsByUserAndReview(user, review)).
                     build());
             if(hotList.size()>=size) return hotList;
         }
