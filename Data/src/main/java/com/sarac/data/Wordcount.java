@@ -29,13 +29,39 @@ public class Wordcount {
         public void map(Object key, Text value, Context context)
                 throws IOException, InterruptedException {
 
-            StringTokenizer itr = new StringTokenizer(value.toString());
-            while ( itr.hasMoreTokens() ) {
-                word.set(itr.nextToken());
+            StringTokenizer lineItr = new StringTokenizer(value.toString(), "\n");
+            StringTokenizer itr;
 
-                context.write(word,one);
+            while(lineItr.hasMoreTokens()) {
+                String line = lineItr.nextToken().replaceAll("[^\uAC00-\uD7A30-9a-zA-Z]", " ");
+
+                if(line.trim().length() == 0)
+                    continue;
+
+                itr = new StringTokenizer(line, " ");
+                while (itr.hasMoreTokens()) {
+
+                    String nextWord = itr.nextToken();
+
+                    if (nextWord.length() < 2)
+                        continue;
+
+                    word.set(nextWord);
+
+                    context.write(word, one);
+                }
             }
         }
+
+//        private String clear(String line) {
+//            return line
+//                    .replaceAll("&lt;", " ")
+//                    .replaceAll("&gt;", " ")
+//                    .replaceAll("&quot;", " ")
+//                    .replaceAll(".", " ")
+//                    .replaceAll(",", " ")
+//                    .replaceAll("'", " ");
+//        }
     }
 
     /*
@@ -67,11 +93,13 @@ public class Wordcount {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf,args).getRemainingArgs();
+
         if ( otherArgs.length != 2 ) {
             System.err.println("Usage: <in> <out>");
             System.exit(2);
         }
-        Job job = new Job(conf,"word count");
+
+        Job job = new Job(conf,"wordcount");
         job.setJarByClass(Wordcount.class);
 
         // let hadoop know my map and reduce classes
