@@ -20,7 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findAllByBookIsbnAndIsSecret(String isbn, Boolean isSecret);
 
-    List<Review> findTop4ByBookOrderByIdDesc(Book book);
+    List<Review> findTop6ByBookOrderByIdDesc(Book book);
 
     // TODO: 2022-09-22  20개까지 limit걸 방법 생각해보기 
     @Query("select book.isbn from Review group by book.isbn order by count(book.isbn) desc")
