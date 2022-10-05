@@ -68,12 +68,10 @@ public class Book {
         if(isContentEmpty(this.publisher))
             this.publisher = aladinItemDto.getPublisher();
 
-        if(isContentEmpty(this.description))
-            this.description = aladinItemDto.getDescription();
-
         if(this.price == 0)
             this.price = aladinItemDto.getPriceStandard();
 
+        this.description = aladinItemDto.getDescription();
         this.bookTitle = aladinItemDto.getTitle();
         this.genre = aladinItemDto.getCategoryName();
         this.page = aladinItemDto.getBookinfo().getItemPage();
