@@ -2,6 +2,7 @@ package com.sarac.sarac.review.entity;
 
 import com.sarac.sarac.user.entitiy.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,10 @@ public class ReviewLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", referencedColumnName = "id")
     private Review review;
+
+    @Builder(builderMethodName = "createReviewLike")
+    ReviewLike (User user, Review review){
+        this.user=user;
+        this.review=review;
+    }
 }

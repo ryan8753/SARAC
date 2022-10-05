@@ -192,4 +192,19 @@ public class ReviewController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
     }
 
+
+    @PostMapping("/like")
+    public ResponseEntity<Map<String, Object>> toggleReviewLike(@RequestHeader Map<String, Object> token, @RequestBody Long reviewId){
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            reviewService.toggleReviewLike(token, reviewId);
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap.put("message", e.getMessage());
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.BAD_REQUEST);
+        }
+        resultMap.put("message", "success");
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
+
 }

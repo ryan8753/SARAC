@@ -6,10 +6,7 @@ import com.sarac.sarac.global.util.FileUpload;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.library.type.LibraryType;
-import com.sarac.sarac.review.entity.Review;
-import com.sarac.sarac.review.entity.ReviewComment;
-import com.sarac.sarac.review.entity.ReviewHashtag;
-import com.sarac.sarac.review.entity.ReviewPhoto;
+import com.sarac.sarac.review.entity.*;
 import com.sarac.sarac.review.payload.request.ReviewCommentRequest;
 import com.sarac.sarac.review.payload.response.*;
 
@@ -327,5 +324,26 @@ public class ReviewServiceImpl implements ReviewService{
             // url만 뽑아내서 보내줌
             return convertReviewPhotoListtoUrlList(reviewPhotos);
         }
+    }
+
+    public void toggleReviewLike(Map<String, Object> token, Long reivewId){
+        User user = userRepository.findOneByKakaoId(
+                (Long)jwtUtil.parseJwtToken((String) token.get("authorization")).get("id"));
+
+        Review review = reviewRepository.findById(reivewId).orElseThrow();
+
+        // 있다면 삭제
+        if(reviewLikeRepository.existsByUserAndReview(user,review)){
+            reviewLikeRepository.delete(reviewLikeRepository.findByUserAndReview(user,review));
+        }else {
+            // 없다면 생성
+            reviewLikeRepository.save(
+                    ReviewLike.createReviewLike()
+                            .user(user)
+                            .review(review)
+                            .build()
+            );
+        }
+
     }
 }
