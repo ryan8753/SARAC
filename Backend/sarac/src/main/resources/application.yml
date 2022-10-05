@@ -51,7 +51,7 @@ spring:
 #카카오 어드민키
 kakao:
   admin : 4834af6c4c44729312c5b43d38dd3516
-  redirect : https://sarac.tk
+  redirect : http://localhost:8081
 
 #jwt
 jwt:
