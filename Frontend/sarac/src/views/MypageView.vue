@@ -18,6 +18,7 @@
         <v-text-field
           :placeholder="user.nickname"
           v-model="newNickName"
+          class="centered-input text-center"
         ></v-text-field>
         <v-btn
           class="edit-btn"
@@ -25,7 +26,8 @@
           elevation="0"
           small
           @click="confirmEdit"
-          color="rgb(223, 137, 49)"
+          color="rgba(227,152,75)"
+          min-width="0px"
           >확인</v-btn
         >
       </div>
@@ -33,13 +35,14 @@
     <div v-else class="edit-box">
       <p align="center" class="text-title">닉네임</p>
       <div class="d-flex justify-center nickname-field">
-        <div class="flex-grow-1 text-center">{{ user.nickname }}</div>
+        <div class="d-inline-flex  flex-grow-1 text-center text-title">{{ user.nickname }}</div>
         <v-btn
           class="edit-btn"
           small
           plain
           elevation="0"
           @click="changeEditing"
+          min-width="0px"
         >
           <v-icon> mdi-pencil</v-icon>
         </v-btn>
@@ -52,20 +55,29 @@
         label="서재공개"
         color="black"
         prepend
-        class="text-content"
+        class="text-content m-bot "
         v-model="user.libraryOpen"
         @change="editOpenInfo"
+        dense
+        hide-details
+        style="padding:0px text-align:center;"
+         
       ></v-checkbox>
       <v-checkbox
+        class="text-content m-bot"
         label="리뷰공개"
         color="black"
         v-model="user.reviewOpen"
         @change="editOpenInfo"
+        dense
+        hide-details
+        style="padding:0px text-align:center;"
+        
       ></v-checkbox>
     </div>
 
     <div class="btn-box">
-      <v-btn color="rgba(245, 193, 108, 1)" @click="logoutAndRefresh">
+      <v-btn color="rgba(227,152,75)" dark @click="logoutAndRefresh">
         로그아웃
       </v-btn>
       <v-btn color="rgba(255, 2, 2, 0.6)" dark @click="signout">회원탈퇴</v-btn>
@@ -123,8 +135,8 @@ export default {
 
 <style scoped>
 .profile {
-  width: 150px;
-  height: 150px;
+  width: 20vh;
+  height: 20vh;
   border-radius: 70%;
 }
 
@@ -135,8 +147,8 @@ export default {
   position: absolute;
   padding: 0px;
   margin: 0px;
-  top: 118px;
-  left: 118px;
+  top: 16vh;
+  left: 15vh;
 }
 .mypage-container {
   /* width: calc(1vw * 100 * 2 / 3); */
@@ -155,8 +167,9 @@ export default {
   display: flex;
   flex-direction: column;
   width: 50%;
-  height: 54px;
+  height: auto;
   align-items: center;
+  justify-content: space-between;
 }
 
 .v-text-field {
@@ -167,13 +180,16 @@ export default {
 
 .edit-btn {
   position: absolute;
-  left: 100%;
+  left: 110%;
+  display:flex;
+  padding: 0px !important;
 }
 
 .v-icon {
-  color: rgb(223, 137, 49) !important;
+  color: rgba(227,152,75) !important;
 }
 .text-title {
+  padding-top: 5px;
   font-size: 2.5vh;
   font-weight: bold;
 }
@@ -182,9 +198,31 @@ export default {
 }
 .nickname-field {
   position: relative;
-  width: 50%;
+  align-content: end;
+  /* text-align: center; */
+  /* width: 100%; */
 }
 .btn-box button {
   margin: 0.5rem;
+}
+p {
+  padding: 0px;
+  margin: 0px;
+}
+.v-input > label {
+  margin: 0px !important;
+}
+
+.centered-input >>> input {
+      text-align: center
+    }
+
+.m-bot >>> label {
+  margin-bottom: 0px !important;
+}
+.m-bot >>> .v-label {
+  font-size: 2vh !important;
+  font-weight: bold;
+
 }
 </style>

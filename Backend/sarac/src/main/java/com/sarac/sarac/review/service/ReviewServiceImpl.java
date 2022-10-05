@@ -1,6 +1,5 @@
 package com.sarac.sarac.review.service;
 
-import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.book.repository.BookRepository;
 import com.sarac.sarac.global.util.FileUpload;
 import com.sarac.sarac.library.entity.Library;
@@ -12,8 +11,6 @@ import com.sarac.sarac.review.payload.response.*;
 
 import com.sarac.sarac.review.payload.request.ReviewRequest;
 import com.sarac.sarac.review.repository.*;
-import com.sarac.sarac.review.util.AladinUtil;
-import com.sarac.sarac.user.dto.UserDto;
 import com.sarac.sarac.user.entitiy.User;
 import com.sarac.sarac.user.repository.UserRepository;
 import com.sarac.sarac.user.util.JwtUtil;
@@ -53,14 +50,13 @@ public class ReviewServiceImpl implements ReviewService{
     private final ReviewCommentRepository reviewCommentRepository;
     private final JwtUtil jwtUtil;
 
-    private final AladinUtil aladinUtil;
-
-
     @Override
+    @Transactional
     public Long registerReview(ReviewRequest review) {
 
         Review saveReview = new Review();
-        saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+        saveReview.setBook(bookRepository.findOneByIsbn(review.getIsbn())
+                .orElseThrow(IllegalArgumentException::new));
         saveReview.setContent(review.getContent());
         saveReview.setTitle(review.getTitle());
         saveReview.setUser(userRepository.findOneById(review.getWriter()));
@@ -100,7 +96,8 @@ public class ReviewServiceImpl implements ReviewService{
 
         Review originReview = reviewRepository.findOneById(reviewId);
         if(review.getIsbn()!=null) {
-            originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn()));
+            originReview.setBook(bookRepository.findOneByIsbn(review.getIsbn())
+                    .orElseThrow(IllegalArgumentException::new));
         }
         if(review.getContent()!=null) {
             originReview.setContent(review.getContent());
@@ -213,7 +210,7 @@ public class ReviewServiceImpl implements ReviewService{
             HashtagList.add(reviewHashtag.getContent());
         }
 
-        ReviewDetailDTO reviewDetailDTO = ReviewDetailDTO.createReviewDetailDTO()
+        return ReviewDetailDTO.createReviewDetailDTO()
                 .review(review)
                 .likeCount(reviewLikeRepository.countReviewLikeByReview(review))
                 .photoUrl(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(reviewId),review))
@@ -221,8 +218,6 @@ public class ReviewServiceImpl implements ReviewService{
                 .reviewCommentList(reviewCommentDTOList)
                 .HashtagList(HashtagList)
                 .build();
-
-        return reviewDetailDTO;
     }
 
     @Override

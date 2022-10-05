@@ -1,26 +1,38 @@
 <template>
   <v-container>
-    워드클라우드
-    <br />
-    <br />
-    <br />
-    <b>내가 읽은 총 페이지 수 :</b> {{ statistics.totalPage }} 쪽
-    <br />
-    <b>내 서재의 총 가격 :</b> {{ statistics.totalPrice }} 원
-    <br />
-    <b>내가 준 평균 평점 : </b>{{ statistics.totalScore }} 점
-    <br />
-    <b> 소음 측정 횟수 :</b> {{ statistics.totalNoise }} 번
-    <br />
-    <br />
-    <br />
-    <b> 많이 쓴 해쉬태그 </b>
-    <cloud
+      <cloud
       :data="words"
       :fontSizeMapper="fontSizeMapper"
       width="200"
       height="200"
     />
+    <v-row>
+      <v-simple-table class="pa-0 ma-0 table" dense>
+      <tbody>
+        <tr>
+          <td><b>내가 읽은 총 페이지 수</b></td>
+          <td>{{ statistics.totalPage }} 쪽</td>
+        </tr>
+        <tr>
+          <td><b>내 서재의 총 가격</b></td>
+          <td>{{ statistics.totalPrice }} 원</td>
+        </tr>
+        <tr>
+          <td><b>내가 준 평균 평점</b></td>
+          <td>{{ statistics.totalScore }} 점</td>
+        </tr>
+        <tr>
+          <td><b>소음 측정 횟수</b></td>
+          <td>{{ statistics.totalNoise }} 번</td>
+        </tr>
+        <tr>
+          <td/>
+          <td/>
+        </tr>
+      </tbody>
+    
+  </v-simple-table>
+    </v-row>
   </v-container>
 </template>
 
@@ -99,5 +111,9 @@ export default {
 .wordCloud {
   width: 30px;
   height: 30px;
+}
+td, tr {
+  font-size: 2vh !important;
+  vertical-align: middle !important;
 }
 </style>

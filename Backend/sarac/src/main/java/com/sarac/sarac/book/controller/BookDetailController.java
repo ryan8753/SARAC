@@ -1,11 +1,14 @@
 package com.sarac.sarac.book.controller;
 
-import com.sarac.sarac.book.entity.dto.response.request.BookDetailRequest;
+import com.sarac.sarac.book.dto.request.BookDetailRequest;
 import com.sarac.sarac.book.dto.response.BookInfoDto;
 import com.sarac.sarac.book.service.BookDetailService;
+import com.sarac.sarac.library.type.LibraryType;
 import com.sarac.sarac.user.repository.UserRepository;
+import com.sarac.sarac.user.service.UserService;
 import com.sarac.sarac.user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
