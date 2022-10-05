@@ -275,15 +275,17 @@ public class ReviewServiceImpl implements ReviewService{
         List<RandomReviewDTO> wishlist = new ArrayList<>();
         List<Library> wishLibraries = libraryRepository.findAllByUserAndLibraryType(user, LibraryType.WISH);
         for (Library library: wishLibraries) {
-            List<Review> tmp = reviewRepository.findTop4ByBookOrderByIdDesc(library.getBook());
+            List<Review> tmp = reviewRepository.findTop6ByBookOrderByIdDesc(library.getBook());
             for (Review review: tmp) {
-                wishlist.add(RandomReviewDTO.createRandomReview().
-                        review(review).
-                        likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
-                        reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
-                        isLike(reviewLikeRepository.existsByUserAndReview(user, review)).
-                        build());
-                if(wishlist.size()>=20) return wishlist;
+                if(review.getUser().getIsReviewOpen() && !review.getIsSecret()) {
+                    wishlist.add(RandomReviewDTO.createRandomReview().
+                            review(review).
+                            likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
+                            reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
+                            isLike(reviewLikeRepository.existsByUserAndReview(user, review)).
+                            build());
+                    if (wishlist.size() >= 20) return wishlist;
+                }
             }
         }
         return wishlist;
@@ -296,13 +298,15 @@ public class ReviewServiceImpl implements ReviewService{
 
 
         for (Review review: reviewList) {
-            hotList.add(RandomReviewDTO.createRandomReview().
-                    review(review).
-                    likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
-                    reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
-                    isLike(reviewLikeRepository.existsByUserAndReview(user, review)).
-                    build());
-            if(hotList.size()>=size) return hotList;
+            if(review.getUser().getIsReviewOpen() && !review.getIsSecret()) {
+                hotList.add(RandomReviewDTO.createRandomReview().
+                        review(review).
+                        likeCount(reviewLikeRepository.countReviewLikeByReview(review)).
+                        reviewPhotos(ifUrlIsEmpty(reviewPhotoRepository.findAllByReviewId(review.getId()), review)).
+                        isLike(reviewLikeRepository.existsByUserAndReview(user, review)).
+                        build());
+                if (hotList.size() >= size) return hotList;
+            }
         }
 
         return hotList;
