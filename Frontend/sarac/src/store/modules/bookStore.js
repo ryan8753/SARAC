@@ -46,7 +46,7 @@ const bookStore = {
           console.log(err);
         });
     },
-    editReadStatus({ commit }, { bookId, newStatus, userId }) {
+    editReadStatus({ commit, dispatch }, { bookId, newStatus, userId }) {
       axios({
         url: "api/v1/book/detail",
         method: "post",
@@ -61,10 +61,11 @@ const bookStore = {
       }).then((res) => {
         if (res.data.message === "success") {
           commit("EDIT_READ_STATUS", newStatus);
+          dispatch("myFeedStore/getSearchUserInfo", { userId: userId }, { root: true });
         }
       });
     },
-    deleteReadStatus({ commit }, bookId) {
+    deleteReadStatus(context, bookId) {
       axios({
         url: `api/v1/book/detail/?isbn=${bookId}`,
         method: "delete",
@@ -73,7 +74,8 @@ const bookStore = {
         },
       }).then((res) => {
         if (res.data.message === "success") {
-          commit("EDIT_READ_STATUS", "");
+          context.commit("EDIT_READ_STATUS", "");
+          context.dispatch("myFeedStore/getSearchUserInfo", {userId: context.rootState.accountStore.user.userId}, { root: true });
         }
       });
     },

@@ -39,12 +39,7 @@ export default {
       refreshToken: refreshToken,
     };
 
-    
-    if (this.getUserInfo(payload)) {
-      this.$router.push('/home')
-    } else {
-      this.$router.push('/login')
-    }
+    this.getUserInfo(payload).then(() => this.$router.push('/home'));
   },
 };
 </script>
