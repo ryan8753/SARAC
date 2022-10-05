@@ -3,13 +3,9 @@
     <!-- <p>개인리뷰모아보기 feeds</p> -->
     <!-- {{ this.reviewList }} -->
     <div class="wrapper">
-      <div
-        
-        v-for="(review, index) in reviewList"
-        :key="index + 'c'"
-      >
+      <div v-for="(review, index) in reviewList" :key="index + 'c'">
         <div>
-          <aFeed :review="review"></aFeed>
+          <aFeed :review="review" v-on:toggleLike="updateInfo()"></aFeed>
         </div>
         <br />
       </div>
@@ -26,6 +22,11 @@ export default {
     return {};
   },
 
+  methods: {
+    updateInfo() {
+      this.$emit("toggleLike");
+    },
+  },
   created() {},
 };
 </script>
