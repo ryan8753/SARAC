@@ -1,33 +1,6 @@
 <template>
   <v-container>
-    <!-- <v-list-item
-        class="ma-0 pa-0"
-        @click="getActionFromType"
-      >
-        
-          <v-img :src="getThumbnail" width="3vh"> </v-img>
-        
-
-        <v-list-item-content>
-          <v-list-item-title
-            v-text="bookTitle"
-          ></v-list-item-title>
-          <v-list-item-subtitle v-text="author"> 
-          </v-list-item-subtitle>
-          <v-rating
-            :value="bookScore"
-            readonly
-            color="#E3984B"
-            background-color="#E3984B"
-            dense
-            half-increments
-            size="2vh"
-          ></v-rating>
-        </v-list-item-content>
-      </v-list-item> -->
-
-  
-  <hr>
+    <hr />
     <v-row @click="getActionFromType">
       <v-col cols="4" class="align-self-stretch pa-0">
         <v-img :src="getThumbnail"></v-img>
@@ -35,23 +8,21 @@
       <v-spacer></v-spacer>
       <v-col class="d-flex flex-column pa-0 justify-space-between" cols="7">
         <div>
-          <h1> {{ bookTitle }} </h1>
-          <h2> {{ author }} </h2>
+          <h1>{{ bookTitle }}</h1>
+          <h2>{{ author }}</h2>
         </div>
 
-          <v-rating
-            :value="bookScore"
-            readonly
-            color="#E3984B"
-            background-color="#E3984B"
-            dense
-            half-increments
-            size="2vh"
-          ></v-rating>
-
+        <v-rating
+          :value="bookScore"
+          readonly
+          color="#E3984B"
+          background-color="#E3984B"
+          dense
+          half-increments
+          size="2vh"
+        ></v-rating>
       </v-col>
     </v-row>
-  
   </v-container>
 </template>
 
@@ -102,7 +73,7 @@ export default {
 h1 {
   font-size: 2vh;
   font-weight: bold;
-  overflow: hidden; 
+  overflow: hidden;
   white-space: wrap;
   /* width: 100%; */
 }
@@ -112,7 +83,7 @@ h2 {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width : 70%;
+  width: 70%;
   height: 2vh;
 }
 hr {

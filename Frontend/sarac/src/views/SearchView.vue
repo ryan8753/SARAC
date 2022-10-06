@@ -56,7 +56,10 @@ export default {
       this.currentPage = newVal.currentPage + 1;
     },
     currentPage(newVal) {
-      this.$router.push("/search?keyword=" + this.$route.query.keyword + "&page=" + (newVal-1) + "&type=" + this.$route.query.type).catch(() => {});
+      if(window.location.href.includes("/review/search"))
+        this.$router.push("/review/search?keyword=" + this.$route.query.keyword + "&page=" + (newVal-1) + "&type=" + this.$route.query.type).catch(() => {});
+      else
+        this.$router.push("/search?keyword=" + this.$route.query.keyword + "&page=" + (newVal-1) + "&type=" + this.$route.query.type).catch(() => {});
     },
   },
   created() {
