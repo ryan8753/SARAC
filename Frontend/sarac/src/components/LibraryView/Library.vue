@@ -58,7 +58,7 @@
                   width="10vh"
                   @click="gotoBookInfo(lib.isbn)"
                 >
-                  <v-img :src="lib.bookImgUrl" class="fill-height" />
+                  <v-img :src="!lib.bookImgUrl ? defaultImgUrl : lib.bookImgUrl" class="fill-height" />
                 </v-card>
               </div>
             </v-slide-item>
@@ -111,6 +111,7 @@ export default {
       value: "선택",
       checkList: [],
       person: null,
+      defaultImgUrl: "https://sarac-a505.s3.ap-northeast-2.amazonaws.com/%EC%B1%85%EA%B8%B0%EB%B3%B8.png",
     };
   },
   computed: {
