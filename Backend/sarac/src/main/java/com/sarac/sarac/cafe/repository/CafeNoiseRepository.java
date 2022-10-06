@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface CafeNoiseRepository extends JpaRepository<CafeNoise, Long> {
     CafeNoise save(CafeNoise cafeNoise);
     Optional<CafeNoise> findFirst1ByCafeOrderByCreatedAtDesc(Cafe cafe);
+
+    Integer countByUserId(Long userId);
+
+
 }
