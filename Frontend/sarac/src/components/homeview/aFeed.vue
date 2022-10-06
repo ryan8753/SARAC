@@ -11,12 +11,12 @@
       rounded="lg"
     >
       <!-- 책이름 -->
-      <v-row class="mx-auto" align="center">
-        <v-col cols="3"
-          ><v-img :src="getThumbnail" @click="mvBook"></v-img
-        ></v-col>
-        <v-col cols="6" class="c-subtitle" @click="mvBook"
-          >"{{ review.bookTitle }}"
+      <v-row class="ma-5" align="center">
+        <v-col cols="3" class="pa-0">
+          <v-img :src="getThumbnail" @click="mvBook"></v-img>
+        </v-col>
+        <v-col cols="8" class="c-subtitle c-bold pl-3" @click="mvBook">
+          "{{ review.bookTitle }}"
         </v-col>
         <v-col
           cols="1"
@@ -24,12 +24,14 @@
           v-if="
             review.authorKakaoId === this.$store.state.accountStore.user.kakaoId
           "
+          class="pa-0 trick"
         >
           <v-btn icon @click="modifyReview"><v-icon>mdi-pencil</v-icon></v-btn>
-        </v-col> </v-row
-      ><br />
+        </v-col>
+      </v-row>
+      <br />
       <!-- 리뷰제목 -->
-      <v-row align="center" justify="center" class="c-title mx-auto">
+      <v-row align="center" justify="center" class="c-title mx-auto px-2">
         {{ review.title }}</v-row
       ><br />
       <!-- 평점 -->
@@ -81,9 +83,8 @@
       </v-row>
       <br />
       <!-- 해시태그 -->
-      <v-row style="width: 100%">
+      <v-row style="width: 100%" class="px-1 mx-auto">
         <v-col>
-          &nbsp;
           <span class="c-subtitle" v-for="(hashtag, i) in hashtagList" :key="i">
             #{{ hashtag }}
           </span>
@@ -202,5 +203,12 @@ hr {
   background-color: rgba(243, 237, 237, 1);
   width: 90%;
   margin-left: 5%;
+}
+.c-bold {
+  font-weight: bold;
+}
+.trick {
+  position: relative;
+  bottom: 3vh;
 }
 </style>
