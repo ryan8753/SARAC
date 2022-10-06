@@ -107,7 +107,7 @@
       <v-row class="ma-5">
         <v-col>
           <v-btn
-            align
+            width="100%"
             color="#E3984B"
             class="white--text"
             type="submit"
