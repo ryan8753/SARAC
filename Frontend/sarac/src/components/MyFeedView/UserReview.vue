@@ -52,7 +52,8 @@
         <br>
         <h1 @click="routeToRegist">첫 리뷰를 작성해주세요</h1>
     </div>
-    <v-row v-else justify="center" class="pa-4"> 비공개 입니다. </v-row>
+    <v-row v-else-if="person == 'private'" justify="center" class="pa-4"> 비공개 입니다 </v-row>
+    <v-row v-else justify="center" class="pa-4"> 게시물 없음 </v-row>
   </div>
 </template>
 
