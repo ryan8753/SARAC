@@ -3,10 +3,12 @@ package com.sarac.sarac.cafe.entity;
 import com.sarac.sarac.baseEntitiy.BaseEntity;
 import com.sarac.sarac.user.entitiy.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,4 +29,11 @@ public class CafeNoise extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id", referencedColumnName = "id")
     private Cafe cafe;
+
+    @Builder
+    public CafeNoise(double noise, User user, Cafe cafe) {
+        this.noise = noise;
+        this.user = user;
+        this.cafe = cafe;
+    }
 }
