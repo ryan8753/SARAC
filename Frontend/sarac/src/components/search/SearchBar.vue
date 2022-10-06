@@ -14,10 +14,10 @@
             placeholder="검색어 입력"
             @click:append="searchBook"
             @click:append-outer="getPicture"
-            @click:clear="clearKeyword"
             color="#E3984B"
             dense
             @keydown.enter.prevent="searchBook"
+            id="bar"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -59,6 +59,7 @@ export default {
       }
       this.setTypeTrue();
       this.getBookResults(this.keyword);
+      document.getElementById("bar").blur();
     },
     getPicture() {
       this.showCamera = !this.showCamera;
