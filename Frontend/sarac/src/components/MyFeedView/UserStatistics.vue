@@ -142,17 +142,14 @@ export default {
 
     async getMyInfo() {
       this.statistics = await this.getMyStatistics();
-      console.log(this.statistics);
     },
     async getOtherInfo() {
       this.statistics = await this.getOtherStatistics(this.userInfo.userId);
     },
     async getMyHashtagInfo() {
-      // this.words = JSON.parse(this.getMyHashtag());
       this.words = await this.getMyHashtag();
     },
     async getOtherHashtagInfo() {
-      // this.words = JSON.parse(this.getMyHashtag());
       this.words = await this.getOtherHashtag(this.userInfo.userId);
     },
   },

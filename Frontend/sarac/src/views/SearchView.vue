@@ -1,11 +1,11 @@
 <template>
   <div>
-    <search-bar :page="currentPage-1"></search-bar>
+    <search-bar></search-bar>
     <book-search-list
       :isSearched="isSearched"
       :fromWhere="beforeLocation"
     ></book-search-list>
-    <b-pagination v-if="isSearched" v-model="currentPage" pills :total-rows="rows" :per-page="perPage" size="sm" align="center"></b-pagination>
+    <b-pagination class="py-7" v-if="isSearched" v-model="currentPage" pills :total-rows="rows" :per-page="perPage" size="sm" align="center"></b-pagination>
   </div>
 </template>
 <script>
@@ -28,15 +28,12 @@ export default {
   components: { SearchBar, BookSearchList },
   computed: {
     ...mapState(searchStore, ["searchResults"]),
-    // ...mapGetters(searchStore, ["isSearched"]),
     ...mapMutations(searchStore, { setTypeFalse: "SET_TEXT_FALSE" }),
     beforeLocation() {
       if (this.$route.params.fromLocation === "search") {
-        console.log("review");
         return "review";
       } 
       else if (this.$route.params.fromLocation === undefined) {
-        console.log("search");
         return "search";
       }
       return "";
@@ -44,9 +41,7 @@ export default {
   },
   watch:{
     $route() {
-      console.log(this.$route.query);
       let path = this.$route.query;
-      console.log(path);
       if(path.keyword) {
         this.isSearched = true;
         this.getBookResults({keyword: path.keyword, page: path.page, type: path.type});
@@ -59,14 +54,16 @@ export default {
     searchResults(newVal) {
       this.rows = newVal.totalElements;
       this.currentPage = newVal.currentPage + 1;
-    }
+    },
+    currentPage(newVal) {
+      this.$router.push("/search?keyword=" + this.$route.query.keyword + "&page=" + (newVal-1) + "&type=" + this.$route.query.type).catch(() => {});
+    },
   },
   created() {
     let path = this.$route.query;
-    console.log(path.keyword + "-----------------------");
     if(path.keyword) {
       this.isSearched = true;
-      this.getBookResults({keyword: path.keyword, page: path.page});
+      this.getBookResults({keyword: path.keyword, page: path.page, type: path.type});
     }
     else {
       this.isSearched = false;

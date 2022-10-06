@@ -5,7 +5,7 @@ const searchStore = {
 
   state: {
     searchResults: [],
-    // isSearched: false,
+    wordCloud: [],
   },
   getters: {
     searchResults: (state) => {
@@ -18,7 +18,6 @@ const searchStore = {
   mutations: {
     SET_BOOK_RESULT(state, searchResults) {
       state.searchResults = searchResults;
-      console.log(state.searchResults);
     },
     SET_TEXT_TRUE(state) {
       state.isSearched = true;
@@ -26,6 +25,9 @@ const searchStore = {
     SET_TEXT_FALSE(state) {
       state.isSearched = false;
     },
+    SET_WORD_CLOUD(state, wordCloud) {
+      state.wordCloud = wordCloud;
+    }
   },
   actions: {
     getBestBook({ commit }) {
@@ -45,6 +47,16 @@ const searchStore = {
         commit("SET_BOOK_RESULT", response.data);
       });
     },
+
+    getWordCloud({commit}) {
+      axios({
+        url: "api/v1/book/keyword",
+        method: "GET",
+      }).then((response) => {
+        console.log(response.data);
+        commit("SET_WORD_CLOUD", response.data.keywords);
+      });
+    }
   },
 };
 
