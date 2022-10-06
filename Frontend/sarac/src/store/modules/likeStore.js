@@ -85,10 +85,8 @@ const likeStore = {
       });
       // return response;
     },
-    // async getCafeLikeInfo(commit, userCafePair) {
-    getCafeLikeInfo(commit, userCafePair) {
-      // const response = await axios({
-      axios({
+    async getCafeLikeInfo(commit, userCafePair) {
+      const response = await axios({
         url: "api/v1/cafeLike/cafeLikeInfo",
         method: "POST",
         headers: {
@@ -104,12 +102,12 @@ const likeStore = {
         }
       }).then((res) => {
         console.log(userCafePair);
-        console.log(res);
+        console.log(res.data);
         return res.data;
       }).catch((error) => {
         return error;
       });
-      // return response;
+      return response;
     }
   },
 };
