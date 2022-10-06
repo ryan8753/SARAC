@@ -5,7 +5,7 @@
       <v-row justify="center" v-if="statistics.topGenre.length > 0">
         <v-col
           cols="4"
-          class="d-flex align-center flex-column"
+          class="d-flex align-center flex-column px-0"
           v-for="(item, j) in statistics.topGenre"
           :key="j"
         >
