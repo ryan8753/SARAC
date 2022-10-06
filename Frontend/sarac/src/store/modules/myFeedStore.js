@@ -75,6 +75,16 @@ const myFeedStore = {
                 router.push("/library").catch(() => {});
             })
         },
+        getLibraryMk2({commit}, payload) {
+            axios({
+                url: `${apiUrl}library`,
+                method: "GET",
+                headers,
+                params: payload,
+            }).then((res) => {
+                commit("GET_LIBRARY", res.data);
+            })
+        },
         getReviewList({commit}, payload) {
             axios({
                 url: `${apiUrl}reviewlist`,
@@ -93,7 +103,8 @@ const myFeedStore = {
                     headers,
                 });
             }
-            context.dispatch("getReviewList", {userId: context.state.userInfo.userId})
+            context.dispatch("getReviewList", {userId: context.state.userInfo.userId});
+            context.dispatch("getSearchUserInfo", {userId: context.state.userInfo.userId});
         },
         async deleteLibraryList(context, payload) {
             for(let id of payload) {
@@ -104,7 +115,8 @@ const myFeedStore = {
                     params: {isbn: id},
                 });
             }
-            context.dispatch("getLibrary", {userId: context.rootState.accountStore.user.userId})
+            context.dispatch("getLibrary", {userId: context.rootState.accountStore.user.userId});
+            context.dispatch("getSearchUserInfo", {userId: context.state.userInfo.userId});
         },
     },
 
