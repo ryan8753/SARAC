@@ -16,13 +16,13 @@ public class CafeLikeRequest {
     public static class CafeLikeInfo {
         private Cafe cafe;
         private User user;
-        private boolean goodOrBad;
+        private boolean goodBad;
 
         @Builder
-        public CafeLikeInfo(Cafe cafe, User user, boolean goodOrBad) {
+        public CafeLikeInfo(Cafe cafe, User user, boolean goodBad) {
             this.cafe = cafe;
             this.user = user;
-            this.goodOrBad = goodOrBad;
+            this.goodBad = goodBad;
         }
     }
 

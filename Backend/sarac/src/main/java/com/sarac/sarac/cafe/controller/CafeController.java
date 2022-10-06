@@ -1,6 +1,5 @@
 package com.sarac.sarac.cafe.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sarac.sarac.cafe.dto.request.CafeRequest;
 import com.sarac.sarac.cafe.dto.response.CafeResponse;
 import com.sarac.sarac.cafe.exception.CafeException;

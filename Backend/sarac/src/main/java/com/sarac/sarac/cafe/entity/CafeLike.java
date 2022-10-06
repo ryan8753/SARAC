@@ -15,7 +15,8 @@ public class CafeLike {
     private Long id;
 
     @Setter
-    private boolean goodOrBad;
+    @Column(name = "goodBad")
+    private boolean goodBad;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -26,9 +27,9 @@ public class CafeLike {
     private Cafe cafe;
 
     @Builder
-    public CafeLike(User user, Cafe cafe, boolean goodOrBad) {
+    public CafeLike(User user, Cafe cafe, boolean goodBad) {
         this.user = user;
         this.cafe = cafe;
-        this.goodOrBad = goodOrBad;
+        this.goodBad = goodBad;
     }
 }
