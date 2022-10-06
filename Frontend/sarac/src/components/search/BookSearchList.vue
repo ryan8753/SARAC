@@ -18,7 +18,7 @@ import BookSearchItem from "./BookSearchItem.vue";
 
 export default {
   props: {
-    type: Boolean,
+    isSearched: Boolean,
     fromWhere: String,
   },
   components: { BookSearchItem },
@@ -26,7 +26,7 @@ export default {
     ...mapState(["searchResults"]),
     ...mapGetters(searchStore, ["searchResults"]),
     typeString() {
-      return this.type ? "검색 결과" : "인기 도서";
+      return this.isSearched ? "검색 결과" : "인기 도서";
     },
     getFromWhere() {
       return this.fromWhere;

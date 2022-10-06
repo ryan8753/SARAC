@@ -45,6 +45,7 @@ const statisticsStore = {
             Authorization: `Bearer ${accessToken}`,
           },
         }).then((res) => {
+          console.log(res.data)
           return res.data
         });
         return response;
