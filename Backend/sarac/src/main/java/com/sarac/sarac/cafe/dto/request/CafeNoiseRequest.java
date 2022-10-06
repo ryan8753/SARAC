@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 public class CafeNoiseRequest {
 
     @Getter
