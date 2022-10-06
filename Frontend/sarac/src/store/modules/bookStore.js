@@ -62,6 +62,7 @@ const bookStore = {
         if (res.data.message === "success") {
           commit("EDIT_READ_STATUS", newStatus);
           dispatch("myFeedStore/getSearchUserInfo", { userId: userId }, { root: true });
+          dispatch("myFeedStore/getLibraryMk2", { userId: userId }, { root: true } );
         }
       });
     },
@@ -76,6 +77,7 @@ const bookStore = {
         if (res.data.message === "success") {
           context.commit("EDIT_READ_STATUS", "");
           context.dispatch("myFeedStore/getSearchUserInfo", {userId: context.rootState.accountStore.user.userId}, { root: true });
+          context.dispatch("myFeedStore/getLibraryMk2", {userId: context.rootState.accountStore.user.userId}, { root: true });
         }
       });
     },
