@@ -37,7 +37,7 @@
           v-on:commentChanged="updateInfo()"
         ></comments>
       </div>
-      <div v-else>등록된 댓글이 없습니다.</div> </v-row
+      <div v-else class="h-comment">등록된 댓글이 없습니다.</div> </v-row
     ><br />
     <!-- 댓글작성폼 -->
     <create-comment
