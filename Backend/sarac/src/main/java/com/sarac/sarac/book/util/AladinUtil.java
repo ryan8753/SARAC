@@ -34,6 +34,7 @@ public class AladinUtil {
     public AladinResponse getBookDetailData(String isbn) {
         ObjectMapper objectMapper = JsonMapper.builder()
                 .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER)
+                .enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS)
                 .build();
 
         String jsonResult = getBookJsonString(isbn);
@@ -60,7 +61,11 @@ public class AladinUtil {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
 
-            return br.readLine();
+            String result = br.readLine();
+
+            log.info(result);
+
+            return result;
 
         } catch (IOException e) {
             log.error(e.getMessage());
