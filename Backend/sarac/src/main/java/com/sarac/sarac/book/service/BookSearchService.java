@@ -1,5 +1,6 @@
 package com.sarac.sarac.book.service;
 
+import com.sarac.sarac.book.dto.request.SearchType;
 import com.sarac.sarac.book.dto.response.BookSearchResultDto;
 import com.sarac.sarac.book.dto.response.BookSearchResultListDto;
 import com.sarac.sarac.book.entity.Book;
@@ -30,13 +31,15 @@ public class BookSearchService {
 
     private final int MAX_BEST_BOOK_COUNT = 30;
 
-    public BookSearchResultListDto getSearchResult(String keyword, Pageable pageable) {
-        Page<Book> bookListWithPage = bookSearchRepository.findByIsbnOrAuthorContainsOrBookTitleContains(keyword, keyword, keyword, pageable);
-
+    public BookSearchResultListDto getSearchResult(String keyword, String type, Pageable pageable) {
+        Page<Book> bookListWithPage =
+                SearchType.KEYWORD.name().equalsIgnoreCase(type) ?
+                        bookSearchRepository.findByDescriptionContains(keyword, pageable)
+                        : bookSearchRepository.findByIsbnOrAuthorContainsOrBookTitleContains(keyword, keyword, keyword, pageable);
 
         return BookSearchResultListDto.builder()
                 .results(calcBookScores(bookListWithPage.getContent()))
-                .totalPages(bookListWithPage.getTotalPages())
+                .totalElements(bookListWithPage.getTotalElements())
                 .currentPage(bookListWithPage.getNumber())
                 .bestBook(false)
                 .build();
