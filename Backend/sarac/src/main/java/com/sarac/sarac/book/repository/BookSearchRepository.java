@@ -13,6 +13,8 @@ import java.util.List;
 public interface BookSearchRepository extends JpaRepository<Book, String> {
     Page<Book> findByIsbnOrAuthorContainsOrBookTitleContains(String keyword1, String keyword2, String keyword3, Pageable pageable);
 
+    Page<Book> findByDescriptionContains(String keyword, Pageable pageable);
+
     @Query("SELECT book FROM Review review join review.book book group by book.isbn order by count(book.isbn) desc")
     List<Book> findBestBooks();
 }

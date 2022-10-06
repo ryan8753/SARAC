@@ -1,9 +1,7 @@
 package com.sarac.sarac.cafe.entity;
 
 import com.sarac.sarac.user.entitiy.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -16,6 +14,7 @@ public class CafeLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     private boolean goodOrBad;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,4 +24,11 @@ public class CafeLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id", referencedColumnName = "id")
     private Cafe cafe;
+
+    @Builder
+    public CafeLike(User user, Cafe cafe, boolean goodOrBad) {
+        this.user = user;
+        this.cafe = cafe;
+        this.goodOrBad = goodOrBad;
+    }
 }

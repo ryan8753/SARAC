@@ -19,8 +19,8 @@ public class BookSearchController {
     private final BookSearchService bookSearchService;
 
     @GetMapping
-    public ResponseEntity<BookSearchResultListDto> getBookSearchResult(String keyword, @PageableDefault(sort = "isbn", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok().body(bookSearchService.getSearchResult(keyword, pageable));
+    public ResponseEntity<BookSearchResultListDto> getBookSearchResult(String keyword, String type, @PageableDefault(sort = "isbn", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok().body(bookSearchService.getSearchResult(keyword, type, pageable));
     }
 
     @GetMapping("/best")
