@@ -20,7 +20,7 @@ public class Cafe {
     private Long id;
 
     @Column(length = 100)
-    private String bookImgUrl;
+    private String cafeImgUrl;
 
     private Double latitude;
 
@@ -29,12 +29,13 @@ public class Cafe {
     @Column(length = 20)
     private String cafeName;
 
+    private String cafeAddress;
 
 
-    @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<CafeLike> cafeLikes = new HashSet<>();
-
-    @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<CafeNoise> cafeNoises = new HashSet<>();
+//    @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private Set<CafeLike> cafeLikes = new HashSet<>();
+//
+//    @OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private Set<CafeNoise> cafeNoises = new HashSet<>();
 
 }

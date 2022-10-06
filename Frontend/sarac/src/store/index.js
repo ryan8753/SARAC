@@ -10,6 +10,8 @@ import searchStore from "@/store/modules/searchStore";
 import myFeedStore from "@/store/modules/myFeedStore";
 import statisticsStore from "@/store/modules/statisticsStore";
 import bookStore from "@/store/modules/bookStore";
+import mapStore from "@/store/modules/mapStore";
+import likeStore from "@/store/modules/likeStore";
 
 Vue.use(Vuex);
 
@@ -21,6 +23,8 @@ const store = new Vuex.Store({
     myFeedStore: myFeedStore,
     bookStore: bookStore,
     statisticsStore: statisticsStore,
+    mapStore: mapStore,
+    likeStore: likeStore,
   },
 });
 
