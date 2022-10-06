@@ -1,6 +1,7 @@
 package com.sarac.sarac.cafe.service;
 
 import com.sarac.sarac.cafe.dto.request.CafeLikeRequest;
+import com.sarac.sarac.cafe.dto.response.CafeLikeResponse;
 import com.sarac.sarac.cafe.entity.Cafe;
 import com.sarac.sarac.cafe.entity.CafeLike;
 import com.sarac.sarac.cafe.exception.CafeException;
@@ -14,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CafeLikeServiceImpl implements CafeLikeService {
@@ -26,12 +25,12 @@ public class CafeLikeServiceImpl implements CafeLikeService {
 
     @Override
     @Transactional
-    public void setGoodOrBadInfo(CafeLikeRequest.CafeLikeInfo cafeLikeInfo) {
+    public void setGoodBadInfo(CafeLikeRequest.CafeLikeInfo cafeLikeInfo) {
         Cafe cafe = cafeRepository.findById(cafeLikeInfo.getCafe().getId()).orElseThrow(CafeException.CafeNotFoundException::new);
         User user = userRepository.findOneById(cafeLikeInfo.getUser().getId());
         // User Repository의 findOneById()를 Optional<User>로 바꾸면 orElseThrow() 구문으로 변경 가능
         if(user == null) throw new UserException.UserNotFoundException();
-        boolean goodOrBad = cafeLikeInfo.isGoodOrBad();
+        boolean goodBad = cafeLikeInfo.isGoodBad();
 
         CafeLike cafeLike = cafeLikeRepository.findOneByCafeAndUser(cafe, user)
                 .orElse(null);
@@ -40,17 +39,17 @@ public class CafeLikeServiceImpl implements CafeLikeService {
             cafeLike = CafeLike.builder()
                     .cafe(cafe)
                     .user(user)
-                    .goodOrBad(goodOrBad)
+                    .goodBad(goodBad)
                     .build();
         }
 
-        cafeLike.setGoodOrBad(goodOrBad);
+        cafeLike.setGoodBad(goodBad);
         cafeLikeRepository.save(cafeLike);
     }
 
     @Override
     @Transactional
-    public void removeGoodOrBadInfo(CafeLikeRequest.CafeLikeInfo cafeLikeInfo) {
+    public void removeGoodBadInfo(CafeLikeRequest.CafeLikeInfo cafeLikeInfo) {
         Cafe cafe = cafeRepository.findById(cafeLikeInfo.getCafe().getId()).orElseThrow(CafeException.CafeNotFoundException::new);
         User user = userRepository.findOneById(cafeLikeInfo.getUser().getId());
         // User Repository의 findOneById()를 Optional<User>로 바꾸면 orElseThrow() 구문으로 변경 가능
@@ -63,7 +62,7 @@ public class CafeLikeServiceImpl implements CafeLikeService {
     }
 
     @Override
-    public Boolean getGoodOrBadInfo(CafeLikeRequest.CafeLikeStatus cafeLikeStatus) {
+    public Boolean getGoodBadInfo(CafeLikeRequest.CafeLikeStatus cafeLikeStatus) {
         Cafe cafe = cafeRepository.findById(cafeLikeStatus.getCafe().getId()).orElseThrow(CafeException.CafeNotFoundException::new);
         User user = userRepository.findOneById(cafeLikeStatus.getUser().getId());
         // User Repository의 findOneById()를 Optional<User>로 바꾸면 orElseThrow() 구문으로 변경 가능
@@ -73,6 +72,18 @@ public class CafeLikeServiceImpl implements CafeLikeService {
                 .orElse(null);
 
         if(cafeLike == null) return null;
-        else return cafeLike.isGoodOrBad();
+        else return cafeLike.isGoodBad();
+    }
+
+    @Override
+    public CafeLikeResponse.GoodBadCounts getGoodBadCounts(long cafeId) {
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(CafeException.CafeNotFoundException::new);
+        long goods = cafeLikeRepository.countByCafeAndGoodBad(cafe, true);
+        long bads = cafeLikeRepository.countByCafeAndGoodBad(cafe, false);
+
+        return CafeLikeResponse.GoodBadCounts.builder()
+                .goods(goods)
+                .bads(bads)
+                .build();
     }
 }

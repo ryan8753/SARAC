@@ -16,6 +16,7 @@
                     </div>
                     <div v-if="lastNoiseRecord.length != 0" class="cafe_info middle">
                         <p class="cafe_last_decibel">{{ lastNoiseRecord.noise.toFixed(2) }} dB</p>
+                        <p class="cafe-average-decibel">평균 {{ averageNoiseRecord.toFixed(2) }} dB</p>
                         <p class="cafe_last_record">마지막 측정 : {{ lastNoiseTime }}</p>
                     </div>
                     <div v-else>
@@ -23,8 +24,8 @@
                     </div>
                     <div class="cafe_info lower">
                         <div class="cafe_noise">
-                            <div class="cafe_noise_graph"></div>
-                            <v-btn class="record-btn">소음 측정</v-btn>
+                            <!--div class="cafe_noise_graph"></div-->
+                            <v-btn class="record-btn white--text" @click="recordNoise" color="#E3984B">{{ recordMessage }}</v-btn>
                         </div>
                         <div class="good-bad-area">
                             <div class="count-area">
@@ -32,7 +33,7 @@
                                     <img :src="likeImg" style="width: 100%; height: 100%" @click="likeCafe">
                                 </div>
                                 <div class="count-number">
-                                    <p class="count"></p>
+                                    <p class="count">{{ cafeGoodBadInfo.goods }}</p>
                                 </div>
                             </div>
                             <div class="count-area">
@@ -40,7 +41,7 @@
                                     <img :src="dislikeImg" style="width: 100%; height: 100%" @click="dislikeCafe">
                                 </div>
                                 <div class="count-number">
-                                    <p class="count"></p>
+                                    <p class="count">{{ cafeGoodBadInfo.bads }}</p>
                                 </div>
                             </div>
                         </div>
@@ -53,6 +54,8 @@
 
 <script>
 import { mapActions } from "vuex";
+import * as Tone from 'tone';
+// import { chart } from 'chart.js';
 
 const mapStore = "mapStore";
 const likeStore = "likeStore";
@@ -61,35 +64,42 @@ export default {
     name: "nearByView",
     data() {
         return {
-            pinRedImg: require('../assets/pins/pin_red.png'),
-            pinYellowImg: require('../assets/pins/pin_yellow.png'),
-            pinGreenImg: require('../assets/pins/pin_green.png'),
-            cafeRedImg: require('../assets/squares/red_square.png'),
-            cafeYellowImg: require('../assets/squares/yellow_square.png'),
-            cafeGreenImg: require('../assets/squares/green_square.png'),
-            cafeGreyImg: require('../assets/squares/grey_square.png'),
+            cafeRedImg: require('../assets/book_icons/book_red.png'),
+            cafeYellowImg: require('../assets/book_icons/book_yellow.png'),
+            cafeGreenImg: require('../assets/book_icons/book_green.png'),
+            cafeGreyImg: require('../assets/book_icons/book_grey.png'),
             dislikeSelectedImg: require('../assets/likes/dislike_selected.png'),
             dislikeUnselectedImg: require('../assets/likes/dislike_unselected.png'),
             likeSelectedImg: require('../assets/likes/like_selected.png'),
             likeUnselectedImg: require('../assets/likes/like_unselected.png'),
             likeImg: require('../assets/likes/like_unselected.png'),
             dislikeImg: require('../assets/likes/dislike_unselected.png'),
-            cafeImg: require('../assets/logo.png'),
+            cafeImg: require('../assets/img/cafe.jpg'),
             latitude: 33.450701,
             longitude: 126.570667,
             cafeList: [],
             positions: [],
             markers: [],
-            cafeInfo: [],
-            lastNoiseRecord: [],
-            lastNoiseTime: '',
+            cafeInfo: {
+                cafeName: "카페 이름",
+                cafeAddress: "카페 주소"
+            },
+            lastNoiseRecord: {
+                noise: 12.345678,
+            },
+            lastNoiseTime: '2022-10-07',
             currentCafeNo: 0,
             currentUserId: 0,
-            dialog: false
+            dialog: false,
+            recordMessage: '주변 소음 측정하기',
+            averageNoiseRecord: 45.67,
+            cafeGoodBadInfo: {
+                goods: 999,
+                bads: 999,
+            },
         }
     },
     created() {
-        // this.currentUserId = this.$store.state.accountStore.user.userId;
     },
     mounted() {
         if(navigator.geolocation) {
@@ -120,18 +130,14 @@ export default {
             if(newRecord.length !== 0) {
                 let dateTime = newRecord.time.split("T");
                 let time = dateTime[1].split(":");
+                console.log(time[0]);
+                console.log(time[1]);
                 this.lastNoiseTime = dateTime[0] + " " + time[0] + ":" + time[1] + ":" + time[2].substring(0, 2);
             }
         },
-        // dialog(newStatus) {
-        //     if(!newStatus) {
-        //         this.likeImg = this.likeUnselectedImg;
-        //         this.dislikeImg = this.dislikeUnselectedImg;
-        //     }
-        // }
     },
     methods: {
-        ...mapActions(mapStore, ["getCafeList", "getCafeInfo", "getLastNoiseRecordInfo"]),
+        ...mapActions(mapStore, ["getCafeList", "getCafeInfo", "getLastNoiseRecordInfo", "getAverageNoiseInfo", "recordCafeNoise", "getCafeGoodBadInfo"]),
         ...mapActions(likeStore, ["voteUpCafe", "voteDownCafe", "removeVoteCafe", "getCafeLikeInfo"]),
 
         initMap() {
@@ -149,7 +155,7 @@ export default {
 
             this.map = new kakao.maps.Map(mapArea, options);
             // 확대 축소 막기 : 카페 정보가 너무 많아서 부하 걸릴 수 있음
-            // this.map.setZoomable(false);
+            this.map.setZoomable(false);
             // 지도 드래그 앤 드롭 이벤트 발생 시 알아서 새로 그리도록
             kakao.maps.event.addListener(this.map, 'dragend', () => {
                 this.createPositions();
@@ -169,21 +175,28 @@ export default {
                 this.createMarkers();
             });
         },
-        createMarkers() {
-            let imageSize = new kakao.maps.Size(15, 15);
-            let markerImgSrc = [this.cafeGreyImg, this.cafeRedImg, this.cafeYellowImg, this.cafeGreenImg];
-            let imageOption = { spriteSize: new kakao.maps.Size(15, 15) };
+        async createMarkers() {
+            let imageSize = new kakao.maps.Size(25, 25);
+            let markerImgSrc = [this.cafeGreyImg, this.cafeGreenImg, this.cafeYellowImg, this.cafeRedImg];
+            let imageOption = { spriteSize: new kakao.maps.Size(25, 25) };
             let markerImg = [];
             markerImgSrc.forEach(src => {
                 markerImg.push(this.createMarkerImage(src, imageSize, imageOption));
             });
 
-            // console.log(this.cafeList.length);
-            this.cafeList.forEach(cafe => {
+            for(const cafe of this.cafeList) {
                 let coord = new kakao.maps.LatLng(cafe.latitude, cafe.longitude);
                 let cafeNo = cafe.id;
-                // 카페 좋아요 수에 따라 markerImg[i] 조정
-                let marker = this.createMarker(coord, markerImg[3]);
+                
+                let idx = 0;
+                let avgNoise = await this.getAverageNoiseInfo(cafeNo);
+
+                if(avgNoise === 0.0) idx = 0;
+                else if(avgNoise < 45) idx = 1;
+                else if(avgNoise < 55) idx = 2;
+                else idx = 3;
+                
+                let marker = this.createMarker(coord, markerImg[idx]);
                 kakao.maps.event.addListener(marker, 'click', () => {
                     this.getCafeInfo(cafeNo).then((res) => {
                         this.cafeInfo = res.cafe;
@@ -199,12 +212,18 @@ export default {
                         this.getLastNoiseRecordInfo(cafeNo).then((res) => {
                             this.lastNoiseRecord = res;
                         });
+                        this.getAverageNoiseInfo(cafeNo).then((res) => {
+                            this.averageNoiseRecord = res;
+                        });
+                        this.getCafeGoodBadInfo(cafeNo).then((res) => {
+                            this.cafeGoodBadInfo = res;
+                        });
 
                         this.dialog = true;
                     });
                 });
                 this.markers.push(marker);
-            });
+            }
 
             this.displayMarkers();
         },
@@ -224,36 +243,77 @@ export default {
             });
         },
         likeCafe() {
-            console.log("like clicked");
+            if(this.dislikeImg === this.dislikeSelectedImg) this.cafeGoodBadInfo.bads -= 1;
             this.dislikeImg = this.dislikeUnselectedImg;
             let userCafePair = [this.currentCafeNo, this.$store.state.accountStore.user.userId];
             if(this.likeImg === this.likeSelectedImg) {
-                console.log("remove vote running");
+                this.cafeGoodBadInfo.goods -= 1;
                 this.removeVoteCafe(userCafePair).then(() => {
                     this.likeImg = this.likeUnselectedImg;
-                    console.log("remove vote finished");
                 });
             } else {
-                console.log("up vote running");
+                this.cafeGoodBadInfo.goods += 1;
                 this.voteUpCafe(userCafePair).then(() => {
                     this.likeImg = this.likeSelectedImg;
-                    console.log("up vote finished");
                 });
             }
         },
         dislikeCafe() {
+            if(this.likeImg === this.likeSelectedImg) this.cafeGoodBadInfo.goods -= 1;
             this.likeImg = this.likeUnselectedImg;
             let userCafePair = [this.currentCafeNo, this.$store.state.accountStore.user.userId];
             if(this.dislikeImg === this.dislikeSelectedImg) {
+                this.cafeGoodBadInfo.bads -= 1;
                 this.removeVoteCafe(userCafePair).then(() => {
                     this.dislikeImg = this.dislikeUnselectedImg;
                 });
             } else {
+                this.cafeGoodBadInfo.bads += 1;
                 this.voteDownCafe(userCafePair).then(() => {
                     this.dislikeImg = this.dislikeSelectedImg;
                 });
             }
         },
+        recordNoise() {
+            if(Tone.context.state !== 'running') {
+                Tone.context.resume();
+            }
+
+            async () => await Tone.start();
+            this.recordMessage = "측정중...";
+
+            let meter = new Tone.Meter();
+            let mic = new Tone.UserMedia();
+
+            mic.open();
+            mic.connect(meter);
+
+            let soundData = [];
+
+            setTimeout(() => {
+                let timerId = setInterval(() => {
+                    let value = meter.getValue() + 100;
+                    value = Number.isNaN(value) ? 0 : value;
+                    soundData.push(value);
+                }, 10);
+
+                setTimeout(() => {
+                    clearInterval(timerId);
+                    const initialValue = 0;
+                    const sum = soundData.reduce((r, b) => r + b, initialValue);
+                    let average = sum / soundData.length;
+                    this.recordMessage = `측정 완료   ${average.toFixed(2)} dB`;
+
+                    let noiseInfo = [this.currentCafeNo, this.$store.state.accountStore.user.userId, average];
+                    this.recordCafeNoise(noiseInfo);
+
+                    mic.disconnect(meter);
+                    mic.close();
+                }, 10000);
+            }, 1000);
+        },
+        // drawChart() {
+        // },
     },
 };
 </script>
@@ -276,13 +336,14 @@ export default {
 }
 
 .upper {
-    height: 250px;
+    height: 230px;
 }
 
 .middle {
     height: 50px;
     display: flex;
     justify-content: space-between;
+    align-items: start;
 }
 
 .lower {
@@ -318,6 +379,7 @@ export default {
     width: 80%;
     text-align: left;
     font-size: 1.8vh;
+    padding-top: 20px;
 }
 
 .cafe_last_decibel {
@@ -325,6 +387,13 @@ export default {
     height: 100%;
     text-align: center;
     font-size: 2.5vh;
+}
+
+.cafe-average-decibel {
+    width: 35%;
+    height: 100%;
+    text-align: center;
+    font-size: 2.2vh;
 }
 
 .cafe-no-record-message {
@@ -337,7 +406,9 @@ export default {
 .cafe_noise {
     width: 60%;
     height: 100%;
+    display: flex;
     text-align: center;
+    align-items: center;
 }
 
 .cafe_noise_graph {
@@ -346,6 +417,8 @@ export default {
 }
 .record-btn {
     margin-top: 10px;
+    width: 100%;
+    height: 80%;
 }
 
 .good-bad-area {
@@ -370,6 +443,8 @@ export default {
 
 .count-number {
     height: 12px;
-    background-color: yellow;
+    display: flex;
+    justify-content: center;
+    text-align: center;
 }
 </style>

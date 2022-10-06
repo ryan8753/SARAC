@@ -29,7 +29,7 @@ const likeStore = {
           "user": {
             "id": userCafePair[1]
           },
-          "goodOrBad": true
+          "goodBad": true
         },
       }).then((res) => {
         return res.data;
@@ -52,7 +52,7 @@ const likeStore = {
           "user": {
             "id": userCafePair[1]
           },
-          "goodOrBad": false
+          "goodBad": false
         },
       }).then((res) => {
         console.log(userCafePair);
