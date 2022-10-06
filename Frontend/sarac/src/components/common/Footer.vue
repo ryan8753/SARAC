@@ -52,14 +52,20 @@ export default {
     value: function (newRoute) {
       // 라우터 중복 오류 무시
       const c = ["home","search","review","myfeed","nearby"]
+      console.log(newRoute)
+      console.log(window.location.search);
       if (c .includes(newRoute)){
-        this.$router.replace({ path: `/` + newRoute }).catch(() => {});
+        if(newRoute == "search" && window.location.search)
+          this.$router.replace(window.location.pathname + window.location.search).catch(() => {});
+        else
+          this.$router.replace({ path: `/` + newRoute }).catch(() => {});
       }
     },
   },
   created() {
     // 새로고침시 footer 상태 유지 (value 값에 현재 url path 설정)
     const a = window.location.pathname.split("/")[1];
+    console.log(window.location.pathname);
     const b = ["home","search","review","myfeed","nearby","library","book","mypage"]
     if(b.includes(a)){
       this.value = window.location.pathname.split("/")[1];
