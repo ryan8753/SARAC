@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CafeNoiseServiceImpl implements CafeNoiseService {
@@ -52,5 +54,19 @@ public class CafeNoiseServiceImpl implements CafeNoiseService {
                 .build();
 
         return noiseInfo;
+    }
+
+    @Override
+    public double averageCafeNoise(long cafeId) {
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(CafeException.CafeNotFoundException::new);
+        List<CafeNoise> cafeNoiseList = cafeNoiseRepository.findAllByCafe(cafe);
+        double average = 0.0;
+        for(CafeNoise cafeNoise : cafeNoiseList) {
+            average += cafeNoise.getNoise();
+        }
+
+        if(cafeNoiseList.size() != 0) average /= cafeNoiseList.size();
+
+        return average;
     }
 }
