@@ -10,6 +10,7 @@ import SearchView from "@/views/SearchView.vue";
 import MyFeedView from "@/views/MyFeedView.vue";
 import LibraryView from "@/views/LibraryView.vue";
 import BookDetailView from "@/views/BookDetailView.vue";
+import NearByView from "@/views/NearByView.vue";
 // component
 import UserActivity from "@/components/MyFeedView/UserActivity.vue";
 import UserSearchResult from "@/components/MyFeedView/UserSearchResult.vue";
@@ -128,6 +129,11 @@ const routes = [
     component: BookDetailView,
     children: [],
   },
+  {
+    path: "/nearby",
+    name: "nearby",
+    component: NearByView,
+  }
 ];
 
 const router = new VueRouter({
