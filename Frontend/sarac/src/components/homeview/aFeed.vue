@@ -31,7 +31,7 @@
       </v-row>
       <br />
       <!-- 리뷰제목 -->
-      <v-row align="center" justify="center" class="c-title mx-auto">
+      <v-row align="center" justify="center" class="c-title mx-auto px-2">
         {{ review.title }}</v-row
       ><br />
       <!-- 평점 -->
@@ -83,9 +83,8 @@
       </v-row>
       <br />
       <!-- 해시태그 -->
-      <v-row style="width: 100%">
+      <v-row style="width: 100%" class="px-1 mx-auto">
         <v-col>
-          &nbsp;
           <span class="c-subtitle" v-for="(hashtag, i) in hashtagList" :key="i">
             #{{ hashtag }}
           </span>
