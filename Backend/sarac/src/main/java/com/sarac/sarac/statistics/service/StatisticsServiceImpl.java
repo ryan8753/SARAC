@@ -3,6 +3,7 @@ package com.sarac.sarac.statistics.service;
 
 import com.sarac.sarac.book.entity.Book;
 import com.sarac.sarac.book.repository.BookRepository;
+import com.sarac.sarac.cafe.repository.CafeNoiseRepository;
 import com.sarac.sarac.library.entity.Library;
 import com.sarac.sarac.library.repository.LibraryRepository;
 import com.sarac.sarac.review.entity.Review;
@@ -32,6 +33,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final ReviewHashtagRepository reviewHashtagRepository;
 
+    private final CafeNoiseRepository cafeNoiseRepository;
+
     private final int EMPTY = 0;
 
 
@@ -52,9 +55,9 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .totalScore(reviewRepository.existsByUserId(userId) ?
                         reviewRepository.findAllByUserId(userId).stream()
                                 .mapToInt(Review::getBookScore).average().getAsDouble() : EMPTY)
-                .totalNoise(0)
+                .totalNoise(cafeNoiseRepository.countByUserId(userId))
                 .build();
-        //소음총 작업후 추가
+
 
         return statisticsDTO;
     }
