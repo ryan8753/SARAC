@@ -18,6 +18,7 @@
       <div class="description-container">
         <h2>목차</h2>
         <div id="toc"></div>
+        <!-- <div>{{this.book.toc}}</div> -->
       </div>
     </div>
 
@@ -26,13 +27,31 @@
   </div>
 </template>
 <script>
+// import { mapState } from 'vuex';
 export default {
   props: ["book"],
-  mounted() {
-    const toc = document.querySelector("#toc");
-
-    if (this.book.toc) toc.innerHTML = this.book.toc;
-  },
+  // computed: {
+  //   ...mapState("bookStore",["book"])
+  // },
+  // mounted() {
+  //   // const toc = document.querySelector("#toc");
+  //   // toc.innerHTML = this.book.toc;
+  //   console.log(this.book)
+  //   if(this.book.toc) {
+  //     const a = document.getElementById("toc")
+  //     console.log(a)
+  //     a.innerHTML = this.book.toc;
+  //     // a.appendChild(this.book.toc)
+  //   }
+  // },
+  // watch : {
+  //   book(newVal) {
+  //     if(newVal.toc) {
+  //     const a = document.getElementById("toc")
+  //     console.log("a",a)
+  //     a.innerHTML = newVal.toc;
+  //   }}
+  // }
 };
 </script>
 <style scoped>
