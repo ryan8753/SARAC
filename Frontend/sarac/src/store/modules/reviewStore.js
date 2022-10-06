@@ -1,4 +1,4 @@
-import router from "@/router";
+// import router from "@/router";
 import axios from "axios";
 
 const reviewStore = {
@@ -116,7 +116,7 @@ const reviewStore = {
       }).then((res) => {
         console.log(res);
         console.log("작성완료");
-        router.push({ name: "home" });
+        // router.push({ name: "home" });
         // this.randomReviewList = res.data;
         return res.data;
       });
