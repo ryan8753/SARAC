@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class BookSearchResultListDto {
     private List<BookSearchResultDto> results;
-    private int totalPages;
+    private Long totalElements;
     private int currentPage;
     private boolean bestBook;
 }
