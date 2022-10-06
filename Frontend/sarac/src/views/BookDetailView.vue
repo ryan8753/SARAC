@@ -90,7 +90,6 @@
     <hr />
     <BookDescription
       v-show="detailOrReviews == `detail`"
-      v-bind:book="book"
       class="descript-review"
       >책 정보</BookDescription
     >

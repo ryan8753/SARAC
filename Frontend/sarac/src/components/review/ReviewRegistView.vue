@@ -160,7 +160,7 @@ export default {
       this.getReview(this.reviewId);
       this.type = "modify";
     } else {
-      this.tmp = this.user.nickname + "님의 리뷰입니다.";
+      this.review.title = this.user.nickname + "님의 리뷰입니다.";
     }
 
     if (this.book.isbn != "") {
@@ -238,13 +238,14 @@ export default {
       const review = this.review;
       const files = this.files;
       this.registReview({ review, files });
+      this.$router.push({ name: "myfeed" });
     },
     async modify() {
       const review = this.review;
       const files = this.files;
       const reviewId = this.reviewId;
       this.updateReview({ review, files, reviewId });
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: "myfeed" });
     },
     getBookFromSearch() {
       this.$router.push({ path: "/review/search" });

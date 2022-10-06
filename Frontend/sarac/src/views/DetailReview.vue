@@ -24,21 +24,24 @@
         ><v-icon>mdi-pencil</v-icon></v-btn
       ></v-row
     > -->
+
     <!-- 댓글 -->
-    <v-row style="width: 100%" justify="center">
-      <div v-if="review.reviewCommentCount">
-        댓글 {{ review.reviewCommentCount }} 개 모두 보기
+    <v-row class="mx-2 ove">
+      <div v-if="review.reviewCommentCount" class="flex-grow-1">
+        <span class="h-comment"
+          >댓글 {{ review.reviewCommentCount }} 개 모두 보기</span
+        >
         <comments
           :reviewCommentList="review.reviewCommentList"
           :reviewId="review.reviewId"
           v-on:commentChanged="updateInfo()"
         ></comments>
       </div>
-      <div v-else>등록된 댓글이 없습니다.</div> </v-row
+      <div v-else class="h-comment">등록된 댓글이 없습니다.</div> </v-row
     ><br />
     <!-- 댓글작성폼 -->
     <create-comment
-      style="width: 100%"
+      style="width: 95%"
       :reviewid="review.reviewId"
       :parentId="0"
       v-on:commentChanged="updateInfo()"
@@ -101,4 +104,12 @@ export default {
 .row {
   margin: 0%;
 }
+.h-comment {
+  font-size: 2vh;
+  font-weight: bold;
+}
+/* .ove {
+  overflow-y: scroll;
+  height: 300px;
+} */
 </style>
