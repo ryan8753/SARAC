@@ -61,11 +61,7 @@ public class AladinUtil {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
 
-            String result = br.readLine();
-
-            log.info(result);
-
-            return result;
+            return br.readLine();
 
         } catch (IOException e) {
             log.error(e.getMessage());

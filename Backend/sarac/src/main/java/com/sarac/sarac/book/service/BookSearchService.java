@@ -39,7 +39,7 @@ public class BookSearchService {
 
         return BookSearchResultListDto.builder()
                 .results(calcBookScores(bookListWithPage.getContent()))
-                .totalPages(bookListWithPage.getTotalPages())
+                .totalElements(bookListWithPage.getTotalElements())
                 .currentPage(bookListWithPage.getNumber())
                 .bestBook(false)
                 .build();
