@@ -110,8 +110,20 @@ export default {
         return;
       }
 
-      // 타입 추가!!!
-      this.$router
+      if(window.location.href.includes("/review/search")) {
+              this.$router
+        .push(
+          "/review/search?keyword=" +
+            this.keyword +
+            "&page=" +
+            0 +
+            "&type=" +
+            this.type
+        )
+        .catch(() => {});
+      }
+      else {
+        this.$router
         .push(
           "/search?keyword=" +
             this.keyword +
@@ -121,6 +133,7 @@ export default {
             this.type
         )
         .catch(() => {});
+      }
       document.getElementById("bar").blur();
     },
     getPicture() {
