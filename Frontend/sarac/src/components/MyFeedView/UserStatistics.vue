@@ -1,8 +1,7 @@
 <template>
   <v-container>
-    <div>많이 본 장르</div>
-    <p />
-    <div>
+    <v-container class="my-4 px-1">
+    <v-row><b>많이 본 장르</b></v-row>
       <v-row justify="center" v-if="statistics.topGenre.length > 0">
         <v-col
           cols="4"
@@ -11,6 +10,7 @@
           :key="j"
         >
           <v-img
+            class="me-1"
             justify="center"
             align="center"
             :src="rank[j]"
@@ -21,7 +21,6 @@
           />
 
           <p class="p" align="center">
-            &nbsp;
             {{
               item.genre
                 .split(">")
@@ -29,20 +28,17 @@
                 .replaceAll(" ", "")
             }}
           </p>
-          ({{ item.cnt }})
+          <p class="p" align="center">({{ item.cnt }} 권)</p>
         </v-col>
       </v-row>
-
       <v-row justify="center" v-else
         ><br />
         <br />
         <h1>완독한 책이 없습니다!</h1>
       </v-row>
-    </div>
+      </v-container>
 
-    <br />
-
-    <v-row>
+    <v-row class="my-4">
       <v-simple-table class="pa-0 ma-0 table" dense>
         <tbody>
           <tr>
@@ -68,12 +64,16 @@
         </tbody>
       </v-simple-table>
     </v-row>
-    많이 쓴 해시태그
+
+    <v-row>
+    <b>많이 쓴 해시태그</b>
+    </v-row>
     <cloud
       :data="words"
       :fontSizeMapper="fontSizeMapper"
-      width="250"
-      height="145"
+      :onWordClick="onWordClick"
+      width="200"
+      height="130"
     />
   </v-container>
 </template>
@@ -98,6 +98,7 @@ export default {
       statistics: {},
       words: [],
       fontSizeMapper: (word) => Math.log2(word.value) * 7,
+      onWordClick: (word) => console.log(word),
     };
   },
 
