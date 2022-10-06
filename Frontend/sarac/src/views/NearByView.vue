@@ -25,7 +25,7 @@
                     <div class="cafe_info lower">
                         <div class="cafe_noise">
                             <!--div class="cafe_noise_graph"></div-->
-                            <v-btn class="record-btn" @click="recordNoise">{{ recordMessage }}</v-btn>
+                            <v-btn class="record-btn white--text" @click="recordNoise" color="#E3984B">{{ recordMessage }}</v-btn>
                         </div>
                         <div class="good-bad-area">
                             <div class="count-area">
