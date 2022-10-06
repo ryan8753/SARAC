@@ -1,11 +1,11 @@
 <template>
   <v-row align="center" justify="center">
-    <v-col cols="3">
+    <v-col cols="3" class="pa-0 d-flex justify-center">
       <v-avatar>
         <img :src="this.$store.state.accountStore.user.imagePath" alt="John" />
       </v-avatar>
     </v-col>
-    <v-col cols="9">
+    <v-col cols="9" class="pa-0">
       <v-text-field
         v-model="inputs.contents"
         :label="text"
@@ -60,4 +60,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+input {
+  font-size: 1.5vh !important;
+}
+
+label {
+  font-size: 1.5vh !important;
+}
+</style>

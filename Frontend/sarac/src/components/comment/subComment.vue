@@ -9,25 +9,25 @@
         <div v-for="(child, index) in childList" :key="index">
           <v-row>
             <!-- 답글아이콘 -->
-            <v-col cols="1" align-self="center">
+            <v-col cols="1" align-self="center" class="pa-0 d-flex justify-end">
               <v-icon>mdi-chevron-right</v-icon>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="2" class="pa-0 pl-2 d-flex justify-center">
               <v-avatar>
                 <img :src="child.userImagePath" />
               </v-avatar>
             </v-col>
             <!-- 닉네임 및 코멘트 -->
-            <v-col cols="5">
-              <v-rol>{{ child.userNickname }}</v-rol>
-              <tr>
+            <v-col cols="8" class="pa-0 pl-5">
+              <v-rol class="t-comment">{{ child.userNickname }}</v-rol>
+              <tr class="subt-comment">
                 {{
                   child.content
                 }}
               </tr>
             </v-col>
             <!-- 수정 및 삭제 버튼 -->
-            <v-col cols="2">
+            <v-col cols="1" class="pa-0">
               <!-- {{ child.kakaoId }} -->
               <v-btn
                 v-if="kakaoId === child.kakaoId"
@@ -36,7 +36,7 @@
                 class="mx-2"
                 @click="deleteComment(child.commentId)"
               >
-                <v-icon dark> mdi-delete </v-icon>
+                <v-icon dark size="2vh"> mdi-delete </v-icon>
               </v-btn>
             </v-col>
           </v-row>
@@ -91,5 +91,12 @@ export default {
 <style scoped>
 .row {
   margin: 0;
+}
+.t-comment {
+  font-size: 1.5vh;
+  font-weight: bold;
+}
+.subt-comment {
+  font-size: 1.5vh;
 }
 </style>

@@ -26,16 +26,19 @@
         </v-list-item-content>
       </v-list-item> -->
 
-
+  
+  <hr>
     <v-row @click="getActionFromType">
-      <v-col cols="4">
+      <v-col cols="4" class="align-self-stretch pa-0">
         <v-img :src="getThumbnail"></v-img>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="7">
-        <v-row><h1> {{ bookTitle }} </h1></v-row>
-        <v-row><h2> {{ author }} </h2></v-row>
-        <v-row>
+      <v-col class="d-flex flex-column pa-0 justify-space-between" cols="7">
+        <div>
+          <h1> {{ bookTitle }} </h1>
+          <h2> {{ author }} </h2>
+        </div>
+
           <v-rating
             :value="bookScore"
             readonly
@@ -45,9 +48,10 @@
             half-increments
             size="2vh"
           ></v-rating>
-        </v-row>
+
       </v-col>
     </v-row>
+  
   </v-container>
 </template>
 
@@ -96,11 +100,25 @@ export default {
 </script>
 <style scoped>
 h1 {
-  font-size: 3vh;
+  font-size: 2vh;
   font-weight: bold;
+  overflow: hidden; 
+  white-space: wrap;
+  /* width: 100%; */
 }
 h2 {
-  font-size: 2vh;
-  font-weight: bold; 
+  font-size: 1.5vh;
+  /* font-weight: bold;  */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width : 70%;
+  height: 2vh;
+}
+hr {
+  margin-top: 0px;
+  margin-bottom: 1.5rem;
+  width: calc(100% + 30px);
+  margin-left: -15px;
 }
 </style>
