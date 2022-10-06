@@ -49,14 +49,16 @@
           >책 트렌드</v-btn
         >
       </v-row>
+      <v-row justify="center" class="mx-auto px-1">
         <cloud
-        v-if="showCloud"
+          v-if="showCloud"
           :data="wordCloud"
           :fontSizeMapper="fontSizeMapper"
           :onWordClick="onWordClick"
           width="250"
           height="150"
         />
+      </v-row>
     </v-container>
   </v-form>
 </template>
@@ -110,29 +112,28 @@ export default {
         return;
       }
 
-      if(window.location.href.includes("/review/search")) {
-              this.$router
-        .push(
-          "/review/search?keyword=" +
-            this.keyword +
-            "&page=" +
-            0 +
-            "&type=" +
-            this.type
-        )
-        .catch(() => {});
-      }
-      else {
+      if (window.location.href.includes("/review/search")) {
         this.$router
-        .push(
-          "/search?keyword=" +
-            this.keyword +
-            "&page=" +
-            0 +
-            "&type=" +
-            this.type
-        )
-        .catch(() => {});
+          .push(
+            "/review/search?keyword=" +
+              this.keyword +
+              "&page=" +
+              0 +
+              "&type=" +
+              this.type
+          )
+          .catch(() => {});
+      } else {
+        this.$router
+          .push(
+            "/search?keyword=" +
+              this.keyword +
+              "&page=" +
+              0 +
+              "&type=" +
+              this.type
+          )
+          .catch(() => {});
       }
       document.getElementById("bar").blur();
     },
@@ -156,9 +157,20 @@ export default {
       this.showCloud = !this.showCloud ? true : false;
     },
     onWordClick(word) {
-      this.$router
-        .push("/search?keyword=" + word.text + "&page=" + 0 + "&type=KEYWORD")
-        .catch(() => {});
+      if (window.location.href.includes("/review/search"))
+        this.$router
+          .push(
+            "/review/search?keyword=" +
+              word.text +
+              "&page=" +
+              0 +
+              "&type=KEYWORD"
+          )
+          .catch(() => {});
+      else
+        this.$router
+          .push("/search?keyword=" + word.text + "&page=" + 0 + "&type=KEYWORD")
+          .catch(() => {});
     },
   },
   created() {
