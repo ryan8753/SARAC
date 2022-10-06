@@ -40,7 +40,7 @@ public class Book {
     @Column(length = 2000)
     private String description;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String toc;
 
     @ColumnDefault("0")
@@ -62,18 +62,13 @@ public class Book {
     private Set<Library> libraries = new HashSet<>();
 
     public void updateDetail(AladinItemDto aladinItemDto) {
-        if(isContentEmpty(this.bookImgUrl))
-            this.bookImgUrl = aladinItemDto.getCover();
-
-        if(isContentEmpty(this.publisher))
-            this.publisher = aladinItemDto.getPublisher();
-
-        if(isContentEmpty(this.description))
-            this.description = aladinItemDto.getDescription();
-
         if(this.price == 0)
             this.price = aladinItemDto.getPriceStandard();
 
+        this.bookImgUrl = aladinItemDto.getCover();
+        this.publisher = aladinItemDto.getPublisher();
+        this.description = aladinItemDto.getDescription();
+        this.bookTitle = aladinItemDto.getTitle();
         this.genre = aladinItemDto.getCategoryName();
         this.page = aladinItemDto.getBookinfo().getItemPage();
         this.toc = aladinItemDto.getBookinfo().getToc()
@@ -87,9 +82,5 @@ public class Book {
             }
         }
         this.author = sb.substring(0, sb.length() - 2).toString();
-    }
-
-    private boolean isContentEmpty(String content) {
-        return (content == null) || (content.trim().length() == 0);
     }
 }
