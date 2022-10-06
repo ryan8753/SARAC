@@ -182,28 +182,16 @@ export default {
             this.cafeList.forEach(cafe => {
                 let coord = new kakao.maps.LatLng(cafe.latitude, cafe.longitude);
                 let cafeNo = cafe.id;
-                this.currentCafeNo = cafeNo;
                 // 카페 좋아요 수에 따라 markerImg[i] 조정
                 let marker = this.createMarker(coord, markerImg[3]);
                 kakao.maps.event.addListener(marker, 'click', () => {
                     this.getCafeInfo(cafeNo).then((res) => {
                         this.cafeInfo = res.cafe;
                     });
+                    this.currentCafeNo = cafeNo;
                     let userCafePair = [cafeNo, this.$store.state.accountStore.user.userId];
                     this.getCafeLikeInfo(userCafePair).then((res) => {
-                        // if(res === "") {
-                        //     this.likeImg = this.likeUnselectedImg;
-                        //     this.dislikeImg = this.dislikeUnselectedImg;
-                        //     // console.log("none");
-                        // } else if(res == "true") {
-                        //     this.likeImg = this.likeSelectedImg;
-                        //     this.dislikeImg = this.dislikeUnselectedImg;
-                        //     // console.log("like");
-                        // } else {    // res == "false"
-                        //     this.likeImg = this.likeUnselectedImg;
-                        //     this.dislikeImg = this.dislikeSelectedImg;
-                        //     // console.log("dislike");
-                        // }
+                        console.log("res is : ");
                         console.log(res);
                         this.likeImg = (res === true) ? this.likeSelectedImg : this.likeUnselectedImg;
                         this.dislikeImg = (res === false) ? this.dislikeSelectedImg : this.dislikeUnselectedImg;
@@ -242,16 +230,12 @@ export default {
             if(this.likeImg === this.likeSelectedImg) {
                 console.log("remove vote running");
                 this.removeVoteCafe(userCafePair).then(() => {
-                    // console.log("Like removed");
-                    this.likeThisCafe = null;
                     this.likeImg = this.likeUnselectedImg;
                     console.log("remove vote finished");
                 });
             } else {
                 console.log("up vote running");
                 this.voteUpCafe(userCafePair).then(() => {
-                    // console.log("Like added");
-                    this.likeThisCafe = true;
                     this.likeImg = this.likeSelectedImg;
                     console.log("up vote finished");
                 });
@@ -262,14 +246,10 @@ export default {
             let userCafePair = [this.currentCafeNo, this.$store.state.accountStore.user.userId];
             if(this.dislikeImg === this.dislikeSelectedImg) {
                 this.removeVoteCafe(userCafePair).then(() => {
-                    // console.log("Dislike removed");
-                    this.likeThisCafe = null;
                     this.dislikeImg = this.dislikeUnselectedImg;
                 });
             } else {
                 this.voteDownCafe(userCafePair).then(() => {
-                    // console.log("Dislike added");
-                    this.likeThisCafe = false;
                     this.dislikeImg = this.dislikeSelectedImg;
                 });
             }
@@ -312,7 +292,6 @@ export default {
 .cafe_image {
     width: 30%;
     height: 80%;
-    background-color: blue;
 }
 
 .cafe_blank {
@@ -364,7 +343,6 @@ export default {
 .cafe_noise_graph {
     width: 100%;
     height: 60%;
-    background-color: blue;
 }
 .record-btn {
     margin-top: 10px;
@@ -376,7 +354,6 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: green;
 }
 
 .count-area {
