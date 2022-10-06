@@ -25,6 +25,8 @@
               <v-list-item
                 v-for="(item, index) in items"
                 :key="index"
+                @click="selectType(item.value)"
+                :class="item.value == type ? 'orange--text' : 'grey--text'"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -36,36 +38,67 @@
         <StreamBarcodeReader @decode="onDecode"></StreamBarcodeReader>
       </v-row>
     </v-container>
+    <v-container>
+      <v-row justify="end">
+        <v-btn
+          text
+          color="#E3984B"
+          x-small
+          class="px-4 ma-0"
+          @click="toggleCloud"
+          >책 트렌드</v-btn
+        >
+      </v-row>
+        <cloud
+        v-if="showCloud"
+          :data="wordCloud"
+          :fontSizeMapper="fontSizeMapper"
+          :onWordClick="onWordClick"
+          width="250"
+          height="150"
+        />
+    </v-container>
   </v-form>
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { StreamBarcodeReader } from "vue-barcode-reader";
+import Cloud from "vue-d3-cloud";
+
 const searchStore = "searchStore";
 
 export default {
   data: () => ({
     keyword: "",
     showCamera: false,
-    items: [{ title: "Click Me" }, { title: "Click Me 2" }],
+    items: [
+      { title: "통합 검색", value: "UNIFIED" },
+      { title: "키워드 검색", value: "KEYWORD" },
+    ],
     showMenu: false,
+    showCloud: false,
+    type: null,
+    // 워드클라우드
+    fontSizeMapper: (word) => word.value / 500,
   }),
-  props:["page"],
   components: {
     StreamBarcodeReader,
+    Cloud,
   },
   computed: {
-    ...mapState(["searchResults"]),
+    ...mapState(searchStore, ["searchResults", "wordCloud"]),
   },
   watch: {
-    page(newVal) {
-      this.getBookResults({keywork: this.keyword, page: newVal});
-    }
+    $route() {
+      this.showMenu = false;
+      this.showCloud = false;
+      this.keyword = this.$route.query.keyword;
+      this.type = this.$route.query.type ? this.$route.query.type : "UNIFIED";
+    },
   },
   methods: {
-    ...mapActions(searchStore, ["getBookResults"]),
-    ...mapMutations(searchStore, { setTypeTrue: "SET_TEXT_TRUE" }),
+    ...mapActions(searchStore, ["getBookResults", "getWordCloud"]),
     searchBook() {
       if (
         this.keyword == null ||
@@ -78,9 +111,16 @@ export default {
       }
 
       // 타입 추가!!!
-      this.$router.push("/search?keyword=" + this.keyword + "&page=" + this.page).catch(() => {});
-      this.setTypeTrue();
-      this.getBookResults({keyword: this.keyword, page: "0"});
+      this.$router
+        .push(
+          "/search?keyword=" +
+            this.keyword +
+            "&page=" +
+            0 +
+            "&type=" +
+            this.type
+        )
+        .catch(() => {});
       document.getElementById("bar").blur();
     },
     getPicture() {
@@ -96,6 +136,22 @@ export default {
     dropdown() {
       this.showMenu = true;
     },
+    selectType(value) {
+      this.type = value;
+    },
+    toggleCloud() {
+      this.showCloud = !this.showCloud ? true : false;
+    },
+    onWordClick(word) {
+      this.$router
+        .push("/search?keyword=" + word.text + "&page=" + 0 + "&type=KEYWORD")
+        .catch(() => {});
+    },
+  },
+  created() {
+    this.getWordCloud();
+    this.keyword = this.$route.query.keyword;
+    this.type = this.$route.query.type ? this.$route.query.type : "UNIFIED";
   },
 };
 </script>
