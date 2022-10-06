@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface KeywordRepository extends JpaRepository<Keyword, Long> {
-    List<Keyword> findTop20ByOrderByCountDesc();
+    List<Keyword> findTop100ByOrderByCountDesc();
 }

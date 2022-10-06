@@ -16,7 +16,7 @@ public class KeywordService {
 
     public KeywordListDto getTopKeywords() {
         return KeywordListDto.builder()
-                .keywords(keywordRepository.findTop20ByOrderByCountDesc().stream()
+                .keywords(keywordRepository.findTop100ByOrderByCountDesc().stream()
                         .map(wordCount -> KeywordDto.builder()
                                 .text(wordCount.getKeyword())
                                 .value(wordCount.getCount())
