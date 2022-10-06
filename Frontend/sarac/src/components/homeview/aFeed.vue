@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- {{ review }} -->
+    {{ review }}
     <br />
 
     <v-card
@@ -12,11 +12,11 @@
     >
       <!-- 책이름 -->
       <v-row class="mx-auto" align="center">
-        <v-col cols="3"
-          ><v-img :src="getThumbnail" @click="mvBook"></v-img
-        ></v-col>
-        <v-col cols="6" class="c-subtitle" @click="mvBook"
-          >"{{ review.bookTitle }}"
+        <v-col cols="3">
+          <v-img :src="getThumbnail" @click="mvBook"></v-img>
+        </v-col>
+        <v-col cols="6" class="c-subtitle" @click="mvBook">
+          "{{ review.bookTitle }}"
         </v-col>
         <v-col
           cols="1"
