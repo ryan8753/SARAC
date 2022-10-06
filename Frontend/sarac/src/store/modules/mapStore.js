@@ -56,7 +56,51 @@ const mapStore = {
                 return [];
             });
             return response;
-        }
+        },
+        async getAverageNoiseInfo(commit, cafeNo) {
+            const response = await axios({
+                url: `api/v1/cafeNoise/averageRecord/${cafeNo}`,
+                method: "GET",
+                headers: {
+
+                }
+            }).then((res) => {
+                return res.data;
+            });
+            return response;
+        },
+        recordCafeNoise(commit, noiseInfo) {
+            axios({
+                url: "api/v1/cafeNoise/record",
+                method: "PUT",
+                headers: {
+                // Token
+                },
+                data: {
+                    "cafe": {
+                        "id": noiseInfo[0]
+                    },
+                    "user": {
+                        "id": noiseInfo[1]
+                    },
+                    "noise": noiseInfo[2]
+                    },
+            }).then((res) => {
+                return res;
+            });
+        },
+        async getCafeGoodBadInfo(commit, cafeNo) {
+            const response = await axios({
+                url: `api/v1/cafeLike/cafeGoodBadCounts/${cafeNo}`,
+                method: "GET",
+                headers: {
+                    //Token
+                }
+            }).then((res) => {
+                return res.data;
+            });
+            return response;
+        },
     },
 };
 

@@ -38,4 +38,13 @@ public class CafeNoiseController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/averageRecord/{cafeId}")
+    public ResponseEntity<?> getAverageOfNoiseRecord(@PathVariable long cafeId) {
+        try {
+            return new ResponseEntity<Double>(cafeNoiseService.averageCafeNoise(cafeId), HttpStatus.OK);
+        } catch(CafeException.CafeNotFoundException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
