@@ -97,7 +97,7 @@ export default {
       ],
       statistics: {},
       words: [],
-      fontSizeMapper: (word) => Math.log2(word.value) * 7,
+      fontSizeMapper: (word) => word.value * 15,
       onWordClick: (word) => console.log(word),
     };
   },

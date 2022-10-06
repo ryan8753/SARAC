@@ -160,7 +160,7 @@ export default {
       this.getReview(this.reviewId);
       this.type = "modify";
     } else {
-      this.tmp = this.user.nickname + "님의 리뷰입니다.";
+      this.review.title = this.user.nickname + "님의 리뷰입니다.";
     }
 
     if (this.book.isbn != "") {
