@@ -5,7 +5,7 @@ const searchStore = {
 
   state: {
     searchResults: [],
-    isSearched: false,
+    // isSearched: false,
   },
   getters: {
     searchResults: (state) => {
@@ -37,9 +37,9 @@ const searchStore = {
       });
     },
 
-    getBookResults({ commit }, keyword) {
+    getBookResults({ commit }, payload) {
       axios({
-        url: "api/v1/book/search?keyword=" + keyword,
+        url: "api/v1/book/search?keyword=" + payload.keyword + "&page=" + payload.page + "&type=" + payload.type,
         method: "GET",
       }).then((response) => {
         commit("SET_BOOK_RESULT", response.data);
