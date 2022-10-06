@@ -75,7 +75,7 @@
           v-model="files"
         />
       </v-row>
-        
+
       <v-row class="ma-0">
         <v-col cols="9" class="pa-0"
           ><v-text-field
@@ -86,19 +86,44 @@
             @keyup.space="inputHashtag(hashtag)"
           ></v-text-field>
         </v-col>
-        
+
         <v-col cols="3" class="pa-0" align-self="center">
-          <v-btn small elevation="none" color="white" @click="inputHashtag(hashtag)" class="orange--text">Add</v-btn>
+          <v-btn
+            small
+            elevation="none"
+            color="white"
+            @click="inputHashtag(hashtag)"
+            class="orange--text"
+            >Add</v-btn
+          >
         </v-col>
       </v-row>
       <span v-for="(item, j) in review.hashtag" :key="j">
-          #{{ item }}
-          <v-btn x-small icon color="red" @click="deleteHashtag(j)">x</v-btn></span
-        >     
+        #{{ item }}
+        <v-btn x-small icon color="red" @click="deleteHashtag(j)"
+          >x</v-btn
+        ></span
+      >
       <v-row class="ma-5">
         <v-col>
-          <v-btn align color="#E3984B" class="white--text" type="submit" v-if="this.type === 'modify'"> 리뷰 수정 </v-btn>
-          <v-btn width="100%" color="#E3984B" class="white--text" type="submit" v-else> 리뷰 작성 </v-btn>
+          <v-btn
+            align
+            color="#E3984B"
+            class="white--text"
+            type="submit"
+            v-if="this.type === 'modify'"
+          >
+            리뷰 수정
+          </v-btn>
+          <v-btn
+            width="100%"
+            color="#E3984B"
+            class="white--text"
+            type="submit"
+            v-else
+          >
+            리뷰 작성
+          </v-btn>
         </v-col>
       </v-row>
     </v-form>
@@ -154,18 +179,17 @@ export default {
     ...mapMutations(reviewStore, ["CLEAR_BOOK_DATA"]),
   },
   created() {
-    
     if (this.$route.params.reviewId != null) {
       this.reviewId = this.$route.params.reviewId;
       this.getReview(this.reviewId);
       this.type = "modify";
     } else {
-      this.tmp = this.user.nickname + "님의 리뷰입니다.";
+      this.review.title = this.user.nickname + "님의 리뷰입니다.";
     }
 
     if (this.book.isbn != "") {
       this.review.isbn = this.book.isbn;
-      this.img = this.book.bookImgUrl;
+      if (this.book.bookImgUrl) this.img = this.book.bookImgUrl;
       this.CLEAR_BOOK_DATA;
     }
     this.review.writer = this.user.userId;
@@ -238,13 +262,14 @@ export default {
       const review = this.review;
       const files = this.files;
       this.registReview({ review, files });
+      this.$router.push({ name: "myfeed" });
     },
     async modify() {
       const review = this.review;
       const files = this.files;
       const reviewId = this.reviewId;
       this.updateReview({ review, files, reviewId });
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: "myfeed" });
     },
     getBookFromSearch() {
       this.$router.push({ path: "/review/search" });
