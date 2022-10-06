@@ -2,7 +2,7 @@
   <v-container>
     <v-container class="my-4 px-1">
     <v-row><b>많이 본 장르</b></v-row>
-      <v-row justify="center" v-if="statistics.topGenre.length > 0">
+      <v-row justify="center" v-if="statistics.topGenre">
         <v-col
           cols="4"
           class="d-flex align-center flex-column px-0"
