@@ -211,9 +211,19 @@
 
   ![ReviewRegist](./README/review_regist.png)
 
+  ![ReviewUpdate](./README/ReviewUpdate.gif)
+
 - 사용자 소통 - 댓글, 좋아요
 
-  ![ReviewRegist](./README/comment_regist.png)
+  ![CommentRegist](./README/comment_regist.png)
+
+  ![Communication](./README/Communication1.gif)
+
+  ![Communication](./README/Communication2.gif)
+
+  ![Communication](./README/Communication3.gif)
+
+  ![Communication](./README/Communication4.gif)
 
 ### 개인 통계 데이터 제공
 
@@ -239,6 +249,18 @@
 
      ![Library](./README/library.png)
 
+     ![LibrarySearch](./README/LibrarySearch.gif)
+
+     ![LibraryManage](./README/LibraryManage.gif)
+
+3. 개인 리뷰 관리
+
+   - 내 feed 보기 및 관리
+
+   ![MyFeed](./README/myfeed.gif)
+
+   ![MyfeedManage](./README/MyfeedManage.gif)
+
 ### 리뷰 모아 보기 / 인기 도서
 
 - 다른 유저의 최신 리뷰 모아보기
@@ -253,7 +275,13 @@
 
 - 책을 읽을 장소 탐색
 
+  ![NearCafe](./README/NearCafe.gif)
+
 - 평균 측정 소음
+
+  ![NoiseCalculate](./README/NoiseCalculate1.gif)
+
+  ![NoiseCalculate](./README/NoiseCalculate2.gif)
 
 - 유저 평가
 
@@ -263,4 +291,6 @@
 
 - 사용자 검색 및 타인의 정보 보기
 
-  ![SearchUser](./README/SearchUser.gif)
+  ![SearchPrivate](./README/SearchPrivate.gif)
+
+  ![SearchPublic](./README/SearchPublic.gif)
