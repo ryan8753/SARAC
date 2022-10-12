@@ -165,7 +165,7 @@
 
 - [포팅\_메뉴얼](./README/포팅메뉴얼.pdf)
 
-- [하둡 사용 매뉴얼](./data/Hadoop%20Usage%20Manual.md)
+- [하둡 사용 매뉴얼](./Data/Hadoop%20Usage%20Manual.md)
 
 - [최종 발표 자료](./README/%ED%8A%B9%ED%99%94PJT_%EC%84%9C%EC%9A%B8_5%EB%B0%98_A505_%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx)
 
