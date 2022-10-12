@@ -223,6 +223,8 @@
 
   ![Communication](./README/Communication3.gif)
 
+  ![Communication](./README/Communication4.gif)
+
 ### 개인 통계 데이터 제공
 
 1. 개인통계
