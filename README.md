@@ -60,7 +60,7 @@
   <details>
   <summary>application.yml</summary>
 
-  ![Untitled](./README/application.png)
+  ![Untitled](./README/application.PNG)
 
   </details>
 
@@ -83,21 +83,21 @@
   <details>
   <summary>.env</summary>
 
-  ![Untitled](./README/env.png)
+  ![Untitled](./README/env.PNG)
 
   </details>
 
   <details>
   <summary>.env.development</summary>
 
-  ![Untitled](./README/env_development.png)
+  ![Untitled](./README/env_development.PNG)
 
   </details>
 
   <details>
   <summary>package.json</summary>
 
-  ![Untitled](./README/package.png)
+  ![Untitled](./README/package.PNG)
 
   </details>
 
@@ -145,7 +145,7 @@
 
 ### 1. ERD
 
-![Untitled](./README/erd.png)
+![Untitled](./README/ERD.png)
 
 ### 2. Server Architecture
 
@@ -203,6 +203,10 @@
 
   ![BookDetail](./README/BookDetail.gif)
 
+- 리뷰를 통해 책 상세 설명 바로 보기
+
+  ![BookDetail](./README/BookDetail2.gif)
+
 - 사진 업로드와 해시태그 기능
 
   ![ReviewRegist](./README/review_regist.png)
@@ -215,23 +219,25 @@
 
 1. 개인통계
 
-- 책에 대한 통계 표시
+   - 책에 대한 통계 표시
 
-- 많이 읽은 장르 Top3 표시
+   - 많이 읽은 장르 Top3 표시
 
-- 읽은 책에 대한 통계 표시
+   - 읽은 책에 대한 통계 표시
 
-- 리뷰에 많이 쓴 해시태그 WordCloud
-  ![Statistics](./README/statistics.gif)
+   - 리뷰에 많이 쓴 해시태그 WordCloud
 
-#### 2. 개인 서재
+     ![Statistics](./README/statistics.gif)
 
-- 읽고 있는 책
+2. 개인 서재
 
-- 완독한 책
+   - 읽고 있는 책
 
-- 읽고 싶은 책
-  ![Library](./README/library.png)
+   - 완독한 책
+
+   - 읽고 싶은 책
+
+     ![Library](./README/library.png)
 
 ### 리뷰 모아 보기 / 인기 도서
 
@@ -250,4 +256,11 @@
 - 평균 측정 소음
 
 - 유저 평가
+
   ![Nearby](./README/nearby.gif)
+
+### 사용자 검색
+
+- 사용자 검색 및 타인의 정보 보기
+
+  ![SearchUser](./README/SearchUser.gif)
